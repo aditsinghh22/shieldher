@@ -1,4 +1,5 @@
 import Navbar from "@/components/Navbar";
+import Image from "next/image";
 import HeroSection from "@/components/HeroSection";
 import FeatureCard from "@/components/FeatureCard";
 import ScrollReveal from "@/components/ScrollReveal";
@@ -42,9 +43,9 @@ const features = [
   },
   {
     icon: <Lock size={24} />,
-    title: "Complete Privacy",
+    title: "Complete Privacy & Ghost Mode",
     description:
-      "Your uploads are encrypted and never shared. Only you can access your analysis history and results.",
+      "Your uploads are encrypted and never shared. Use Ghost Mode to leave no trace. Only you can access your analysis history and results.",
   },
   {
     icon: <Scale size={24} />,
@@ -167,7 +168,7 @@ export default function Home() {
             </ScrollReveal>
             <div className={styles.featureGrid}>
               {features.map((feature, i) => (
-                <ScrollReveal key={i} delay={i * 80}>
+                <ScrollReveal key={i} delay={i * 80} className={styles.featureReveal}>
                   <FeatureCard {...feature} index={i} />
                 </ScrollReveal>
               ))}
@@ -189,7 +190,7 @@ export default function Home() {
             </ScrollReveal>
             <div className={styles.steps}>
               {steps.map((step, i) => (
-                <ScrollReveal key={i} delay={i * 120}>
+                <ScrollReveal key={i} delay={i * 120} className={styles.featureReveal}>
                   <div className={styles.step}>
                     <div className={styles.stepNumber}>{step.number}</div>
                     <h3 className={styles.stepTitle}>{step.title}</h3>
@@ -219,7 +220,7 @@ export default function Home() {
             </ScrollReveal>
             <div className={styles.trustGrid}>
               {testimonials.map((t, i) => (
-                <ScrollReveal key={i} delay={i * 100}>
+                <ScrollReveal key={i} delay={i * 100} className={styles.featureReveal}>
                   <div className={styles.trustCard}>
                     <p className={styles.trustQuote}>&ldquo;{t.quote}&rdquo;</p>
                     <div className={styles.trustAuthor}>
@@ -275,10 +276,10 @@ export default function Home() {
         <footer className={styles.footer}>
           <div className="container">
             <div className={styles.footerInner}>
-              <div className={styles.footerLogo}>
-                <Shield size={18} />
+              <Link href="/" className={styles.footerLogo} style={{textDecoration: 'none'}}>
+                <Image src="/logo.png.jpeg" alt="ShieldHer Logo" width={32} height={32} style={{ objectFit: 'contain' }} />
                 <span>ShieldHer</span>
-              </div>
+              </Link>
               <p className={styles.footerText}>
                 © {new Date().getFullYear()} ShieldHer. Built with care for
                 women&apos;s safety.

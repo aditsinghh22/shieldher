@@ -13,6 +13,9 @@ import {
   Plus,
   MapPin,
   FileSearch,
+  MessageSquare,
+  Scale,
+  Lightbulb,
 } from 'lucide-react';
 import { type AnalysisResult, type Upload as UploadType } from '@/lib/types';
 import { createClient } from '@/lib/supabase/client';
@@ -24,6 +27,12 @@ export default function DashboardPage() {
   const [uploads, setUploads] = useState<UploadType[]>([]);
   const [analyses, setAnalyses] = useState<AnalysisResult[]>([]);
   const [loading, setLoading] = useState(true);
+  const [expandedId, setExpandedId] = useState<string | null>(null);
+
+  const toggleExpand = (id: string, e: React.MouseEvent) => {
+    e.preventDefault();
+    setExpandedId(expandedId === id ? null : id);
+  };
 
   useEffect(() => {
     async function fetchData() {
@@ -221,7 +230,12 @@ export default function DashboardPage() {
               const isWarning = analysis.risk_level === 'medium' || analysis.risk_level === 'high' || analysis.risk_level === 'critical';
 
               return (
-                <div key={analysis.id} className={styles.analysisCard}>
+                <div key={analysis.id} style={{ display: 'flex', flexDirection: 'column' }}>
+                  <div 
+                    className={styles.analysisCard}
+                    onClick={(e) => toggleExpand(analysis.id, e)}
+                    style={{ cursor: 'pointer', zIndex: 2 }}
+                  >
                   {/* Accent bar */}
                   <div className={`${styles.accentBar} ${risk.accent}`} />
 
@@ -269,17 +283,70 @@ export default function DashboardPage() {
                         {confidence}
                       </p>
                     </div>
-                    <Link
-                      href={`/dashboard/analysis/${analysis.upload_id}`}
+                    <button
+                      onClick={(e) => toggleExpand(analysis.id, e)}
                       className={`${styles.arrowBtn} ${
                         (analysis.risk_level === 'high' || analysis.risk_level === 'critical')
                           ? styles.arrowBtnDanger : ''
                       }`}
                     >
-                      <ArrowRight size={18} />
-                    </Link>
+                      <ArrowRight size={18} style={{ 
+                        transform: expandedId === analysis.id ? 'rotate(90deg)' : 'none',
+                        transition: 'transform 0.2s ease'
+                      }} />
+                    </button>
                   </div>
                 </div>
+
+                {/* INLINE EXPANSION */}
+                {expandedId === analysis.id && (
+                  <div className={styles.inlineAnalysisDetails}>
+                    {hasFlags && (
+                      <div className={styles.detailsSection}>
+                        <div className={styles.detailsSectionTitle}>
+                          <AlertTriangle size={14} /> Detected Flags
+                        </div>
+                        <div className={styles.flagsList}>
+                          {analysis.flags.map((flag, idx) => (
+                            <div key={idx} className={styles.flagItem}>
+                              <span className={styles.flagCat}>{flag.category}</span>
+                              <span className={styles.flagDesc}>{flag.description}</span>
+                            </div>
+                          ))}
+                        </div>
+                      </div>
+                    )}
+                    
+                    {analysis.details?.recommendations && analysis.details.recommendations.length > 0 && (
+                      <div className={styles.detailsSection}>
+                        <div className={styles.detailsSectionTitle}>
+                          <Lightbulb size={14} /> Recommendations
+                        </div>
+                        <div className={styles.listItems}>
+                          {analysis.details.recommendations.map((rec, idx) => (
+                            <div key={idx} style={{ marginBottom: '4px' }}>• {rec}</div>
+                          ))}
+                        </div>
+                      </div>
+                    )}
+
+                    {analysis.details?.legal_analysis && (
+                      <div className={styles.detailsSection}>
+                        <div className={styles.detailsSectionTitle}>
+                          <Scale size={14} /> Legal Perspective
+                        </div>
+                        <p className={styles.detailsText}>{analysis.details.legal_analysis.summary}</p>
+                      </div>
+                    )}
+                    
+                    <div style={{ marginTop: '4px', textAlign: 'right' }}>
+                      <Link href={`/dashboard/analysis/${analysis.upload_id}`} style={{ fontSize: '13px', color: 'var(--accent-primary)', fontWeight: 'bold', textDecoration: 'none' }}>
+                        Generate PDF Report &rarr;
+                      </Link>
+                    </div>
+                  </div>
+                )}
+              </div>
               );
             })}
           </div>

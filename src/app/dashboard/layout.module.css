@@ -2,6 +2,7 @@
     position: relative;
     display: flex;
     min-height: 100vh;
+    zoom: 77%;
     background:
         radial-gradient(
             1200px 620px at 8% 8%,

@@ -4,8 +4,9 @@
 
 .page {
     position: relative;
-    max-width: 1180px;
-    margin: 0 auto;
+    width: 100%;
+    max-width: none;
+    margin: 0;
     display: flex;
     flex-direction: column;
     gap: 34px;
@@ -87,7 +88,7 @@
 
 .heroTitle {
     font-family: var(--font-headline);
-    font-size: clamp(36px, 5vw, 56px);
+    font-size: clamp(30px, 4.3vw, 46px);
     font-weight: 800;
     letter-spacing: -0.035em;
     line-height: 1.02;
@@ -96,7 +97,7 @@
 }
 
 .heroSubtitle {
-    font-size: 16px;
+    font-size: 18px;
     color: var(--text-secondary);
     max-width: 520px;
     line-height: 1.65;
@@ -632,6 +633,86 @@
 .arrowBtnDanger:hover {
     background: #dc2626;
     border-color: #dc2626;
+}
+
+/* Inline Analysis */
+.inlineAnalysisDetails {
+    margin-top: -12px;
+    margin-bottom: 12px;
+    padding: 24px 26px;
+    border-radius: 0 0 24px 24px;
+    border: 1px solid rgba(255, 255, 255, 0.44);
+    border-top: none;
+    background: linear-gradient(145deg, rgba(255, 255, 255, 0.7), rgba(255, 255, 255, 0.4));
+    box-shadow: 0 10px 30px rgba(10, 37, 64, 0.08);
+    backdrop-filter: blur(14px);
+    animation: fadeInSlide 0.2s ease-out forwards;
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+}
+
+@keyframes fadeInSlide {
+    from { opacity: 0; transform: translateY(-10px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+.detailsSection {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+}
+
+.detailsSectionTitle {
+    font-size: 14px;
+    font-weight: 800;
+    color: #1f2937;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+}
+
+.detailsText {
+    font-size: 14px;
+    color: #1f2937;
+    line-height: 1.5;
+}
+
+.flagsList {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    margin-top: 4px;
+}
+
+.flagItem {
+    padding: 12px;
+    background: rgba(255, 255, 255, 0.6);
+    border: 1px solid rgba(0, 0, 0, 0.05);
+    border-radius: 12px;
+}
+
+.flagCat {
+    font-weight: 800;
+    font-size: 13px;
+    display: block;
+    margin-bottom: 4px;
+    color: #111827;
+}
+
+.flagDesc {
+    font-size: 13px;
+    color: #1f2937;
+    line-height: 1.5;
+}
+
+.listItems {
+    padding-left: 20px;
+    font-size: 14px;
+    color: #1f2937;
+    line-height: 1.6;
 }
 
 /* Insight bento */

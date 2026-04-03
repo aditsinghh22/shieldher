@@ -1,9 +1,9 @@
 "use client";
 
 import Link from "next/link";
+import Image from "next/image";
 import { usePathname, useRouter } from "next/navigation";
 import {
-  Shield,
   LayoutDashboard,
   Upload,
   History,
@@ -65,9 +65,15 @@ export default function Sidebar() {
   return (
     <aside className={`${styles.sidebar} ${collapsed ? styles.collapsed : ""}`}>
       <div className={styles.top}>
-        <Link href="/dashboard" className={styles.logo}>
+        <Link href="/" className={styles.logo}>
           <div className={styles.logoIcon}>
-            <Shield size={20} className={styles.shieldIcon} />
+            <Image 
+              src="/logo.png.jpeg"
+              alt="ShieldHer Logo"
+              width={38}
+              height={38}
+              className={styles.customLogoImage}
+            />
           </div>
           {!collapsed && <span className={styles.logoText}>ShieldHer</span>}
         </Link>

@@ -118,6 +118,34 @@ export default function AnalysisDetailPage() {
   }
 
   const details = analysis.details || {};
+  const fileUrls = (upload.file_url || "")
+    .split(",")
+    .map((url) => url.trim())
+    .filter(Boolean);
+
+  const getFileKind = (url: string) => {
+    let pathname = url;
+    try {
+      pathname = new URL(url).pathname;
+    } catch {
+      // Use raw URL if parsing fails
+    }
+    const lower = pathname.toLowerCase();
+    if (/\.(png|jpe?g|webp|gif)$/i.test(lower)) return "image";
+    if (/\.(mp3|wav|m4a|ogg)$/i.test(lower)) return "audio";
+    return "other";
+  };
+
+  const mediaItems = fileUrls.map((url, index) => {
+    const kind = getFileKind(url);
+    const label =
+      kind === "image"
+        ? `Screenshot ${index + 1}`
+        : kind === "audio"
+          ? `Audio Recording ${index + 1}`
+          : `File ${index + 1}`;
+    return { url, kind, label };
+  });
 
   return (
     <div className={styles.page}>
@@ -191,18 +219,40 @@ export default function AnalysisDetailPage() {
         </div>
       </div>
 
-      {/* Screenshot preview */}
+      {/* Uploaded evidence */}
       <div className={styles.screenshotSection}>
         <h2 className={styles.sectionTitle}>
           <Target size={18} />
-          Uploaded Screenshot
+          Uploaded Evidence
         </h2>
-        <div className={styles.screenshotWrap}>
-          <img
-            src={upload.file_url}
-            alt="Chat screenshot"
-            className={styles.screenshot}
-          />
+        <div className={styles.mediaGrid}>
+          {mediaItems.map((item) => (
+            <div key={item.url} className={styles.mediaCard}>
+              <div className={styles.mediaLabel}>{item.label}</div>
+              {item.kind === "image" ? (
+                <img
+                  src={item.url}
+                  alt={item.label}
+                  className={styles.mediaImage}
+                  loading="lazy"
+                />
+              ) : item.kind === "audio" ? (
+                <audio controls className={styles.audioPlayer}>
+                  <source src={item.url} />
+                  Your browser does not support the audio element.
+                </audio>
+              ) : (
+                <a
+                  href={item.url}
+                  target="_blank"
+                  rel="noreferrer"
+                  className={styles.mediaLink}
+                >
+                  Open uploaded file
+                </a>
+              )}
+            </div>
+          ))}
         </div>
       </div>
 

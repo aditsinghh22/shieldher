@@ -29,7 +29,7 @@ export default function Navbar() {
       <div className={`container ${styles.inner}`}>
         <Link href="/" className={styles.logo}>
           <div className={styles.logoIcon}>
-            <Image src="/auratein-removebg-preview.png" alt="ShieldHer Logo" width={32} height={32} style={{ objectFit: 'contain' }} />
+            <Image src="/logo.png.jpeg" alt="ShieldHer Logo" width={32} height={32} style={{ objectFit: 'contain' }} />
           </div>
           <span className={styles.logoText}>ShieldHer</span>
         </Link>

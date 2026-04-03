@@ -94,6 +94,10 @@
     gap: 26px;
 }
 
+.featureReveal {
+    height: 100%;
+}
+
 /* ═══ Dark Stats Banner ═══ */
 .statsBanner {
     padding: 120px 0;
@@ -131,7 +135,7 @@
 
 .statsBannerGrid {
     display: grid;
-    grid-template-columns: repeat(4, 1fr);
+    grid-template-columns: repeat(4, minmax(0, 1fr));
     gap: 32px;
     text-align: center;
 }
@@ -142,6 +146,7 @@
     align-items: center;
     gap: 10px;
     padding: 18px;
+    min-width: 0;
     border-radius: var(--radius-lg);
     background: rgba(255, 255, 255, 0.06);
     border: 1px solid rgba(255, 255, 255, 0.15);
@@ -214,6 +219,9 @@
     border-radius: var(--radius-lg);
     box-shadow: var(--shadow-card);
     backdrop-filter: blur(16px);
+    height: 100%;
+    display: flex;
+    flex-direction: column;
     transition: all 0.35s ease;
 }
 
@@ -254,13 +262,14 @@
     font-size: 20px;
     font-weight: 700;
     margin-bottom: 10px;
-    color: var(--text-primary);
+    color: #0f172a;
 }
 
 .stepDesc {
     font-size: 15px;
-    color: var(--text-secondary);
+    color: #334155;
     line-height: 1.7;
+    flex-grow: 1;
 }
 
 .stepConnector {
@@ -306,6 +315,9 @@
     box-shadow: var(--shadow-card);
     transition: all 0.3s ease;
     backdrop-filter: blur(14px);
+    height: 100%;
+    display: flex;
+    flex-direction: column;
 }
 
 .trustCard:hover {
@@ -315,9 +327,10 @@
 
 .trustQuote {
     font-size: 16px;
-    color: var(--text-secondary);
+    color: #334155;
     line-height: 1.7;
     margin-bottom: 24px;
+    flex-grow: 1;
 }
 
 .trustAuthor {
@@ -343,12 +356,12 @@
 .trustName {
     font-size: 14px;
     font-weight: 700;
-    color: var(--text-primary);
+    color: #0f172a;
 }
 
 .trustRole {
     font-size: 12px;
-    color: var(--text-muted);
+    color: #475569;
 }
 
 /* ═══ CTA ═══ */

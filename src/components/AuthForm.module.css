@@ -50,6 +50,21 @@
   color: var(--text-secondary);
 }
 
+.roleHint {
+  margin-top: 10px;
+  font-size: 13px;
+  color: var(--text-secondary);
+}
+
+.changeRoleLink {
+  color: var(--accent-primary);
+  font-weight: 600;
+}
+
+.changeRoleLink:hover {
+  opacity: 0.8;
+}
+
 .form {
   display: flex;
   flex-direction: column;
@@ -59,6 +74,34 @@
 .field {
   display: flex;
   flex-direction: column;
+}
+
+.methodToggle {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 8px;
+}
+
+.methodBtn {
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-md);
+  background: var(--bg-tertiary);
+  color: var(--text-secondary);
+  font-size: 13px;
+  font-weight: 600;
+  padding: 10px 12px;
+  transition: all var(--transition-fast);
+}
+
+.methodBtn:hover {
+  border-color: var(--accent-primary);
+  color: var(--text-primary);
+}
+
+.methodBtnActive {
+  background: rgba(99, 102, 241, 0.14);
+  border-color: var(--accent-primary);
+  color: var(--accent-primary);
 }
 
 .inputWrap {
@@ -76,6 +119,25 @@
 
 .inputWithIcon {
   padding-left: 40px !important;
+}
+
+.phoneInputWrap .inputIcon {
+  left: 12px;
+}
+
+.dialCode {
+  position: absolute;
+  left: 40px;
+  top: 50%;
+  transform: translateY(-50%);
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--text-secondary);
+  pointer-events: none;
+}
+
+.inputWithDialCode {
+  padding-left: 88px !important;
 }
 
 .error {
