@@ -10,6 +10,7 @@ import {
   FileDown,
   Scale,
   MessageSquare,
+  HeartHandshake,
   Settings,
   Moon,
   Sun,
@@ -98,6 +99,7 @@ export default function Sidebar() {
         label: "Communication",
         badge: unreadCount > 0 ? unreadCount : undefined,
       },
+      { href: "/dashboard/get-help", icon: HeartHandshake, label: "Get Help" },
       { href: "/dashboard/settings", icon: Settings, label: "Settings" },
     ],
     [unreadCount]
@@ -120,9 +122,9 @@ export default function Sidebar() {
         <Link href="/" className={styles.logo}>
           <div className={styles.logoIcon}>
             <Image 
-              src="/logo.png.jpeg"
+              src="/logo.png"
               alt="ShieldHer Logo"
-              width={38}
+              width={42}
               height={38}
               className={styles.customLogoImage}
             />

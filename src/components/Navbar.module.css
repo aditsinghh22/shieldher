@@ -78,6 +78,17 @@
     filter: none;
 }
 
+.logoIcon {
+    width: 36px;
+    height: 32px;
+    flex-shrink: 0;
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+}
+
 .logoText {
     font-weight: 800;
 }

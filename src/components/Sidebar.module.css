@@ -61,13 +61,14 @@
 }
 
 .logoIcon {
-  width: 38px;
+  width: 42px;
   height: 38px;
   flex-shrink: 0;
   border-radius: 10px;
   display: flex;
   align-items: center;
   justify-content: center;
+  overflow: hidden;
 }
 
 .customLogoImage {
