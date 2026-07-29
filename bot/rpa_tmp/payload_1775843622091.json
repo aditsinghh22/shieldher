@@ -1,0 +1,32 @@
+{
+  "complaint_id": "804628a9-848d-46ab-bf4d-73da35ad5b77",
+  "category_label": "Women/Children Related Crime",
+  "category_value": "14",
+  "subcategory_label": "Sexually Explicit Act",
+  "subcategory_value": "",
+  "date": "2026-04-10",
+  "hour": "10",
+  "minute": "30",
+  "ampm": "AM",
+  "delay_reason": "Due to severe psychological distress and the need for proper evidence analysis before reporting. The incident was analyzed using ShieldHer AI safety platform.",
+  "state_label": "HARYANA",
+  "state_index": 11,
+  "district_index": 1,
+  "user_district": "Karnal",
+  "platform": "WhatsApp",
+  "platform_label": "WhatsApp",
+  "info_source_index": 2,
+  "media_type_index": 1,
+  "email": "abahykaushik5432@gmail.com",
+  "additional_info": "INCIDENT REPORT: I can see this conversation is making you feel uncomfortable, and I want to validate that your boundaries are important. Right now, this person is being pushy and ignoring your clear 'no,' but they have not yet escalated to threats or aggressive language. DETECTED ISSUES: Boundary Violation: The individual is repeatedly pressuring you to meet after you have clearly declined the invitation. LEGAL CONTEXT:  Preliminary Legal Analysis\n Deep Legal Profile powered by Indian Kanoon API\n\n PRELIMINARY LEGAL MEMORANDUM\nDATE: April 10, 2026\nTO: Concerned Party\nFROM: ShieldHer AI Protection Bureau\nSUBJECT: Preliminary Legal Assessment Regarding Online Abuse\n\n---\n\n I. EXECUTIVE SUMMARY\nThis memorandum provides a preliminary legal assessment concerning observed disrespectful and inappropriate behavior. While the current actions do not yet meet the legal threshold for criminal harassment or stalking under Indian law, there is a clear potential for escalation into actionable legal territory. Should the individual persist in following, monitoring whereabouts, or continue contact after a clear directive to cease, the behavior would likely constitute criminal offenses, triggering robust legal protections and remedies.\n\n II. CASE FACTS\nThe subject has exhibited behavior characterized as disrespectful and inappropriate. At present, this conduct does not definitively cross the legal threshold for criminal offenses such as harassment or stalking. However, the nature of t",
+  "evidence_paths": [
+    "C:\\Users\\LENOVO\\PROJECTS\\SHIELD-HER\\shieldher\\bot\\rpa_tmp\\evidence_batch_804628a9-848d-46ab-bf4d-73da35ad5b77_0_1775843622089.jpg"
+  ],
+  "suspect_name": "Ayush",
+  "suspect_platform_contact": "8798767578",
+  "suspect_id_type_index": 1,
+  "suspect_id_type_label": "Mobile Number",
+  "suspect_id_value": "9898989887",
+  "suspect_description": "Perpetrator operates through anonymous online accounts. Known handle/profile: Ayush.",
+  "risk_level": "low"
+}

@@ -1,0 +1,86 @@
+[
+  {
+    "tag": "input",
+    "id": "ContentPlaceHolder1_txtresiondelay",
+    "name": "ctl00$ContentPlaceHolder1$txtresiondelay",
+    "type": "text"
+  },
+  {
+    "tag": "input",
+    "id": "ContentPlaceHolder1_txt_Info",
+    "name": "ctl00$ContentPlaceHolder1$txt_Info",
+    "type": "text"
+  },
+  {
+    "tag": "input",
+    "id": "ContentPlaceHolder1_fu_info",
+    "name": "ctl00$ContentPlaceHolder1$fu_info",
+    "type": "file"
+  },
+  {
+    "tag": "input",
+    "id": "ContentPlaceHolder1_btnAdd",
+    "name": "ctl00$ContentPlaceHolder1$btnAdd",
+    "type": "submit"
+  },
+  {
+    "tag": "input",
+    "id": "ContentPlaceHolder1_btnNext",
+    "name": "ctl00$ContentPlaceHolder1$btnNext",
+    "type": "submit"
+  },
+  {
+    "tag": "select",
+    "id": "ContentPlaceHolder1_ddl_CategoryCrime",
+    "name": "ctl00$ContentPlaceHolder1$ddl_CategoryCrime",
+    "type": "select"
+  },
+  {
+    "tag": "select",
+    "id": "ContentPlaceHolder1_ddlHr",
+    "name": "ctl00$ContentPlaceHolder1$ddlHr",
+    "type": "select"
+  },
+  {
+    "tag": "select",
+    "id": "ContentPlaceHolder1_ddlMint",
+    "name": "ctl00$ContentPlaceHolder1$ddlMint",
+    "type": "select"
+  },
+  {
+    "tag": "select",
+    "id": "ContentPlaceHolder1_ddlAMPM",
+    "name": "ctl00$ContentPlaceHolder1$ddlAMPM",
+    "type": "select"
+  },
+  {
+    "tag": "select",
+    "id": "ContentPlaceHolder1_ddl_State",
+    "name": "ctl00$ContentPlaceHolder1$ddl_State",
+    "type": "select"
+  },
+  {
+    "tag": "select",
+    "id": "ContentPlaceHolder1_ddl_District",
+    "name": "ctl00$ContentPlaceHolder1$ddl_District",
+    "type": "select"
+  },
+  {
+    "tag": "select",
+    "id": "ContentPlaceHolder1_ddl_policeStation",
+    "name": "ctl00$ContentPlaceHolder1$ddl_policeStation",
+    "type": "select"
+  },
+  {
+    "tag": "select",
+    "id": "ContentPlaceHolder1_ddl_InformationSource",
+    "name": "ctl00$ContentPlaceHolder1$ddl_InformationSource",
+    "type": "select"
+  },
+  {
+    "tag": "select",
+    "id": "ContentPlaceHolder1_ddlMediaType",
+    "name": "ctl00$ContentPlaceHolder1$ddlMediaType",
+    "type": "select"
+  }
+]

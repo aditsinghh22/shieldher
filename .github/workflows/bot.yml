@@ -1,0 +1,20 @@
+name: RPA Complaint Bot
+on:
+  repository_dispatch:
+    types: [new_complaint]
+  workflow_dispatch:
+jobs:
+  run-bot:
+    runs-on: self-hosted
+    steps:
+      - uses: actions/checkout@v4
+      - name: Install dependencies
+        run: |
+          pip install playwright requests
+          playwright install chromium
+      - name: Execute Bot
+        env:
+          SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
+          SUPABASE_SERVICE_KEY: ${{ secrets.SUPABASE_SERVICE_KEY }}
+        shell: cmd
+        run: python bot/rpa_complaint_bot.py --payload "${{ toJson(github.event.client_payload.data) }}"

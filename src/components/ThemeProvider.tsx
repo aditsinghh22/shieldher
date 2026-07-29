@@ -20,28 +20,16 @@ export function useTheme() {
 
 export default function ThemeProvider({ children }: { children: ReactNode }) {
   const [theme, setTheme] = useState<Theme>('light');
-  const [mounted, setMounted] = useState(false);
 
   useEffect(() => {
-    const stored = localStorage.getItem('shieldher-theme') as Theme | null;
-    if (stored === 'dark' || stored === 'light') {
-      setTheme(stored);
-      document.documentElement.setAttribute('data-theme', stored);
-    }
-    setMounted(true);
-  }, []);
+    document.documentElement.setAttribute('data-theme', theme);
+  }, [theme]);
 
   const toggleTheme = () => {
     const next = theme === 'light' ? 'dark' : 'light';
     setTheme(next);
     localStorage.setItem('shieldher-theme', next);
-    document.documentElement.setAttribute('data-theme', next);
   };
-
-  // Prevent flash of unstyled content
-  if (!mounted) {
-    return <>{children}</>;
-  }
 
   return (
     <ThemeContext.Provider value={{ theme, toggleTheme }}>

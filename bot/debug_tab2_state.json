@@ -1,0 +1,96 @@
+{
+  "title": "Cyber Crime Portal",
+  "url": "https://cybercrime.gov.in/Webform/Crime_ReportAnonymously.aspx",
+  "tracked": [
+    null,
+    {
+      "selector": "#ContentPlaceHolder1_ddl_Id",
+      "id": "ContentPlaceHolder1_ddl_Id",
+      "name": "ctl00$ContentPlaceHolder1$ddl_Id",
+      "tag": "select",
+      "type": "select-one",
+      "value": "0",
+      "text": "---Select---\n\tDriving License\n\tEmail\n\tGov. Issued Card\n\tMobile Number\n\tPAN Card\n\tVoter Card\n\tOther\n\tSocial Media Profile URL\n\tLandline Call\n\tInternational Call\n\tWhatsApp Call\n\tBank Account Number\n\tURL",
+      "disabled": false,
+      "visible": true,
+      "outerHTML": "<select name=\"ctl00$ContentPlaceHolder1$ddl_Id\" onchange=\"javascript:setTimeout('__doPostBack(\\'ctl00$ContentPlaceHolder1$ddl_Id\\',\\'\\')', 0)\" id=\"ContentPlaceHolder1_ddl_Id\" title=\"Provide suspect's ID Type if known to you\" class=\"form-select\">\n\t<option selected=\"selected\" value=\"0\">---Select---</option>\n\t<option value=\"1\">Driving License</option>\n\t<option value=\"2\">Email</option>\n\t<option value=\"3\">Gov. Issued Card</option>\n\t<option value=\"4\">Mobile Number</option>\n\t<option value=\"5\">PAN Card</option>\n\t<option value=\"6\">Voter Card</option>\n\t<option value=\"7\">Other</option>\n\t<option value=\"8\">Social Media Profile URL</option>\n\t<option value=\"9\">Landline Call</option>\n\t<option value=\"10\">International Call</option>\n\t<option value=\"11\">WhatsApp Call</option>\n\t<option value=\"22\">Bank Account Number</option>\n\t<option value=\"23\">URL</option>\n\n</select>"
+    },
+    null,
+    {
+      "selector": "#ContentPlaceHolder1_txt_IdNo",
+      "id": "ContentPlaceHolder1_txt_IdNo",
+      "name": "ctl00$ContentPlaceHolder1$txt_IdNo",
+      "tag": "input",
+      "type": "text",
+      "value": "",
+      "text": "",
+      "disabled": false,
+      "visible": true,
+      "outerHTML": "<input name=\"ctl00$ContentPlaceHolder1$txt_IdNo\" type=\"text\" maxlength=\"10\" id=\"ContentPlaceHolder1_txt_IdNo\" title=\"Provide suspect's id number if known to you\" class=\"form-control\" autocomplete=\"off\" onkeypress=\"return verifySpecileChar(event);\" autocompllete=\"off\" placeholder=\"999999999\" style=\"\">"
+    },
+    null,
+    {
+      "selector": "#txt_AnyOtherDetails",
+      "id": "txt_AnyOtherDetails",
+      "name": "ctl00$ContentPlaceHolder1$txt_AnyOtherDetails",
+      "tag": "textarea",
+      "type": "textarea",
+      "value": "Perpetrator operates through anonymous online accounts. Known handle/profile Not provided.",
+      "text": "",
+      "disabled": false,
+      "visible": true,
+      "outerHTML": "<textarea name=\"ctl00$ContentPlaceHolder1$txt_AnyOtherDetails\" rows=\"2\" cols=\"20\" id=\"txt_AnyOtherDetails\" title=\"Any other information of suspect which may be of help to police authorities during investigation\" class=\"scanwid form-control\" autocomplete=\"off\" onkeyup=\"textCounter(this,'q17lengthtxt',250)\" style=\"\"></textarea>"
+    },
+    null
+  ],
+  "addControls": [
+    {
+      "id": "ContentPlaceHolder1_btnAddSuspect",
+      "name": "ctl00$ContentPlaceHolder1$btnAddSuspect",
+      "tag": "input",
+      "text": "ADD",
+      "disabled": false,
+      "visible": true,
+      "rect": {
+        "x": 880.5250244140625,
+        "y": 543.4000244140625,
+        "w": 90,
+        "h": 29.600000381469727
+      }
+    }
+  ],
+  "suspectTables": [
+    {
+      "id": "ContentPlaceHolder1_gv_SuspectNameDetails",
+      "visible": true,
+      "textSample": "S.No.Suspect NameSuspect ID NameID Number/Phone Number \n\t\t\n\t\t\t\n                                                                            1\n                                                                        AyushMobile Number9873457646",
+      "rows": [
+        [
+          "S.No.",
+          "Suspect Name",
+          "Suspect ID Name",
+          "ID Number/Phone Number",
+          ""
+        ],
+        [
+          "1",
+          "Ayush",
+          "Mobile Number",
+          "9873457646",
+          ""
+        ]
+      ]
+    }
+  ],
+  "errors": [
+    {
+      "tag": "span",
+      "id": "",
+      "className": "",
+      "text": "*",
+      "visible": true,
+      "display": "inline",
+      "color": "rgb(255, 0, 0)"
+    }
+  ]
+}

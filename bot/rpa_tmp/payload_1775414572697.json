@@ -1,0 +1,28 @@
+{
+  "complaint_id": "09c81e8e-559c-4a0b-8285-5981f45395a4",
+  "category_label": "Women/Children Related Crime",
+  "subcategory_label": "Sexually Explicit Act",
+  "date": "2026-04-05",
+  "hour": "10",
+  "minute": "30",
+  "ampm": "AM",
+  "delay_reason": "Due to severe psychological distress and the need for proper evidence analysis before reporting. The incident was analyzed using ShieldHer AI safety platform.",
+  "state_label": "DELHI",
+  "state_index": 8,
+  "district_index": 1,
+  "user_district": "north delhi",
+  "platform": "WhatsApp",
+  "platform_label": "WhatsApp",
+  "info_source_index": 2,
+  "media_type_index": 1,
+  "email": "anonymous@shieldher.app",
+  "additional_info": "INCIDENT REPORT: The conversation shows a sender, 'Ayush', persistently attempting to arrange a meeting with the recipient, despite the recipient's clear and repeated rejections. Ayush attempts to justify his request by claiming to be a classmate and referencing a roll number, seemingly disregarding the recipient's stated discomfort and lack of recognition. DETECTED ISSUES: Unwanted Contact/Persistence: The sender repeatedly initiates and insists on a meeting despite the recipient's clear refusal and stated reasons for not wanting to meet.. Boundary Violation: The sender disrespects the recipient's explicit 'No' and attempts to override their discomfort by asserting a connection.. Attempted Coercion/Pressure: The sender uses shared context classmate, roll number to pressure the recipient into acknowledging him and meeting, rather than accepting the refusal.. Gaslighting Subtle: The sender attempts to make the recipient doubt their own perception or memory of not knowing him by insisting they are classmates and have been seen. LEGAL CONTEXT: This conversation demonstrates persistent unwanted contact and a refusal to respect explicit boundaries. While not containing explicit threats or overtly sexual content in this snippet, the sender's behavior constitutes a form of online harassment due to the repeated requests and disregard for the recipient's refusal. If this behavior escalates or continues over time, it could be grounds for a cyber harassment or stalking complai",
+  "evidence_paths": [
+    "C:\\Users\\LENOVO\\PROJECTS\\SHIELD-HER\\rpa_tmp\\evidence_batch_09c81e8e-559c-4a0b-8285-5981f45395a4_0_1775414572673.png"
+  ],
+  "suspect_name": "Ayush",
+  "suspect_id_type_index": 0,
+  "suspect_id_value": "",
+  "suspect_description": "The suspect, Ayush, is persistently attempting to arrange a meeting with the recipient despite clear and repeated rejections. He tries to justify his request by stating they are classmates and that the recipient should know him, ignoring the rec",
+  "risk_level": "medium"
+}

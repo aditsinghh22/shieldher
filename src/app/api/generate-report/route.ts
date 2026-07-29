@@ -1,6 +1,8 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { createClient } from '@/lib/supabase/server';
 import { jsPDF } from 'jspdf';
+import { type MediaAuthenticityStatus } from '@/lib/types';
+import { getFriendlyAuthenticityMessage } from '@/lib/mediaAuthenticity';
 
 export async function POST(request: NextRequest) {
   try {
@@ -236,6 +238,69 @@ export async function POST(request: NextRequest) {
 
     // ═══ DETAILS ═══
     const details = analysis.details || {};
+
+    // Media Authenticity
+    const authenticity = details.media_authenticity;
+    if (authenticity && authenticity.supported_count > 0) {
+      addPageIfNeeded(24);
+      doc.setTextColor(10, 37, 64);
+      doc.setFontSize(13);
+      doc.setFont('helvetica', 'bold');
+      doc.text('Media Authenticity Check', margin, y);
+      y += 8;
+
+      const statusColorMap: Record<MediaAuthenticityStatus, [number, number, number]> = {
+        ai_generated: [239, 68, 68],
+        likely_human: [0, 166, 124],
+        inconclusive: [245, 158, 11],
+        unsupported: [100, 116, 139],
+        unavailable: [100, 116, 139],
+      };
+      const badgeColor = statusColorMap[authenticity.status as MediaAuthenticityStatus] || [100, 116, 139];
+      doc.setFillColor(...badgeColor);
+      doc.roundedRect(margin, y, 48, 7, 2, 2, 'F');
+      doc.setTextColor(255, 255, 255);
+      doc.setFontSize(8);
+      doc.setFont('helvetica', 'bold');
+      doc.text(sanitizeText((authenticity.label || 'UNKNOWN').toUpperCase()), margin + 24, y + 4.8, { align: 'center' });
+
+      if (typeof authenticity.ai_probability === 'number') {
+        doc.setTextColor(66, 84, 102);
+        doc.setFontSize(9);
+        doc.setFont('helvetica', 'bold');
+        doc.text(`AI likelihood: ${authenticity.ai_probability}%`, pageWidth - margin, y + 4.8, { align: 'right' });
+      }
+      y += 11;
+
+      doc.setTextColor(66, 84, 102);
+      doc.setFontSize(10);
+      doc.setFont('helvetica', 'normal');
+      y = addWrappedText(
+        getFriendlyAuthenticityMessage(authenticity.status as MediaAuthenticityStatus),
+        margin,
+        y,
+        contentWidth,
+        5
+      );
+      y += 4;
+
+      if (authenticity.items && authenticity.items.length > 0) {
+        doc.setTextColor(66, 84, 102);
+        doc.setFontSize(9);
+        doc.setFont('helvetica', 'normal');
+        for (const item of authenticity.items) {
+          addPageIfNeeded(8);
+          const line = `${item.file_name}: ${item.label}`;
+          const lineParts = doc.splitTextToSize(sanitizeText(`- ${line}`), contentWidth - 4);
+          for (let i = 0; i < lineParts.length; i++) {
+            addPageIfNeeded(5);
+            doc.text(lineParts[i], margin + 4, y + i * 4.5);
+          }
+          y += lineParts.length * 4.5 + 1;
+        }
+      }
+      y += 6;
+    }
 
     // Tone Analysis
     if (details.tone_analysis) {

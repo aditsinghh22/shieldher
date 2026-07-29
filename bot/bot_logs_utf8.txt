@@ -1,0 +1,168 @@
+﻿python : 2026-04-07 
+12:54:15,502 - INFO - No 
+--payload argument, using 
+MOCK_DATA for standalone 
+testing
+At line:1 char:1
++ python -u 
+rpa_complaint_bot.py > 
+bot_logs.txt 2>&1
++ ~~~~~~~~~~~~~~~~~~~~~~~~
+~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo        
+      : NotSpecified: (2  
+  026-04-07 12:5...ndal   
+ one testing:String) [    
+], RemoteException
+    + FullyQualifiedError 
+   Id : NativeCommandErr  
+  or
+ 
+2026-04-07 12:54:15,502 - 
+INFO - ===================
+==========================
+==========
+2026-04-07 12:54:15,502 - 
+INFO -   ShieldHer RPA 
+Complaint Bot v3.0
+2026-04-07 12:54:15,502 - 
+INFO -   Complaint ID: 
+MOCK-STANDALONE
+2026-04-07 12:54:15,502 - 
+INFO -   Risk Level:   
+high
+2026-04-07 12:54:15,502 - 
+INFO -   Platform:     
+WhatsApp
+2026-04-07 12:54:15,502 - 
+INFO - ===================
+==========================
+==========
+2026-04-07 12:54:18,887 - 
+INFO - Navigating to 
+Anonymous Reporting 
+form...
+2026-04-07 12:54:48,818 - 
+INFO - === TAB 1: 
+Complaint & Incident 
+Details ===
+2026-04-07 12:54:48,818 - 
+INFO - Step 1: Category 
+-> 'Sexually Explicit Act'
+2026-04-07 12:54:48,818 - 
+INFO - Selecting #ContentP
+laceHolder1_ddl_CategoryCr
+ime: value=14, 
+label=Sexually Explicit 
+Act, index=3
+2026-04-07 12:54:48,900 - 
+INFO -   -> Selected by 
+value='14'
+2026-04-07 12:54:55,225 - 
+INFO - Step 2: Date -> 
+2026-04-01
+2026-04-07 12:54:55,287 - 
+INFO - Step 3: Time
+2026-04-07 12:54:55,396 - 
+INFO - Step 4: Delay 
+reason
+2026-04-07 12:54:55,444 - 
+INFO - Step 5: State -> 
+'DELHI'
+2026-04-07 12:54:55,444 - 
+INFO - Selecting #ContentP
+laceHolder1_ddl_State: 
+value=8, label=DELHI, 
+index=9
+2026-04-07 12:54:55,506 - 
+INFO -   -> Selected by 
+value='8'
+2026-04-07 12:54:55,511 - 
+INFO - Waiting for 
+District dropdown to 
+populate...
+2026-04-07 12:54:59,884 - 
+INFO - District dropdown 
+populated.
+2026-04-07 12:54:59,885 - 
+INFO - Step 6: District 
+-> label='', index=1
+2026-04-07 12:54:59,885 - 
+INFO - Selecting #ContentP
+laceHolder1_ddl_District: 
+value=None, label=None, 
+index=1
+2026-04-07 12:54:59,948 - 
+INFO -   -> Selected by 
+index=1
+2026-04-07 12:54:59,949 - 
+INFO - Step 7: 
+Information Source -> 
+'WhatsApp'
+2026-04-07 12:54:59,949 - 
+INFO - Selecting #ContentP
+laceHolder1_ddl_Informatio
+nSource: value=9, 
+label=WhatsApp, index=6
+2026-04-07 12:55:00,011 - 
+INFO -   -> Selected by 
+value='9'
+2026-04-07 12:55:01,570 - 
+INFO - Step 8: Uploading 
+1 evidence files...
+2026-04-07 12:55:01,571 - 
+INFO -   [1/1] C:\Users\LE
+NOVO\PROJECTS\SHIELD-HER\d
+ummy_evidence.png
+2026-04-07 12:55:12,039 - 
+INFO -   Evidence 1 
+uploaded.
+2026-04-07 12:55:12,039 - 
+INFO - Step 9: Additional 
+info (725 chars)
+2026-04-07 12:55:12,636 - 
+INFO - Tab 1 screenshot 
+saved.
+2026-04-07 12:55:12,636 - 
+INFO - Clicking SAVE & 
+NEXT...
+2026-04-07 12:55:37,670 - 
+INFO - Post-Tab1 
+screenshot saved.
+2026-04-07 12:55:37,696 - 
+ERROR - Tab 1 validation 
+errors: ['Please select 
+category of crime.', 
+'Please select 
+approximate date.', 
+'Please select state / 
+UTs.', 'Please select 
+district.', 'Please enter 
+SuspectÆs WhatsApp Phone 
+number', 'Please Enter 
+Valid WhatsApp Phone 
+number', 'Please Upload 
+screenshot of SuspectÆs 
+WhatsApp Phone number', 
+'Please insert additional 
+information about the 
+incident']
+2026-04-07 12:55:37,697 - 
+ERROR - Tab 1 did not 
+advance. Check 
+screenshots.
+2026-04-07 12:55:37,697 - 
+INFO - ===================
+==========================
+2026-04-07 12:55:37,697 - 
+INFO -   HALTED ON 
+PREVIEW & SUBMIT
+2026-04-07 12:55:37,697 - 
+INFO -   Browser stays 
+open for 5 minutes.
+2026-04-07 12:55:37,697 - 
+INFO -   Review and 
+submit manually.
+2026-04-07 12:55:37,697 - 
+INFO - ===================
+==========================

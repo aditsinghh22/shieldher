@@ -37,6 +37,8 @@ NEXT_PUBLIC_SUPABASE_URL=your_project_url
 NEXT_PUBLIC_SUPABASE_ANON_KEY=your_anon_key
 SUPABASE_SERVICE_ROLE_KEY=your_service_role_key
 GEMINI_API_KEY=your_gemini_api_key
+SIGHTENGINE_API_USER=your_sightengine_api_user
+SIGHTENGINE_API_SECRET=your_sightengine_api_secret
 CRON_SECRET=your_random_string_for_ghost_purge
 ```
 

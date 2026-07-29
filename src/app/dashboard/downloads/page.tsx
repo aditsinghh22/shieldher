@@ -127,21 +127,21 @@ export default function DownloadsPage() {
                   <FileText size={28} />
                 </div>
                 <div className={styles.reportInfo}>
-                  <div className={styles.reportNameRow}>
-                    <span className={styles.reportName}>{report.file_name}</span>
+                  <span className={styles.reportName}>{report.file_name}</span>
+                  <div className={styles.reportMetaRow}>
+                    <div className={styles.reportMeta}>
+                      <Clock size={14} />
+                      <span>
+                        {new Date(report.created_at).toLocaleDateString('en-US', {
+                          month: 'short',
+                          day: 'numeric',
+                          year: 'numeric',
+                          hour: '2-digit',
+                          minute: '2-digit',
+                        })}
+                      </span>
+                    </div>
                     <RiskBadge level={report.risk_level} size="sm" />
-                  </div>
-                  <div className={styles.reportMeta}>
-                    <Clock size={14} />
-                    <span>
-                      {new Date(report.created_at).toLocaleDateString('en-US', {
-                        month: 'short',
-                        day: 'numeric',
-                        year: 'numeric',
-                        hour: '2-digit',
-                        minute: '2-digit',
-                      })}
-                    </span>
                   </div>
                 </div>
               </div>

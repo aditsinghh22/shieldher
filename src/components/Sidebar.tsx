@@ -8,29 +8,31 @@ import {
   Upload,
   History,
   FileDown,
+  Scale,
+  MessageSquare,
   Settings,
   Moon,
   Sun,
   ChevronLeft,
   ChevronRight,
 } from "lucide-react";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useMemo, type ComponentType } from "react";
 import { createClient } from "@/lib/supabase/client";
 import { useTheme } from "./ThemeProvider";
 import styles from "./Sidebar.module.css";
 
-const navItems = [
-  { href: "/dashboard", icon: LayoutDashboard, label: "Dashboard" },
-  { href: "/dashboard/upload", icon: Upload, label: "Upload" },
-  { href: "/dashboard/history", icon: History, label: "History" },
-  { href: "/dashboard/downloads", icon: FileDown, label: "Downloads" },
-  { href: "/dashboard/settings", icon: Settings, label: "Settings" },
-];
+type NavItem = {
+  href: string;
+  icon: ComponentType<{ size?: number; className?: string }>;
+  label: string;
+  badge?: number;
+};
 
 export default function Sidebar() {
   const pathname = usePathname();
   const router = useRouter();
   const [collapsed, setCollapsed] = useState(false);
+  const [unreadCount, setUnreadCount] = useState(0);
 
   useEffect(() => {
     document.body.dataset.sidebarCollapsed = collapsed ? "true" : "false";
@@ -55,7 +57,57 @@ export default function Sidebar() {
     getUser();
   }, []);
 
+  useEffect(() => {
+    let active = true;
+
+    async function loadUnreadCount() {
+      try {
+        const res = await fetch("/api/communications/unread", { cache: "no-store" });
+        if (!res.ok) return;
+        const payload: unknown = await res.json();
+        const nextCount = Number((payload as { unreadCount?: unknown }).unreadCount ?? 0);
+        if (active) {
+          setUnreadCount(Number.isFinite(nextCount) ? nextCount : 0);
+        }
+      } catch {
+        if (active) setUnreadCount(0);
+      }
+    }
+
+    void loadUnreadCount();
+    const timer = window.setInterval(() => {
+      void loadUnreadCount();
+    }, 10000);
+
+    return () => {
+      active = false;
+      window.clearInterval(timer);
+    };
+  }, []);
+
+  const navItems: NavItem[] = useMemo(
+    () => [
+      { href: "/dashboard", icon: LayoutDashboard, label: "Dashboard" },
+      { href: "/dashboard/upload", icon: Upload, label: "Upload" },
+      { href: "/dashboard/history", icon: History, label: "History" },
+      { href: "/dashboard/downloads", icon: FileDown, label: "Downloads" },
+      { href: "/dashboard/lawyers", icon: Scale, label: "Lawyers" },
+      {
+        href: "/dashboard/communication",
+        icon: MessageSquare,
+        label: "Communication",
+        badge: unreadCount > 0 ? unreadCount : undefined,
+      },
+      { href: "/dashboard/settings", icon: Settings, label: "Settings" },
+    ],
+    [unreadCount]
+  );
+
   const handleLogout = async () => {
+    // E2EE: Clear encryption key from session
+    const { clearKey } = await import('@/lib/crypto');
+    clearKey();
+
     const supabase = createClient();
     await supabase.auth.signOut();
     router.push("/");
@@ -102,7 +154,19 @@ export default function Sidebar() {
             >
               {isActive && <div className={styles.activeIndicator} />}
               <item.icon size={20} className={styles.navIcon} />
-              {!collapsed && <span>{item.label}</span>}
+              {!collapsed && (
+                <span className={styles.navLabel}>
+                  <span>{item.label}</span>
+                  {item.badge ? (
+                    <span className={styles.navBadge}>{item.badge > 99 ? "99+" : item.badge}</span>
+                  ) : null}
+                </span>
+              )}
+              {collapsed && item.badge ? (
+                <span className={styles.navBadgeCollapsed}>
+                  {item.badge > 99 ? "99+" : item.badge}
+                </span>
+              ) : null}
             </Link>
           );
         })}

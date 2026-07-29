@@ -1,0 +1,32 @@
+{
+  "complaint_id": "e8f2a437-d76e-45c0-9ec8-faa2f6dc42d1",
+  "category_label": "Women/Children Related Crime",
+  "category_value": "14",
+  "subcategory_label": "Sexually Explicit Act",
+  "subcategory_value": "",
+  "date": "2026-04-10",
+  "hour": "10",
+  "minute": "30",
+  "ampm": "AM",
+  "delay_reason": "Due to severe psychological distress and the need for proper evidence analysis before reporting. The incident was analyzed using ShieldHer AI safety platform.",
+  "state_label": "GUJARAT",
+  "state_index": 10,
+  "district_index": 1,
+  "user_district": "Jamnagar",
+  "platform": "WhatsApp",
+  "platform_label": "WhatsApp",
+  "info_source_index": 2,
+  "media_type_index": 1,
+  "email": "abahykaushik5432@gmail.com",
+  "additional_info": "INCIDENT REPORT: It looks like someone named Ayush reached out to you on WhatsApp, asking to meet. Even though you clearly and repeatedly said 'No' and explained you weren't comfortable meeting someone you don't know, they kept asking 'why' and tried to convince you by emphasizing that you're classmates. It's completely understandable to feel uneasy when someone keeps pushing for interaction after you've clearly set a boundary. DETECTED ISSUES: Unwanted Communication: Ayush persistently asked to meet and questioned your refusal, even after you clearly expressed disinterest and discomfort. Your boundaries were not respected.. Disregard for Boundaries: Despite your clear rejections 'No', 'But i just cant meet any random person', 'But i dont know u', 'We can't meet', Ayush continued to try and persuade you, ignoring your explicit discomfort. LEGAL CONTEXT: This interaction, while not containing explicit threats, demonstrates persistent unwanted communication and a disregard for your clear refusal. In India, such behavior, especially if it continues or escalates, can be a serious concern and may fall under laws designed to protect women from harassment and stalking.",
+  "evidence_paths": [
+    "C:\\Users\\LENOVO\\PROJECTS\\SHIELD-HER\\shieldher\\bot\\rpa_tmp\\evidence_batch_e8f2a437-d76e-45c0-9ec8-faa2f6dc42d1_0_1775840132018.jpg"
+  ],
+  "suspect_name": "Ayush",
+  "suspect_platform_contact": "9876765463",
+  "suspect_id_type_index": 1,
+  "suspect_id_type_label": "Mobile Number",
+  "suspect_id_value": "9876765463",
+  "suspect_description": "Perpetrator operates through anonymous online accounts. Known handle/profile: Ayush.",
+  "risk_level": "low"
+}

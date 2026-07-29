@@ -201,3 +201,106 @@ CREATE POLICY "Users can delete their reports"
     bucket_id = 'reports'
     AND auth.uid() IS NOT NULL
   );
+
+-- ═══════════════════════════════════════
+-- 7. Communication Threads & Messages
+-- ═══════════════════════════════════════
+CREATE TABLE IF NOT EXISTS public.communication_threads (
+  id UUID DEFAULT gen_random_uuid() PRIMARY KEY,
+  user_id UUID REFERENCES auth.users(id) ON DELETE CASCADE NOT NULL,
+  lawyer_id UUID REFERENCES auth.users(id) ON DELETE CASCADE NOT NULL,
+  user_name TEXT NOT NULL,
+  lawyer_name TEXT NOT NULL,
+  initiated_by_user_at TIMESTAMPTZ DEFAULT NOW(),
+  created_at TIMESTAMPTZ DEFAULT NOW() NOT NULL,
+  updated_at TIMESTAMPTZ DEFAULT NOW() NOT NULL,
+  UNIQUE (user_id, lawyer_id)
+);
+
+CREATE TABLE IF NOT EXISTS public.communication_messages (
+  id UUID DEFAULT gen_random_uuid() PRIMARY KEY,
+  thread_id UUID REFERENCES public.communication_threads(id) ON DELETE CASCADE NOT NULL,
+  sender_id UUID REFERENCES auth.users(id) ON DELETE CASCADE NOT NULL,
+  sender_role TEXT CHECK (sender_role IN ('user', 'lawyer')) NOT NULL,
+  body TEXT NOT NULL,
+  read_at TIMESTAMPTZ,
+  created_at TIMESTAMPTZ DEFAULT NOW() NOT NULL
+);
+
+CREATE INDEX IF NOT EXISTS communication_threads_user_id_idx
+  ON public.communication_threads (user_id);
+CREATE INDEX IF NOT EXISTS communication_threads_lawyer_id_idx
+  ON public.communication_threads (lawyer_id);
+CREATE INDEX IF NOT EXISTS communication_threads_updated_at_idx
+  ON public.communication_threads (updated_at DESC);
+
+CREATE INDEX IF NOT EXISTS communication_messages_thread_id_idx
+  ON public.communication_messages (thread_id, created_at ASC);
+CREATE INDEX IF NOT EXISTS communication_messages_unread_idx
+  ON public.communication_messages (thread_id, read_at);
+
+CREATE OR REPLACE FUNCTION public.touch_communication_thread()
+RETURNS TRIGGER AS $$
+BEGIN
+  UPDATE public.communication_threads
+  SET updated_at = NEW.created_at
+  WHERE id = NEW.thread_id;
+
+  RETURN NEW;
+END;
+$$ LANGUAGE plpgsql SECURITY DEFINER;
+
+DROP TRIGGER IF EXISTS communication_message_touch_thread ON public.communication_messages;
+CREATE TRIGGER communication_message_touch_thread
+  AFTER INSERT ON public.communication_messages
+  FOR EACH ROW EXECUTE FUNCTION public.touch_communication_thread();
+
+ALTER TABLE public.communication_threads ENABLE ROW LEVEL SECURITY;
+ALTER TABLE public.communication_messages ENABLE ROW LEVEL SECURITY;
+
+DROP POLICY IF EXISTS "Participants can view their communication threads" ON public.communication_threads;
+CREATE POLICY "Participants can view their communication threads"
+  ON public.communication_threads FOR SELECT
+  USING (auth.uid() = user_id OR auth.uid() = lawyer_id);
+
+DROP POLICY IF EXISTS "Users can create their communication threads" ON public.communication_threads;
+CREATE POLICY "Users can create their communication threads"
+  ON public.communication_threads FOR INSERT
+  WITH CHECK (auth.uid() = user_id OR auth.uid() = lawyer_id);
+
+DROP POLICY IF EXISTS "Participants can view thread messages" ON public.communication_messages;
+CREATE POLICY "Participants can view thread messages"
+  ON public.communication_messages FOR SELECT
+  USING (
+    EXISTS (
+      SELECT 1
+      FROM public.communication_threads t
+      WHERE t.id = communication_messages.thread_id
+      AND (t.user_id = auth.uid() OR t.lawyer_id = auth.uid())
+    )
+  );
+
+DROP POLICY IF EXISTS "Participants can send thread messages" ON public.communication_messages;
+CREATE POLICY "Participants can send thread messages"
+  ON public.communication_messages FOR INSERT
+  WITH CHECK (
+    auth.uid() = sender_id
+    AND EXISTS (
+      SELECT 1
+      FROM public.communication_threads t
+      WHERE t.id = communication_messages.thread_id
+      AND (t.user_id = auth.uid() OR t.lawyer_id = auth.uid())
+    )
+  );
+
+DROP POLICY IF EXISTS "Participants can mark messages read" ON public.communication_messages;
+CREATE POLICY "Participants can mark messages read"
+  ON public.communication_messages FOR UPDATE
+  USING (
+    EXISTS (
+      SELECT 1
+      FROM public.communication_threads t
+      WHERE t.id = communication_messages.thread_id
+      AND (t.user_id = auth.uid() OR t.lawyer_id = auth.uid())
+    )
+  );

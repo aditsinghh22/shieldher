@@ -1,0 +1,28 @@
+.page {
+  display: flex;
+  flex-direction: column;
+  gap: 0.9rem;
+  position: relative;
+  z-index: 2;
+  isolation: isolate;
+}
+
+.page::before {
+  content: '';
+  position: absolute;
+  inset: -1.3rem -1rem auto -1rem;
+  height: 10rem;
+  border-radius: 1.6rem;
+  background:
+    radial-gradient(30rem 14rem at 14% 10%, rgba(70, 101, 80, 0.14), transparent 72%),
+    radial-gradient(24rem 12rem at 88% 12%, rgba(255, 255, 255, 0.72), transparent 72%);
+  filter: blur(11px);
+  pointer-events: none;
+  z-index: -1;
+}
+
+[data-theme='dark'] .page::before {
+  background:
+    radial-gradient(30rem 14rem at 14% 10%, rgba(112, 150, 129, 0.24), transparent 72%),
+    radial-gradient(24rem 12rem at 88% 12%, rgba(40, 48, 40, 0.66), transparent 72%);
+}

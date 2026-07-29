@@ -1,0 +1,28 @@
+{
+  "complaint_id": "5d2698e7-f82d-4347-8bf5-1f88a5163d47",
+  "category_label": "Women/Children Related Crime",
+  "subcategory_label": "Sexually explicit act",
+  "date": "2026-04-05",
+  "hour": "10",
+  "minute": "30",
+  "ampm": "AM",
+  "delay_reason": "Due to severe psychological distress and the need for proper evidence analysis before reporting. The incident was analyzed using ShieldHer AI safety platform.",
+  "state_label": "ARUNACHAL PRADESH",
+  "state_index": 3,
+  "district_index": 1,
+  "user_district": "kra daadi",
+  "platform": "Other",
+  "platform_label": "Other",
+  "info_source_index": 7,
+  "media_type_index": 1,
+  "email": "aahyka@gmail.com",
+  "additional_info": "INCIDENT REPORT: No chat screenshot was provided for analysis. Only an image of a woman was supplied. Therefore, a behavioral and legal analysis of chat content cannot be performed. The critical instructions regarding context awareness, behavioral analysis, and legal analysis cannot be met without the necessary chat data. DETECTED ISSUES: Missing Input: No chat screenshot was provided for analysis. The image provided is an illustration of a woman, not a chat log. LEGAL CONTEXT: Unable to perform legal analysis as no chat content was provided to identify potential violations related to cyber harassment, stalking, or terroristic threats.",
+  "evidence_paths": [
+    "C:\\Users\\LENOVO\\PROJECTS\\SHIELD-HER\\rpa_tmp\\evidence_batch_5d2698e7-f82d-4347-8bf5-1f88a5163d47_0_1775407341572.png"
+  ],
+  "suspect_name": "Unknown Online Perpetrator",
+  "suspect_id_type_index": 0,
+  "suspect_id_value": "",
+  "suspect_description": "Perpetrator operates through anonymous online accounts.",
+  "risk_level": "critical"
+}

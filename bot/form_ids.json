@@ -1,0 +1,738 @@
+{
+  "selects": [
+    {
+      "id": "ContentPlaceHolder1_ddl_CategoryCrime",
+      "name": "ctl00$ContentPlaceHolder1$ddl_CategoryCrime",
+      "opts": [
+        {
+          "idx": 0,
+          "val": "0",
+          "txt": "---Select---"
+        },
+        {
+          "idx": 1,
+          "val": "2",
+          "txt": "Rape/Gang Rape (RGR)-Sexually Abusive Content"
+        },
+        {
+          "idx": 2,
+          "val": "3",
+          "txt": "Sexually Obscene material"
+        },
+        {
+          "idx": 3,
+          "val": "14",
+          "txt": "Sexually Explicit Act"
+        },
+        {
+          "idx": 4,
+          "val": "1",
+          "txt": "CSEAM - Child Sexual Exploitative and Abuse Material"
+        }
+      ]
+    },
+    {
+      "id": "ContentPlaceHolder1_ddlHr",
+      "name": "ctl00$ContentPlaceHolder1$ddlHr",
+      "opts": [
+        {
+          "idx": 0,
+          "val": "0",
+          "txt": "HH"
+        },
+        {
+          "idx": 1,
+          "val": "0",
+          "txt": "00"
+        },
+        {
+          "idx": 2,
+          "val": "1",
+          "txt": "01"
+        },
+        {
+          "idx": 3,
+          "val": "2",
+          "txt": "02"
+        },
+        {
+          "idx": 4,
+          "val": "3",
+          "txt": "03"
+        },
+        {
+          "idx": 5,
+          "val": "4",
+          "txt": "04"
+        },
+        {
+          "idx": 6,
+          "val": "5",
+          "txt": "05"
+        },
+        {
+          "idx": 7,
+          "val": "6",
+          "txt": "06"
+        },
+        {
+          "idx": 8,
+          "val": "7",
+          "txt": "07"
+        },
+        {
+          "idx": 9,
+          "val": "8",
+          "txt": "08"
+        },
+        {
+          "idx": 10,
+          "val": "9",
+          "txt": "09"
+        },
+        {
+          "idx": 11,
+          "val": "10",
+          "txt": "10"
+        },
+        {
+          "idx": 12,
+          "val": "11",
+          "txt": "11"
+        }
+      ]
+    },
+    {
+      "id": "ContentPlaceHolder1_ddlMint",
+      "name": "ctl00$ContentPlaceHolder1$ddlMint",
+      "opts": [
+        {
+          "idx": 0,
+          "val": "0",
+          "txt": "MM"
+        },
+        {
+          "idx": 1,
+          "val": "0",
+          "txt": "00"
+        },
+        {
+          "idx": 2,
+          "val": "1",
+          "txt": "01"
+        },
+        {
+          "idx": 3,
+          "val": "2",
+          "txt": "02"
+        },
+        {
+          "idx": 4,
+          "val": "3",
+          "txt": "03"
+        },
+        {
+          "idx": 5,
+          "val": "4",
+          "txt": "04"
+        },
+        {
+          "idx": 6,
+          "val": "5",
+          "txt": "05"
+        },
+        {
+          "idx": 7,
+          "val": "6",
+          "txt": "06"
+        },
+        {
+          "idx": 8,
+          "val": "7",
+          "txt": "07"
+        },
+        {
+          "idx": 9,
+          "val": "8",
+          "txt": "08"
+        },
+        {
+          "idx": 10,
+          "val": "9",
+          "txt": "09"
+        },
+        {
+          "idx": 11,
+          "val": "10",
+          "txt": "10"
+        },
+        {
+          "idx": 12,
+          "val": "11",
+          "txt": "11"
+        },
+        {
+          "idx": 13,
+          "val": "12",
+          "txt": "12"
+        },
+        {
+          "idx": 14,
+          "val": "13",
+          "txt": "13"
+        },
+        {
+          "idx": 15,
+          "val": "14",
+          "txt": "14"
+        },
+        {
+          "idx": 16,
+          "val": "15",
+          "txt": "15"
+        },
+        {
+          "idx": 17,
+          "val": "16",
+          "txt": "16"
+        },
+        {
+          "idx": 18,
+          "val": "17",
+          "txt": "17"
+        },
+        {
+          "idx": 19,
+          "val": "18",
+          "txt": "18"
+        },
+        {
+          "idx": 20,
+          "val": "19",
+          "txt": "19"
+        },
+        {
+          "idx": 21,
+          "val": "20",
+          "txt": "20"
+        },
+        {
+          "idx": 22,
+          "val": "21",
+          "txt": "21"
+        },
+        {
+          "idx": 23,
+          "val": "22",
+          "txt": "22"
+        },
+        {
+          "idx": 24,
+          "val": "23",
+          "txt": "23"
+        },
+        {
+          "idx": 25,
+          "val": "24",
+          "txt": "24"
+        },
+        {
+          "idx": 26,
+          "val": "25",
+          "txt": "25"
+        },
+        {
+          "idx": 27,
+          "val": "26",
+          "txt": "26"
+        },
+        {
+          "idx": 28,
+          "val": "27",
+          "txt": "27"
+        },
+        {
+          "idx": 29,
+          "val": "28",
+          "txt": "28"
+        },
+        {
+          "idx": 30,
+          "val": "29",
+          "txt": "29"
+        },
+        {
+          "idx": 31,
+          "val": "30",
+          "txt": "30"
+        },
+        {
+          "idx": 32,
+          "val": "31",
+          "txt": "31"
+        },
+        {
+          "idx": 33,
+          "val": "32",
+          "txt": "32"
+        },
+        {
+          "idx": 34,
+          "val": "33",
+          "txt": "33"
+        },
+        {
+          "idx": 35,
+          "val": "34",
+          "txt": "34"
+        },
+        {
+          "idx": 36,
+          "val": "35",
+          "txt": "35"
+        },
+        {
+          "idx": 37,
+          "val": "36",
+          "txt": "36"
+        },
+        {
+          "idx": 38,
+          "val": "37",
+          "txt": "37"
+        },
+        {
+          "idx": 39,
+          "val": "38",
+          "txt": "38"
+        },
+        {
+          "idx": 40,
+          "val": "39",
+          "txt": "39"
+        },
+        {
+          "idx": 41,
+          "val": "40",
+          "txt": "40"
+        },
+        {
+          "idx": 42,
+          "val": "41",
+          "txt": "41"
+        },
+        {
+          "idx": 43,
+          "val": "42",
+          "txt": "42"
+        },
+        {
+          "idx": 44,
+          "val": "43",
+          "txt": "43"
+        },
+        {
+          "idx": 45,
+          "val": "44",
+          "txt": "44"
+        },
+        {
+          "idx": 46,
+          "val": "45",
+          "txt": "45"
+        },
+        {
+          "idx": 47,
+          "val": "46",
+          "txt": "46"
+        },
+        {
+          "idx": 48,
+          "val": "47",
+          "txt": "47"
+        },
+        {
+          "idx": 49,
+          "val": "48",
+          "txt": "48"
+        },
+        {
+          "idx": 50,
+          "val": "49",
+          "txt": "49"
+        },
+        {
+          "idx": 51,
+          "val": "50",
+          "txt": "50"
+        },
+        {
+          "idx": 52,
+          "val": "51",
+          "txt": "51"
+        },
+        {
+          "idx": 53,
+          "val": "52",
+          "txt": "52"
+        },
+        {
+          "idx": 54,
+          "val": "53",
+          "txt": "53"
+        },
+        {
+          "idx": 55,
+          "val": "54",
+          "txt": "54"
+        },
+        {
+          "idx": 56,
+          "val": "55",
+          "txt": "55"
+        },
+        {
+          "idx": 57,
+          "val": "56",
+          "txt": "56"
+        },
+        {
+          "idx": 58,
+          "val": "57",
+          "txt": "57"
+        },
+        {
+          "idx": 59,
+          "val": "58",
+          "txt": "58"
+        },
+        {
+          "idx": 60,
+          "val": "59",
+          "txt": "59"
+        }
+      ]
+    },
+    {
+      "id": "ContentPlaceHolder1_ddlAMPM",
+      "name": "ctl00$ContentPlaceHolder1$ddlAMPM",
+      "opts": [
+        {
+          "idx": 0,
+          "val": "0",
+          "txt": "AM"
+        },
+        {
+          "idx": 1,
+          "val": "1",
+          "txt": "PM"
+        }
+      ]
+    },
+    {
+      "id": "ContentPlaceHolder1_ddl_State",
+      "name": "ctl00$ContentPlaceHolder1$ddl_State",
+      "opts": [
+        {
+          "idx": 0,
+          "val": "0",
+          "txt": "---Select---"
+        },
+        {
+          "idx": 1,
+          "val": "1",
+          "txt": "ANDAMAN & NICOBAR"
+        },
+        {
+          "idx": 2,
+          "val": "2",
+          "txt": "ANDHRA PRADESH"
+        },
+        {
+          "idx": 3,
+          "val": "3",
+          "txt": "ARUNACHAL PRADESH"
+        },
+        {
+          "idx": 4,
+          "val": "4",
+          "txt": "ASSAM"
+        },
+        {
+          "idx": 5,
+          "val": "5",
+          "txt": "BIHAR"
+        },
+        {
+          "idx": 6,
+          "val": "6",
+          "txt": "CHANDIGARH"
+        },
+        {
+          "idx": 7,
+          "val": "33",
+          "txt": "CHHATTISGARH"
+        },
+        {
+          "idx": 8,
+          "val": "7",
+          "txt": "DADRA & NAGAR HAVELI AND DAMAN & DIU"
+        },
+        {
+          "idx": 9,
+          "val": "8",
+          "txt": "DELHI"
+        },
+        {
+          "idx": 10,
+          "val": "10",
+          "txt": "GOA"
+        },
+        {
+          "idx": 11,
+          "val": "11",
+          "txt": "GUJARAT"
+        },
+        {
+          "idx": 12,
+          "val": "13",
+          "txt": "HARYANA"
+        },
+        {
+          "idx": 13,
+          "val": "12",
+          "txt": "HIMACHAL PRADESH"
+        },
+        {
+          "idx": 14,
+          "val": "14",
+          "txt": "JAMMU & KASHMIR"
+        },
+        {
+          "idx": 15,
+          "val": "34",
+          "txt": "JHARKHAND"
+        },
+        {
+          "idx": 16,
+          "val": "16",
+          "txt": "KARNATAKA"
+        },
+        {
+          "idx": 17,
+          "val": "15",
+          "txt": "KERALA"
+        },
+        {
+          "idx": 18,
+          "val": "38",
+          "txt": "LADAKH"
+        },
+        {
+          "idx": 19,
+          "val": "17",
+          "txt": "LAKSHADWEEP"
+        },
+        {
+          "idx": 20,
+          "val": "21",
+          "txt": "MADHYA PRADESH"
+        },
+        {
+          "idx": 21,
+          "val": "19",
+          "txt": "MAHARASHTRA"
+        },
+        {
+          "idx": 22,
+          "val": "20",
+          "txt": "MANIPUR"
+        },
+        {
+          "idx": 23,
+          "val": "18",
+          "txt": "MEGHALAYA"
+        },
+        {
+          "idx": 24,
+          "val": "22",
+          "txt": "MIZORAM"
+        },
+        {
+          "idx": 25,
+          "val": "23",
+          "txt": "NAGALAND"
+        },
+        {
+          "idx": 26,
+          "val": "24",
+          "txt": "ODISHA"
+        },
+        {
+          "idx": 27,
+          "val": "26",
+          "txt": "PUDUCHERRY"
+        },
+        {
+          "idx": 28,
+          "val": "25",
+          "txt": "PUNJAB"
+        },
+        {
+          "idx": 29,
+          "val": "27",
+          "txt": "RAJASTHAN"
+        },
+        {
+          "idx": 30,
+          "val": "28",
+          "txt": "SIKKIM"
+        },
+        {
+          "idx": 31,
+          "val": "29",
+          "txt": "TAMIL NADU"
+        },
+        {
+          "idx": 32,
+          "val": "37",
+          "txt": "TELANGANA"
+        },
+        {
+          "idx": 33,
+          "val": "30",
+          "txt": "TRIPURA"
+        },
+        {
+          "idx": 34,
+          "val": "35",
+          "txt": "UTTARAKHAND"
+        },
+        {
+          "idx": 35,
+          "val": "31",
+          "txt": "UTTAR PRADESH"
+        },
+        {
+          "idx": 36,
+          "val": "32",
+          "txt": "WEST BENGAL"
+        }
+      ]
+    },
+    {
+      "id": "ContentPlaceHolder1_ddl_District",
+      "name": "ctl00$ContentPlaceHolder1$ddl_District",
+      "opts": [
+        {
+          "idx": 0,
+          "val": "0",
+          "txt": "--Select--"
+        }
+      ]
+    },
+    {
+      "id": "ContentPlaceHolder1_ddl_policeStation",
+      "name": "ctl00$ContentPlaceHolder1$ddl_policeStation",
+      "opts": [
+        {
+          "idx": 0,
+          "val": "0",
+          "txt": "--Select--"
+        }
+      ]
+    },
+    {
+      "id": "ContentPlaceHolder1_ddl_InformationSource",
+      "name": "ctl00$ContentPlaceHolder1$ddl_InformationSource",
+      "opts": [
+        {
+          "idx": 0,
+          "val": "0",
+          "txt": "---Select---"
+        },
+        {
+          "idx": 1,
+          "val": "2",
+          "txt": "Email"
+        },
+        {
+          "idx": 2,
+          "val": "3",
+          "txt": "Facebook"
+        },
+        {
+          "idx": 3,
+          "val": "5",
+          "txt": "Instagram"
+        },
+        {
+          "idx": 4,
+          "val": "6",
+          "txt": "Snapchat"
+        },
+        {
+          "idx": 5,
+          "val": "8",
+          "txt": "Twitter"
+        },
+        {
+          "idx": 6,
+          "val": "9",
+          "txt": "WhatsApp"
+        },
+        {
+          "idx": 7,
+          "val": "10",
+          "txt": "Website Url"
+        },
+        {
+          "idx": 8,
+          "val": "12",
+          "txt": "Youtube"
+        },
+        {
+          "idx": 9,
+          "val": "13",
+          "txt": "LinkedIn"
+        },
+        {
+          "idx": 10,
+          "val": "14",
+          "txt": "Telegram"
+        },
+        {
+          "idx": 11,
+          "val": "15",
+          "txt": "Other"
+        }
+      ]
+    }
+  ],
+  "inputs": [
+    {
+      "id": "txt_ApproxDateTime",
+      "name": "ctl00$ContentPlaceHolder1$txt_ApproxDateTime",
+      "type": "date",
+      "ph": "dd/mm/yyyy"
+    },
+    {
+      "id": "ContentPlaceHolder1_txtresiondelay",
+      "name": "ctl00$ContentPlaceHolder1$txtresiondelay",
+      "type": "text",
+      "ph": ""
+    },
+    {
+      "id": "txt_AdditionalInfo",
+      "name": "ctl00$ContentPlaceHolder1$txt_AdditionalInfo",
+      "type": "textarea",
+      "ph": ""
+    },
+    {
+      "id": "q17length",
+      "name": "q17length",
+      "type": "text",
+      "ph": ""
+    }
+  ]
+}

@@ -1,0 +1,157 @@
+﻿diff --git a/src/app/dashboard/analysis/[id]/page.module.css b/src/app/dashboard/analysis/[id]/page.module.css
+index 000644e..c9ca8b1 100644
+--- a/src/app/dashboard/analysis/[id]/page.module.css
++++ b/src/app/dashboard/analysis/[id]/page.module.css
+@@ -282,6 +282,72 @@
+     box-shadow: none;
+ }
+ 
++/* Dispatcher banner */
++.dispatcherBanner {
++    position: relative;
++    z-index: 2;
++    border-radius: 22px;
++    border: 1px solid rgba(16, 185, 129, 0.24);
++    background: linear-gradient(
++        145deg,
++        rgba(16, 185, 129, 0.14),
++        rgba(16, 185, 129, 0.05)
++    );
++    box-shadow:
++        0 16px 40px rgba(16, 185, 129, 0.14),
++        inset 0 1px 0 rgba(255, 255, 255, 0.45);
++    backdrop-filter: blur(12px) saturate(130%);
++    -webkit-backdrop-filter: blur(12px) saturate(130%);
++    overflow: hidden;
++}
++
++.dispatcherBanner::before {
++    content: "";
++    position: absolute;
++    inset: 0;
++    background:
++        linear-gradient(120deg, rgba(255, 255, 255, 0.34), transparent 40%),
++        radial-gradient(
++            340px 180px at 90% 20%,
++            rgba(52, 211, 153, 0.14),
++            transparent 72%
++        );
++    pointer-events: none;
++}
++
++.dispatcherIcon {
++    color: #10b981;
++    flex-shrink: 0;
++    margin-top: 2px;
++}
++
++.dispatcherBtn {
++    border: 1px solid rgba(255, 255, 255, 0.24);
++    border-radius: var(--radius-full);
++    display: inline-flex;
++    align-items: center;
++    justify-content: center;
++    gap: 8px;
++    padding: 12px 18px;
++    font-size: 13px;
++    font-weight: 800;
++    letter-spacing: -0.01em;
++    color: #fff;
++    background: linear-gradient(135deg, #10b981, #059669);
++    box-shadow:
++        0 14px 30px rgba(16, 185, 129, 0.34),
++        0 0 0 1px rgba(255, 255, 255, 0.18) inset;
++    transition: all var(--transition-base);
++    white-space: nowrap;
++}
++
++.dispatcherBtn:hover:not(:disabled) {
++    transform: translateY(-1px);
++    box-shadow:
++        0 20px 40px rgba(16, 185, 129, 0.42),
++        0 0 0 1px rgba(255, 255, 255, 0.24) inset;
++}
++
+ /* Shared section shell */
+ .section,
+ .screenshotSection {
+@@ -574,6 +640,7 @@
+ }
+ 
+ [data-theme="dark"] .exportBanner::before,
++[data-theme="dark"] .dispatcherBanner::before,
+ [data-theme="dark"] .section::before,
+ [data-theme="dark"] .screenshotSection::before {
+     background:
+@@ -619,7 +686,8 @@
+ }
+ 
+ [data-theme="dark"] .exportBannerIcon,
+-[data-theme="dark"] .exportBannerDesc strong {
++[data-theme="dark"] .exportBannerDesc strong,
++[data-theme="dark"] .dispatcherIcon {
+     color: #c7d2fe;
+ }
+ 
+@@ -681,7 +749,7 @@
+         font-size: 11px;
+     }
+ 
+-    .exportBanner {
++    .exportBanner, .dispatcherBanner {
+         border-radius: 16px;
+     }
+ 
+@@ -691,7 +759,7 @@
+         align-items: stretch;
+     }
+ 
+-    .exportBtn {
++    .exportBtn, .dispatcherBtn {
+         width: 100%;
+     }
+ 
+diff --git a/src/app/dashboard/analysis/[id]/page.tsx b/src/app/dashboard/analysis/[id]/page.tsx
+index 857c025..906815c 100644
+--- a/src/app/dashboard/analysis/[id]/page.tsx
++++ b/src/app/dashboard/analysis/[id]/page.tsx
+@@ -23,6 +23,7 @@ import {
+   Loader,
+   CheckCircle,
+   Lock,
++  Bot,
+ } from "lucide-react";
+ import styles from "./page.module.css";
+ 
+@@ -563,6 +564,31 @@ export default function AnalysisDetailPage() {
+         </div>
+       </div>
+ 
++      {/* ΓòÉΓòÉΓòÉ AUTONOMOUS DISPATCHER BUTTON ΓòÉΓòÉΓòÉ */}
++      <div className={styles.dispatcherBanner}>
++        <div className={styles.exportBannerContent}>
++          <div className={styles.exportBannerText}>
++            <Bot size={22} className={styles.dispatcherIcon} />
++            <div>
++              <h3 className={styles.exportBannerTitle}>
++                Autonomous Legal Dispatcher
++              </h3>
++              <p className={styles.exportBannerDesc}>
++                Automatically file a complaint with the appropriate authorities using your local machine.{" "}
++                <strong>This will open a browser window and pre-fill the complex legal forms for you.</strong> You will have a chance to review the complaint before submitting.
++              </p>
++            </div>
++          </div>
++          <button
++            className={styles.dispatcherBtn}
++            onClick={() => alert("To use the Autonomous Dispatcher, run the Python dispatcher script locally on your machine. We are currently integrating this directly into the app.")}
++          >
++            <Bot size={18} />
++            Run Legal Dispatcher
++          </button>
++        </div>
++      </div>
++
+       {/* Screenshot preview */}
+       <div className={styles.screenshotSection}>
+         <h2 className={styles.sectionTitle}>

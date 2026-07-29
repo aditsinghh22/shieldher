@@ -1,0 +1,402 @@
+.lawyersError {
+  border-radius: 14px;
+  padding: 12px 14px;
+  border: 1px solid rgba(220, 38, 38, 0.28);
+  background: linear-gradient(140deg, rgba(220, 38, 38, 0.12), rgba(239, 68, 68, 0.07));
+  color: #991b1b;
+  font-size: 13px;
+  font-weight: 700;
+}
+
+.statsGrid {
+  margin-top: 18px;
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 14px;
+}
+
+.statCard {
+  position: relative;
+  border-radius: 20px;
+  padding: 18px;
+  border: 1px solid rgba(15, 23, 42, 0.12);
+  background:
+    linear-gradient(130deg, rgba(15, 23, 42, 0.08), rgba(15, 23, 42, 0.03)),
+    rgba(255, 255, 255, 0.88);
+  box-shadow:
+    0 16px 34px rgba(15, 23, 42, 0.1),
+    inset 0 1px 0 rgba(255, 255, 255, 0.58);
+  overflow: hidden;
+}
+
+.statCard::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(120deg, rgba(255, 255, 255, 0.34), transparent 40%);
+  pointer-events: none;
+}
+
+.statCardHeader {
+  position: relative;
+  z-index: 2;
+  margin-bottom: 14px;
+}
+
+.statIconWrap {
+  width: 44px;
+  height: 44px;
+  border-radius: 13px;
+  border: 1px solid transparent;
+  display: grid;
+  place-items: center;
+}
+
+.statIconDefault {
+  color: #1d4ed8;
+  border-color: rgba(37, 99, 235, 0.3);
+  background: rgba(37, 99, 235, 0.14);
+}
+
+.statIconDanger {
+  color: #dc2626;
+  border-color: rgba(239, 68, 68, 0.3);
+  background: rgba(239, 68, 68, 0.14);
+}
+
+.statIconNeutral {
+  color: #4338ca;
+  border-color: rgba(79, 70, 229, 0.3);
+  background: rgba(79, 70, 229, 0.14);
+}
+
+.statIconSafe {
+  color: #0f766e;
+  border-color: rgba(20, 184, 166, 0.3);
+  background: rgba(20, 184, 166, 0.14);
+}
+
+.statBody {
+  position: relative;
+  z-index: 2;
+}
+
+.statLabel {
+  font-size: 11px;
+  text-transform: uppercase;
+  letter-spacing: 0.14em;
+  color: var(--text-muted);
+  font-weight: 800;
+}
+
+.statValue {
+  margin-top: 8px;
+  font-family: var(--font-headline);
+  font-size: clamp(34px, 4vw, 40px);
+  font-weight: 800;
+  line-height: 1;
+  letter-spacing: -0.03em;
+  color: #0f172a;
+}
+
+.statValueDanger {
+  color: #be123c;
+}
+
+.statValueSafe {
+  color: #0f766e;
+}
+
+.section {
+  margin-top: 18px;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.sectionHeader {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.sectionTitle {
+  font-family: var(--font-headline);
+  font-size: clamp(27px, 3.2vw, 35px);
+  font-weight: 800;
+  letter-spacing: -0.03em;
+  color: #0f172a;
+}
+
+.viewAll {
+  text-decoration: none;
+  border-radius: var(--radius-full);
+  padding: 9px 14px;
+  font-size: 13px;
+  font-weight: 800;
+  color: #312e81;
+  border: 1px solid rgba(79, 70, 229, 0.3);
+  background: rgba(79, 70, 229, 0.1);
+  transition: all var(--transition-fast);
+}
+
+.viewAll:hover {
+  color: #ffffff;
+  background: #4338ca;
+  border-color: #4338ca;
+}
+
+.analysisList {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.analysisCard {
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: 18px;
+  padding: 18px 20px;
+  border-radius: 20px;
+  border: 1px solid rgba(15, 23, 42, 0.12);
+  background:
+    linear-gradient(145deg, rgba(255, 255, 255, 0.92), rgba(255, 255, 255, 0.75)),
+    radial-gradient(300px 140px at 90% 20%, rgba(79, 70, 229, 0.08), transparent 65%);
+  box-shadow:
+    0 16px 36px rgba(15, 23, 42, 0.1),
+    inset 0 1px 0 rgba(255, 255, 255, 0.55);
+  overflow: hidden;
+}
+
+.accentBar {
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 5px;
+  height: 100%;
+}
+
+.accentBarLow {
+  background: linear-gradient(180deg, #3730a3, #6366f1);
+}
+
+.accentBarMedium {
+  background: linear-gradient(180deg, #b45309, #f59e0b);
+}
+
+.accentBarHigh {
+  background: linear-gradient(180deg, #dc2626, #ef4444);
+}
+
+.accentBarCritical {
+  background: linear-gradient(180deg, #7f1d1d, #b91c1c);
+}
+
+.analysisIcon {
+  width: 52px;
+  height: 52px;
+  border-radius: 15px;
+  border: 1px solid transparent;
+  display: grid;
+  place-items: center;
+  flex-shrink: 0;
+}
+
+.analysisIconLow {
+  color: #3730a3;
+  border-color: rgba(79, 70, 229, 0.32);
+  background: rgba(79, 70, 229, 0.14);
+}
+
+.analysisIconMedium {
+  color: #b45309;
+  border-color: rgba(245, 158, 11, 0.3);
+  background: rgba(245, 158, 11, 0.13);
+}
+
+.analysisIconHigh {
+  color: #b91c1c;
+  border-color: rgba(239, 68, 68, 0.3);
+  background: rgba(239, 68, 68, 0.13);
+}
+
+.analysisIconCritical {
+  color: #7f1d1d;
+  border-color: rgba(185, 28, 28, 0.3);
+  background: rgba(185, 28, 28, 0.13);
+}
+
+.analysisContent {
+  min-width: 0;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.analysisMeta {
+  display: flex;
+  align-items: center;
+  gap: 9px;
+  flex-wrap: wrap;
+}
+
+.analysisBadge {
+  border-radius: var(--radius-full);
+  padding: 4px 9px;
+  font-size: 10px;
+  font-weight: 800;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  border: 1px solid transparent;
+}
+
+.badgeLow {
+  color: #312e81;
+  border-color: rgba(79, 70, 229, 0.3);
+  background: rgba(79, 70, 229, 0.14);
+}
+
+.badgeMedium {
+  color: #92400e;
+  border-color: rgba(245, 158, 11, 0.3);
+  background: rgba(245, 158, 11, 0.14);
+}
+
+.badgeHigh {
+  color: #991b1b;
+  border-color: rgba(239, 68, 68, 0.3);
+  background: rgba(239, 68, 68, 0.14);
+}
+
+.badgeCritical {
+  color: #7f1d1d;
+  border-color: rgba(185, 28, 28, 0.33);
+  background: rgba(185, 28, 28, 0.16);
+}
+
+.analysisDate {
+  font-size: 12px;
+  color: var(--text-muted);
+  font-weight: 700;
+}
+
+.analysisTitle {
+  font-family: var(--font-headline);
+  font-size: 20px;
+  font-weight: 800;
+  line-height: 1.2;
+  letter-spacing: -0.02em;
+  color: #0f172a;
+}
+
+.analysisSummary {
+  font-size: 14px;
+  line-height: 1.5;
+  color: #334155;
+}
+
+.empty {
+  border-radius: 20px;
+  border: 1px dashed rgba(79, 70, 229, 0.3);
+  background:
+    linear-gradient(140deg, rgba(79, 70, 229, 0.1), rgba(79, 70, 229, 0.04)),
+    rgba(255, 255, 255, 0.75);
+  padding: 34px 20px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  gap: 10px;
+  color: #475569;
+}
+
+.empty h3 {
+  font-family: var(--font-headline);
+  font-size: 24px;
+  letter-spacing: -0.02em;
+  color: #0f172a;
+}
+
+.empty p {
+  font-size: 14px;
+  max-width: 520px;
+}
+
+[data-theme='dark'] .lawyersError {
+  color: #fca5a5;
+  border-color: rgba(248, 113, 113, 0.38);
+  background: linear-gradient(140deg, rgba(248, 113, 113, 0.18), rgba(248, 113, 113, 0.08));
+}
+
+[data-theme='dark'] .statCard,
+[data-theme='dark'] .analysisCard,
+[data-theme='dark'] .empty {
+  border-color: rgba(148, 163, 184, 0.24);
+  background:
+    linear-gradient(145deg, rgba(15, 23, 42, 0.82), rgba(15, 23, 42, 0.62)),
+    radial-gradient(320px 160px at 90% 18%, rgba(129, 140, 248, 0.14), transparent 70%);
+  box-shadow:
+    0 22px 54px rgba(2, 6, 23, 0.56),
+    inset 0 1px 0 rgba(255, 255, 255, 0.08);
+}
+
+[data-theme='dark'] .statCard::before {
+  background: linear-gradient(120deg, rgba(255, 255, 255, 0.08), transparent 40%);
+}
+
+[data-theme='dark'] .sectionTitle,
+[data-theme='dark'] .analysisTitle,
+[data-theme='dark'] .statValue,
+[data-theme='dark'] .empty h3 {
+  color: #f8fafc;
+}
+
+[data-theme='dark'] .analysisSummary,
+[data-theme='dark'] .analysisDate,
+[data-theme='dark'] .statLabel,
+[data-theme='dark'] .empty p,
+[data-theme='dark'] .empty {
+  color: #94a3b8;
+}
+
+[data-theme='dark'] .viewAll {
+  color: #c7d2fe;
+  border-color: rgba(129, 140, 248, 0.42);
+  background: rgba(129, 140, 248, 0.18);
+}
+
+[data-theme='dark'] .viewAll:hover {
+  background: #6366f1;
+  border-color: #6366f1;
+  color: #fff;
+}
+
+[data-theme='dark'] .empty {
+  border-color: rgba(129, 140, 248, 0.38);
+}
+
+@media (max-width: 1200px) {
+  .statsGrid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (max-width: 768px) {
+  .statsGrid {
+    grid-template-columns: 1fr;
+  }
+
+  .analysisCard {
+    padding: 15px;
+    border-radius: 16px;
+    gap: 12px;
+  }
+
+  .sectionHeader {
+    align-items: flex-start;
+    flex-direction: column;
+  }
+}

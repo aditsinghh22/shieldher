@@ -1,0 +1,91 @@
+﻿node.exe : ΓÜá Warning: 
+Next.js inferred your 
+workspace root, but it 
+may not be correct.
+At line:1 char:1
++ & "C:\Program 
+Files\nodejs/node.exe" 
+"C:\Program 
+Files\nodejs/node_mo ...
++ ~~~~~~~~~~~~~~~~~~~~~~~~
+~~~~~~~~~~~~~~~~~~~~~~~~~~
+~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo        
+      : NotSpecified: (Γ  
+  Üá Warning: Ne...not    
+ be correct.:String) [    
+], RemoteException
+    + FullyQualifiedError 
+   Id : NativeCommandErr  
+  or
+ 
+ We detected multiple 
+lockfiles and selected 
+the directory of C:\Users\
+LENOVO\package-lock.json 
+as the root directory.
+ To silence this warning, 
+set `turbopack.root` in 
+your Next.js config, or 
+consider removing one of 
+the lockfiles if it's not 
+needed.
+   See https://nextjs.org/
+docs/app/api-reference/con
+fig/next-config-js/turbopa
+ck#root-directory for 
+more information.
+ Detected additional 
+lockfiles: 
+   * C:\Users\LENOVO\PROJE
+CTS\SHIELD-HER\shieldher\p
+ackage-lock.json
+   * C:\Users\LENOVO\PROJE
+CTS\SHIELD-HER\package-loc
+k.json
+
+Γû▓ Next.js 16.1.6 (Turbopack)
+- Environments: .env.local
+
+ΓÜá The "middleware" file 
+convention is deprecated. 
+Please use "proxy" 
+instead. Learn more: https
+://nextjs.org/docs/message
+s/middleware-to-proxy
+  Creating an optimized production build ...
+Γ£ô Compiled successfully in 5.9s
+  Running TypeScript ...
+  Collecting page data using 7 workers ...
+  Generating static pages using 7 workers (0/18) ...
+  Generating static pages using 7 workers (4/18) 
+  Generating static pages using 7 workers (8/18) 
+  Generating static pages using 7 workers (13/18) 
+Γ£ô Generating static pages using 7 workers (18/18) in 308.1ms
+  Finalizing page optimization ...
+
+Route (app)
+Γöî Γùï /
+Γö£ Γùï /_not-found
+Γö£ ╞Æ /api/ai-proxy
+Γö£ ╞Æ /api/auth/signup
+Γö£ ╞Æ /api/delete-report
+Γö£ ╞Æ /api/dispatch
+Γö£ ╞Æ /api/ghost-purge
+Γö£ ╞Æ /api/history
+Γö£ Γùï /auth
+Γö£ ╞Æ /auth/callback
+Γö£ Γùï /dashboard
+Γö£ ╞Æ /dashboard/analysis/[id]
+Γö£ Γùï /dashboard/downloads
+Γö£ Γùï /dashboard/history
+Γö£ Γùï /dashboard/migrate
+Γö£ Γùï /dashboard/settings
+Γöö Γùï /dashboard/upload
+
+
+╞Æ Proxy (Middleware)
+
+Γùï  (Static)   prerendered as static content
+╞Æ  (Dynamic)  server-rendered on demand
+

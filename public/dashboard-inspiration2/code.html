@@ -1,0 +1,382 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Shield Her - Dashboard</title>
+<!-- Fonts -->
+<link href="https://fonts.googleapis.com/css2?family=Newsreader:ital,opsz,wght@0,6..72,200..800;1,6..72,200..800&amp;family=Manrope:wght@200..800&amp;display=swap" rel="stylesheet"/>
+<!-- Icons -->
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<!-- Tailwind -->
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            "colors": {
+                "on-tertiary-container": "#436254",
+                "secondary-dim": "#595851",
+                "primary-fixed": "#c8ebd0",
+                "tertiary-fixed-dim": "#cbeddb",
+                "on-tertiary": "#ffffff",
+                "outline": "#838170",
+                "secondary-container": "#e5e2d8",
+                "secondary": "#66655d",
+                "on-surface-variant": "#666555",
+                "on-primary-fixed": "#284632",
+                "on-primary-fixed-variant": "#44624d",
+                "error": "#a64542",
+                "inverse-surface": "#0f0e0a",
+                "on-tertiary-fixed-variant": "#4e6d5e",
+                "inverse-primary": "#d3f7db",
+                "on-error": "#ffffff",
+                "error-container": "#fe8983",
+                "surface-container-highest": "#ece9d5",
+                "on-secondary": "#ffffff",
+                "tertiary-fixed": "#d9fce9",
+                "surface-container-lowest": "#ffffff",
+                "inverse-on-surface": "#9f9d95",
+                "tertiary-dim": "#405f50",
+                "primary": "#466550",
+                "surface-tint": "#466550",
+                "surface-variant": "#ece9d5",
+                "on-secondary-fixed": "#404039",
+                "primary-dim": "#3b5944",
+                "primary-fixed-dim": "#baddc2",
+                "on-secondary-fixed-variant": "#5d5c54",
+                "surface": "#fffbff",
+                "background": "#fffbff",
+                "on-tertiary-fixed": "#315042",
+                "surface-container": "#f7f4e5",
+                "surface-container-low": "#fdf9ed",
+                "on-background": "#39382b",
+                "tertiary": "#4c6b5c",
+                "surface-container-high": "#f2eedd",
+                "surface-bright": "#fffbff",
+                "on-error-container": "#752121",
+                "primary-container": "#c8ebd0",
+                "surface-dim": "#e6e3cd",
+                "on-surface": "#39382b",
+                "error-dim": "#4e0309",
+                "tertiary-container": "#d9fce9",
+                "on-secondary-container": "#53524a",
+                "outline-variant": "#bcbaa7",
+                "secondary-fixed": "#e5e2d8",
+                "secondary-fixed-dim": "#d7d4cb",
+                "on-primary": "#e2ffe7",
+                "on-primary-container": "#3a5844"
+            },
+            "borderRadius": {
+                "DEFAULT": "0.125rem",
+                "lg": "0.25rem",
+                "xl": "0.5rem",
+                "full": "0.75rem"
+            },
+            "fontFamily": {
+                "headline": ["Newsreader", "serif"],
+                "body": ["Manrope", "sans-serif"],
+                "label": ["Manrope", "sans-serif"]
+            }
+          },
+        },
+      }
+    </script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        .serif-text { font-family: 'Newsreader', serif; }
+        .sans-text { font-family: 'Manrope', sans-serif; }
+        .glass-nav {
+            background: rgba(253, 249, 240, 0.8);
+            backdrop-filter: blur(20px);
+        }
+    </style>
+</head>
+<body class="bg-[#fdf9f0] text-[#1c1c16] font-body selection:bg-primary-container">
+<!-- Sidebar Navigation -->
+<aside class="h-screen w-64 fixed left-0 top-0 bg-[#f7f4e5] flex flex-col py-8 border-r border-[#bcbaa7]/15 z-50">
+<div class="px-8 mb-10">
+<h1 class="serif-text text-xl text-[#1c1c16] tracking-tight">Shield Her</h1>
+<p class="text-[10px] uppercase tracking-widest text-[#1c1c16]/50 mt-1">Editorial Guardian</p>
+</div>
+<nav class="flex-1 space-y-1 px-4">
+<!-- Dashboard Active -->
+<a class="flex items-center gap-3 px-4 py-3 text-[#466550] border-r-2 border-[#466550] bg-[#fdf9f0] transition-all duration-300 transform active:scale-[0.98]" href="#">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">dashboard</span>
+<span class="text-sm font-medium tracking-wide">Dashboard</span>
+</a>
+<!-- Inactive Items -->
+<a class="flex items-center gap-3 px-4 py-3 text-[#1c1c16]/70 hover:bg-[#e6e3cd]/50 hover:text-[#1c1c16] transition-colors" href="#">
+<span class="material-symbols-outlined">cloud_upload</span>
+<span class="text-sm font-medium tracking-wide">Upload</span>
+</a>
+<a class="flex items-center gap-3 px-4 py-3 text-[#1c1c16]/70 hover:bg-[#e6e3cd]/50 hover:text-[#1c1c16] transition-colors" href="#">
+<span class="material-symbols-outlined">history</span>
+<span class="text-sm font-medium tracking-wide">History</span>
+</a>
+<a class="flex items-center gap-3 px-4 py-3 text-[#1c1c16]/70 hover:bg-[#e6e3cd]/50 hover:text-[#1c1c16] transition-colors" href="#">
+<span class="material-symbols-outlined">download</span>
+<span class="text-sm font-medium tracking-wide">Downloads</span>
+</a>
+<a class="flex items-center gap-3 px-4 py-3 text-[#1c1c16]/70 hover:bg-[#e6e3cd]/50 hover:text-[#1c1c16] transition-colors" href="#">
+<span class="material-symbols-outlined">gavel</span>
+<span class="text-sm font-medium tracking-wide">Lawyers</span>
+</a>
+<a class="flex items-center gap-3 px-4 py-3 text-[#1c1c16]/70 hover:bg-[#e6e3cd]/50 hover:text-[#1c1c16] transition-colors" href="#">
+<span class="material-symbols-outlined">chat</span>
+<span class="text-sm font-medium tracking-wide">Communication</span>
+</a>
+<a class="flex items-center gap-3 px-4 py-3 text-[#1c1c16]/70 hover:bg-[#e6e3cd]/50 hover:text-[#1c1c16] transition-colors" href="#">
+<span class="material-symbols-outlined">settings</span>
+<span class="text-sm font-medium tracking-wide">Settings</span>
+</a>
+</nav>
+<div class="px-4 mt-auto border-t border-[#bcbaa7]/15 pt-6 space-y-1">
+<a class="flex items-center gap-3 px-4 py-3 text-[#1c1c16]/70 hover:bg-[#e6e3cd]/50 transition-colors" href="#">
+<span class="material-symbols-outlined">contact_support</span>
+<span class="text-sm font-medium tracking-wide">Support</span>
+</a>
+<a class="flex items-center gap-3 px-4 py-3 text-[#1c1c16]/70 hover:bg-[#e6e3cd]/50 transition-colors" href="#">
+<span class="material-symbols-outlined">logout</span>
+<span class="text-sm font-medium tracking-wide">Log out</span>
+</a>
+</div>
+</aside>
+<!-- Main Content Area -->
+<main class="ml-64 min-h-screen">
+<!-- Top Nav -->
+<header class="sticky top-0 z-40 w-full glass-nav px-8 py-4 flex justify-between items-center">
+<div class="flex items-center gap-4">
+<div class="relative">
+<span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-[#1c1c16]/40">search</span>
+<input class="pl-10 pr-4 py-2 bg-surface-container-high border-none rounded-full text-sm focus:ring-2 focus:ring-primary/40 w-64 transition-all" placeholder="Search safety reports..." type="text"/>
+</div>
+</div>
+<div class="flex items-center gap-6">
+<button class="relative text-[#1c1c16]/60 hover:text-[#466550] transition-colors">
+<span class="material-symbols-outlined">notifications</span>
+<span class="absolute top-0 right-0 w-2 h-2 bg-error rounded-full"></span>
+</button>
+<button class="text-[#1c1c16]/60 hover:text-[#466550] transition-colors">
+<span class="material-symbols-outlined">help</span>
+</button>
+<div class="flex items-center gap-3 pl-4 border-l border-[#bcbaa7]/20">
+<div class="text-right">
+<p class="text-sm font-bold text-[#1c1c16]">Elena Vance</p>
+<p class="text-[10px] text-[#1c1c16]/50">Safety Lead</p>
+</div>
+<img alt="Profile" class="w-10 h-10 rounded-full object-cover shadow-sm" data-alt="professional headshot of a woman with a confident smile in soft studio lighting against a warm neutral background" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDfD5ffD-YxFpReaOhJax6N1_Pt3NFLUpitrzyzuXmPPYsIdBf8xw8PIwRb-8DVo_-apKbsW0FoLS3aW7oPHCrAkTjH_LGlZ9fio1WmFpCopgVy4Hr2zmOYzqpNldphju6-qCSZjoLCiAGH6MxpkY9P6WRj_m95-Rg4AVfbeKWgyNLUYgqiBVECaYYT7GQD1LV68xZF0qcy9DGuLAmOdqMXQglAaoMmeM8CdvFekxRiaapoHQili0wb2fYPDL0Cn7aLPeP9a8bWXb6r"/>
+</div>
+</div>
+</header>
+<div class="p-8 max-w-7xl mx-auto space-y-8">
+<!-- Page Title -->
+<div class="flex justify-between items-end">
+<div>
+<h2 class="serif-text text-4xl font-semibold tracking-tight text-[#1c1c16]">Safety Dashboard</h2>
+<p class="text-on-surface-variant mt-2 max-w-lg">Monitoring and analyzing visual content patterns to ensure brand integrity and safety compliance.</p>
+</div>
+<button class="bg-primary hover:bg-primary-dim text-white px-6 py-3 rounded-full flex items-center gap-2 transition-all shadow-lg shadow-primary/10">
+<span class="material-symbols-outlined text-sm">add</span>
+<span class="text-sm font-semibold">New Analysis</span>
+</button>
+</div>
+<!-- Row 1: Metric Cards -->
+<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+<!-- Card 1 -->
+<div class="bg-surface-container-lowest p-6 rounded-xl shadow-[0_24px_40px_-4px_rgba(57,56,43,0.05)] border border-outline-variant/15">
+<div class="flex justify-between items-start mb-4">
+<div class="p-2 bg-primary/10 rounded-lg">
+<span class="material-symbols-outlined text-primary">cloud_upload</span>
+</div>
+<span class="text-primary text-xs font-bold flex items-center bg-primary/5 px-2 py-1 rounded-full">+12.5%</span>
+</div>
+<p class="text-on-surface-variant text-sm font-medium">Total Uploads</p>
+<h3 class="text-3xl font-bold text-[#1c1c16] mt-1">2,842</h3>
+</div>
+<!-- Card 2 -->
+<div class="bg-surface-container-lowest p-6 rounded-xl shadow-[0_24px_40px_-4px_rgba(57,56,43,0.05)] border border-outline-variant/15">
+<div class="flex justify-between items-start mb-4">
+<div class="p-2 bg-primary/10 rounded-lg">
+<span class="material-symbols-outlined text-primary">query_stats</span>
+</div>
+<span class="text-primary text-xs font-bold flex items-center bg-primary/5 px-2 py-1 rounded-full">+4.2%</span>
+</div>
+<p class="text-on-surface-variant text-sm font-medium">Analyzed %</p>
+<h3 class="text-3xl font-bold text-[#1c1c16] mt-1">98.4%</h3>
+</div>
+<!-- Card 3 -->
+<div class="bg-surface-container-lowest p-6 rounded-xl shadow-[0_24px_40px_-4px_rgba(57,56,43,0.05)] border border-outline-variant/15">
+<div class="flex justify-between items-start mb-4">
+<div class="p-2 bg-primary/10 rounded-lg">
+<span class="material-symbols-outlined text-primary">verified_user</span>
+</div>
+<span class="text-primary text-xs font-bold flex items-center bg-primary/5 px-2 py-1 rounded-full">+8.1%</span>
+</div>
+<p class="text-on-surface-variant text-sm font-medium">Safe Results</p>
+<h3 class="text-3xl font-bold text-[#1c1c16] mt-1">2,615</h3>
+</div>
+<!-- Card 4 -->
+<div class="bg-surface-container-lowest p-6 rounded-xl shadow-[0_24px_40px_-4px_rgba(57,56,43,0.05)] border border-outline-variant/15">
+<div class="flex justify-between items-start mb-4">
+<div class="p-2 bg-error/10 rounded-lg">
+<span class="material-symbols-outlined text-error">flag</span>
+</div>
+<span class="text-error text-xs font-bold flex items-center bg-error/5 px-2 py-1 rounded-full">-2.4%</span>
+</div>
+<p class="text-on-surface-variant text-sm font-medium">Flagged Assets</p>
+<h3 class="text-3xl font-bold text-[#1c1c16] mt-1">227</h3>
+</div>
+</div>
+<!-- Main Content: Graphs -->
+<div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+<!-- Safety Insights Graph -->
+<div class="lg:col-span-2 bg-surface-container-lowest p-8 rounded-xl shadow-[0_24px_40px_-4px_rgba(57,56,43,0.05)] border border-outline-variant/15">
+<div class="flex justify-between items-center mb-10">
+<h4 class="serif-text text-2xl font-semibold">Safety Insights</h4>
+<div class="flex bg-surface-container p-1 rounded-full">
+<button class="px-4 py-1.5 text-xs font-bold bg-white text-primary rounded-full shadow-sm">Monthly</button>
+<button class="px-4 py-1.5 text-xs font-bold text-on-surface-variant">Yearly</button>
+</div>
+</div>
+<div class="relative h-64 w-full flex items-end justify-between gap-2 px-2">
+<!-- Simulated Bar/Line Chart Area -->
+<div class="flex-1 bg-surface-container h-[40%] rounded-t-lg relative group transition-all hover:bg-primary-container">
+<div class="absolute -top-8 left-1/2 -translate-x-1/2 bg-on-surface text-white text-[10px] px-2 py-1 rounded opacity-0 group-hover:opacity-100 transition-opacity">420</div>
+</div>
+<div class="flex-1 bg-surface-container h-[60%] rounded-t-lg relative group transition-all hover:bg-primary-container"></div>
+<div class="flex-1 bg-primary h-[85%] rounded-t-lg relative group transition-all hover:bg-primary-dim"></div>
+<div class="flex-1 bg-surface-container h-[55%] rounded-t-lg relative group transition-all hover:bg-primary-container"></div>
+<div class="flex-1 bg-surface-container h-[70%] rounded-t-lg relative group transition-all hover:bg-primary-container"></div>
+<div class="flex-1 bg-primary h-[95%] rounded-t-lg relative group transition-all hover:bg-primary-dim"></div>
+<div class="flex-1 bg-surface-container h-[45%] rounded-t-lg relative group transition-all hover:bg-primary-container"></div>
+<div class="flex-1 bg-surface-container h-[65%] rounded-t-lg relative group transition-all hover:bg-primary-container"></div>
+<div class="flex-1 bg-primary h-[80%] rounded-t-lg relative group transition-all hover:bg-primary-dim"></div>
+<div class="flex-1 bg-surface-container h-[50%] rounded-t-lg relative group transition-all hover:bg-primary-container"></div>
+<div class="flex-1 bg-surface-container h-[75%] rounded-t-lg relative group transition-all hover:bg-primary-container"></div>
+<div class="flex-1 bg-primary h-[100%] rounded-t-lg relative group transition-all hover:bg-primary-dim"></div>
+</div>
+<div class="flex justify-between mt-4 px-2">
+<span class="text-[10px] font-bold text-on-surface-variant">JAN</span>
+<span class="text-[10px] font-bold text-on-surface-variant">FEB</span>
+<span class="text-[10px] font-bold text-on-surface-variant">MAR</span>
+<span class="text-[10px] font-bold text-on-surface-variant">APR</span>
+<span class="text-[10px] font-bold text-on-surface-variant">MAY</span>
+<span class="text-[10px] font-bold text-on-surface-variant">JUN</span>
+<span class="text-[10px] font-bold text-on-surface-variant">JUL</span>
+<span class="text-[10px] font-bold text-on-surface-variant">AUG</span>
+<span class="text-[10px] font-bold text-on-surface-variant">SEP</span>
+<span class="text-[10px] font-bold text-on-surface-variant">OCT</span>
+<span class="text-[10px] font-bold text-on-surface-variant">NOV</span>
+<span class="text-[10px] font-bold text-on-surface-variant">DEC</span>
+</div>
+</div>
+<!-- Global Safety Gauge -->
+<div class="bg-surface-container-lowest p-8 rounded-xl shadow-[0_24px_40px_-4px_rgba(57,56,43,0.05)] border border-outline-variant/15 flex flex-col items-center justify-center">
+<h4 class="serif-text text-xl font-semibold mb-8 text-center">Global Safety Growth</h4>
+<div class="relative w-48 h-48">
+<svg class="w-full h-full transform -rotate-90">
+<circle class="text-surface-container" cx="96" cy="96" fill="transparent" r="88" stroke="currentColor" stroke-width="12"></circle>
+<circle class="text-primary" cx="96" cy="96" fill="transparent" r="88" stroke="currentColor" stroke-dasharray="552.92" stroke-dashoffset="138.23" stroke-width="12"></circle>
+</svg>
+<div class="absolute inset-0 flex flex-col items-center justify-center">
+<span class="text-4xl font-bold text-[#1c1c16]">75%</span>
+<span class="text-[10px] font-bold text-on-surface-variant uppercase tracking-widest mt-1">Growth</span>
+</div>
+</div>
+<div class="mt-8 text-center space-y-2">
+<p class="text-sm font-medium text-on-surface-variant">New Safety protocols integrated</p>
+<p class="text-xs text-primary font-bold">12 new regions protected this quarter</p>
+</div>
+</div>
+</div>
+<!-- Recent Analyses Table -->
+<section class="bg-surface-container-lowest rounded-xl shadow-[0_24px_40px_-4px_rgba(57,56,43,0.05)] border border-outline-variant/15 overflow-hidden">
+<div class="p-8 flex justify-between items-center">
+<h4 class="serif-text text-2xl font-semibold">Recent Analyses</h4>
+<button class="text-primary text-sm font-bold hover:underline">View All</button>
+</div>
+<div class="overflow-x-auto">
+<table class="w-full text-left">
+<thead>
+<tr class="bg-surface-container-low border-b border-outline-variant/10">
+<th class="px-8 py-4 text-[10px] font-bold text-on-surface-variant uppercase tracking-widest">Analysis ID</th>
+<th class="px-8 py-4 text-[10px] font-bold text-on-surface-variant uppercase tracking-widest">Date</th>
+<th class="px-8 py-4 text-[10px] font-bold text-on-surface-variant uppercase tracking-widest">Pattern Found</th>
+<th class="px-8 py-4 text-[10px] font-bold text-on-surface-variant uppercase tracking-widest">Category</th>
+<th class="px-8 py-4 text-[10px] font-bold text-on-surface-variant uppercase tracking-widest">Status</th>
+<th class="px-8 py-4 text-[10px] font-bold text-on-surface-variant uppercase tracking-widest">Confidence %</th>
+</tr>
+</thead>
+<tbody class="divide-y divide-outline-variant/5">
+<tr class="hover:bg-surface-container-low transition-colors group">
+<td class="px-8 py-5 text-sm font-bold text-[#1c1c16]">#ANL-8942</td>
+<td class="px-8 py-5 text-sm text-on-surface-variant">Oct 24, 2023</td>
+<td class="px-8 py-5 text-sm text-on-surface-variant">Subtle Gradient Skew</td>
+<td class="px-8 py-5">
+<span class="px-3 py-1 bg-surface-container rounded-full text-[10px] font-bold text-on-surface-variant">Visual Quality</span>
+</td>
+<td class="px-8 py-5">
+<div class="flex items-center gap-2">
+<div class="w-2 h-2 rounded-full bg-primary"></div>
+<span class="text-xs font-bold text-primary">Cleared</span>
+</div>
+</td>
+<td class="px-8 py-5 text-sm font-bold text-[#1c1c16]">99.8%</td>
+</tr>
+<tr class="hover:bg-surface-container-low transition-colors">
+<td class="px-8 py-5 text-sm font-bold text-[#1c1c16]">#ANL-8943</td>
+<td class="px-8 py-5 text-sm text-on-surface-variant">Oct 24, 2023</td>
+<td class="px-8 py-5 text-sm text-on-surface-variant">Irregular Brand Kerning</td>
+<td class="px-8 py-5">
+<span class="px-3 py-1 bg-surface-container rounded-full text-[10px] font-bold text-on-surface-variant">Typography</span>
+</td>
+<td class="px-8 py-5">
+<div class="flex items-center gap-2">
+<div class="w-2 h-2 rounded-full bg-error"></div>
+<span class="text-xs font-bold text-error">Review Required</span>
+</div>
+</td>
+<td class="px-8 py-5 text-sm font-bold text-[#1c1c16]">84.2%</td>
+</tr>
+<tr class="hover:bg-surface-container-low transition-colors">
+<td class="px-8 py-5 text-sm font-bold text-[#1c1c16]">#ANL-8944</td>
+<td class="px-8 py-5 text-sm text-on-surface-variant">Oct 23, 2023</td>
+<td class="px-8 py-5 text-sm text-on-surface-variant">High Contrast Artifacts</td>
+<td class="px-8 py-5">
+<span class="px-3 py-1 bg-surface-container rounded-full text-[10px] font-bold text-on-surface-variant">Image Fidelity</span>
+</td>
+<td class="px-8 py-5">
+<div class="flex items-center gap-2">
+<div class="w-2 h-2 rounded-full bg-primary"></div>
+<span class="text-xs font-bold text-primary">Cleared</span>
+</div>
+</td>
+<td class="px-8 py-5 text-sm font-bold text-[#1c1c16]">97.5%</td>
+</tr>
+<tr class="hover:bg-surface-container-low transition-colors">
+<td class="px-8 py-5 text-sm font-bold text-[#1c1c16]">#ANL-8945</td>
+<td class="px-8 py-5 text-sm text-on-surface-variant">Oct 23, 2023</td>
+<td class="px-8 py-5 text-sm text-on-surface-variant">None Detected</td>
+<td class="px-8 py-5">
+<span class="px-3 py-1 bg-surface-container rounded-full text-[10px] font-bold text-on-surface-variant">Batch Scan</span>
+</td>
+<td class="px-8 py-5">
+<div class="flex items-center gap-2">
+<div class="w-2 h-2 rounded-full bg-primary"></div>
+<span class="text-xs font-bold text-primary">Cleared</span>
+</div>
+</td>
+<td class="px-8 py-5 text-sm font-bold text-[#1c1c16]">100%</td>
+</tr>
+</tbody>
+</table>
+</div>
+</section>
+</div>
+</main>
+</body></html>

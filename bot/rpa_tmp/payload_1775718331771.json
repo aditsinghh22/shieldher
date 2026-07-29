@@ -1,0 +1,30 @@
+{
+  "complaint_id": "2893c61b-5bab-45de-81dd-a4f7aba1a461",
+  "category_label": "Women/Children Related Crime",
+  "subcategory_label": "Sexually Explicit Act",
+  "date": "2026-04-09",
+  "hour": "10",
+  "minute": "30",
+  "ampm": "AM",
+  "delay_reason": "Due to severe psychological distress and the need for proper evidence analysis before reporting. The incident was analyzed using ShieldHer AI safety platform.",
+  "state_label": "BIHAR",
+  "state_index": 5,
+  "district_index": 1,
+  "user_district": "BANKA",
+  "platform": "WhatsApp",
+  "platform_label": "WhatsApp",
+  "info_source_index": 2,
+  "media_type_index": 1,
+  "email": "abahykaushik5432@gmail.com",
+  "additional_info": "INCIDENT REPORT: The conversation shows an individual named Ayush persistently attempting to solicit a meeting with the recipient, despite clear and repeated refusals. Ayush tries to establish a connection by claiming to be a classmate and providing a roll number, but the recipient states they don't know him and does not wish to meet. Ayush's continued 'Why' questions after rejections indicate a disregard for the recipient's boundaries and disinterest. DETECTED ISSUES: Disregard for Boundaries: The sender, Ayush, repeatedly questions the recipient's refusal to meet, despite clear statements of disinterest and a lack of recognition.. Emotional Pressure / Obligation: Ayush attempts to make the recipient feel obligated to meet or to acknowledge him by repeatedly stating he is a classmate, providing a roll number, and claiming the recipient has 'seen' him, thereby challenging the recipient's lack of recognition.. Persistence / Unwanted Contact: Ayush continues to pursue a meeting and explanation after the recipient has clearly expressed disinterest multiple times. LEGAL CONTEXT:  MEMORANDUM OF LAW\n\nDate: October 26, 2023\n\nTo: Concerned Party / Victim Advocate\n\nFrom: Expert Indian Cyber-Lawyer\n\nSubject: Preliminary Legal Assessment Regarding Persistent Unwanted Online Contact Potential Cyber Harassment/Stalking\n\n---\n\n Executive Summary\n\nThis preliminary legal memorandum addresses a deeply concerning pattern of persistent unwanted online contact. Based on the initial asse",
+  "evidence_paths": [
+    "C:\\Users\\LENOVO\\PROJECTS\\SHIELD-HER\\rpa_tmp\\evidence_batch_2893c61b-5bab-45de-81dd-a4f7aba1a461_0_1775718331770.jpg"
+  ],
+  "suspect_name": "Ayush",
+  "suspect_platform_contact": "123456789",
+  "suspect_id_type_index": 1,
+  "suspect_id_type_label": "Mobile Number",
+  "suspect_id_value": "12345678",
+  "suspect_description": "An individual persistently requesting a meeting and questioning refusal, claiming to be a classmate and providing 'Roll number 25'.",
+  "risk_level": "medium"
+}

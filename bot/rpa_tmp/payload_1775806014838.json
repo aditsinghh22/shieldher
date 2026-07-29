@@ -1,0 +1,32 @@
+{
+  "complaint_id": "2d3c5ac5-463b-4a08-ab83-5027d07dd8ba",
+  "category_label": "Women/Children Related Crime",
+  "category_value": "14",
+  "subcategory_label": "Sexually Explicit Act",
+  "subcategory_value": "",
+  "date": "2026-04-10",
+  "hour": "10",
+  "minute": "30",
+  "ampm": "AM",
+  "delay_reason": "Due to severe psychological distress and the need for proper evidence analysis before reporting. The incident was analyzed using ShieldHer AI safety platform.",
+  "state_label": "JAMMU AND KASHMIR",
+  "state_index": 13,
+  "district_index": 1,
+  "user_district": "Jammu",
+  "platform": "WhatsApp",
+  "platform_label": "WhatsApp",
+  "info_source_index": 2,
+  "media_type_index": 1,
+  "email": "abahykaushik5432@gmail.com",
+  "additional_info": "INCIDENT REPORT: I am so sorry you are being put in this uncomfortable position. It is clear that you have set a firm boundary by saying 'No' and expressing that you do not want to meet, but this person is refusing to respect your space or accept your answer. You are doing the right thing by trusting your instincts. DETECTED ISSUES: Boundary Violation: Despite you saying 'No' and stating you don't know them, the person continues to press for a meeting.. Persistence: The individual is ignoring your clear discomfort and lack of interest in continuing the conversation. LEGAL CONTEXT:  Preliminary Legal Analysis\n Deep Legal Profile powered by Indian Kanoon API\n\n PRELIMINARY LEGAL MEMORANDUM\nDATE: April 10, 2026\nTO: Concerned Party\nFROM: ShieldHer AI Protection Bureau\nSUBJECT: Preliminary Legal Assessment Regarding Online Abuse\n\n---\n\n I. EXECUTIVE SUMMARY\nThe current pattern of unwanted digital communication constitutes the threshold of criminal stalking under Indian law. While currently categorized as persistent nuisance, the behavior exhibits the requisite elements of \"repeated contact\" despite a clear expression of disinterest. This memorandum evaluates the viability of legal recourse under the Indian Penal Code IPC and the Bharatiya Nyaya Sanhita BNS framework, supported by relevant judicial precedents.\n\n II. CASE FACTS\nThe evidence provided indicates an ongoing, persistent pattern of digital interaction where the aggrieved party has explicitly communicated a lack of",
+  "evidence_paths": [
+    "C:\\Users\\LENOVO\\PROJECTS\\SHIELD-HER\\shieldher\\bot\\rpa_tmp\\evidence_batch_2d3c5ac5-463b-4a08-ab83-5027d07dd8ba_0_1775806014836.jpg"
+  ],
+  "suspect_name": "Ayush",
+  "suspect_platform_contact": "9844657546",
+  "suspect_id_type_index": 1,
+  "suspect_id_type_label": "Mobile Number",
+  "suspect_id_value": "9864345667",
+  "suspect_description": "Perpetrator operates through anonymous online accounts. Known handle/profile: Not provided.",
+  "risk_level": "medium"
+}

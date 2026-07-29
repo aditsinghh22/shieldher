@@ -1,0 +1,32 @@
+{
+  "complaint_id": "ca26afaa-c3af-4fb5-bfbe-f5efed3336db",
+  "category_label": "Women/Children Related Crime",
+  "category_value": "14",
+  "subcategory_label": "Sexually Explicit Act",
+  "subcategory_value": "",
+  "date": "2026-04-10",
+  "hour": "10",
+  "minute": "30",
+  "ampm": "AM",
+  "delay_reason": "Due to severe psychological distress and the need for proper evidence analysis before reporting. The incident was analyzed using ShieldHer AI safety platform.",
+  "state_label": "HIMACHAL PRADESH",
+  "state_index": 12,
+  "district_index": 1,
+  "user_district": "Kinnaur",
+  "platform": "WhatsApp",
+  "platform_label": "WhatsApp",
+  "info_source_index": 2,
+  "media_type_index": 1,
+  "email": "abahykaushik5432@gmail.com",
+  "additional_info": "INCIDENT REPORT: This conversation shows a pattern where 'Ayush' repeatedly asks to meet you and dismisses your clear refusals. It can feel really uncomfortable and unsettling when someone keeps pushing after you've said 'No', and it's important to recognize that your boundaries are valid and should be respected. DETECTED ISSUES: Persistent Unwanted Contact: Ayush continued to ask you to meet and questioned your reasons for not wanting to, even after you clearly said 'No' multiple times. This shows a disregard for your expressed disinterest.. Disregard for Personal Boundaries: You clearly communicated that you don't want to meet and that you don't know him, but Ayush tried to invalidate your feelings by insisting he's a 'classmate' and providing his roll number, seemingly to pressure you into a meeting. LEGAL CONTEXT:  Preliminary Legal Analysis\n Deep Legal Profile powered by Indian Kanoon API\n\n PRELIMINARY LEGAL MEMORANDUM\nDATE: April 10, 2026\nTO: Concerned Party\nFROM: ShieldHer AI Protection Bureau\nSUBJECT: Preliminary Legal Assessment Regarding Online Abuse\n\n---\n\n I. EXECUTIVE SUMMARY\nThis memorandum provides a preliminary legal assessment concerning the repeated and unwelcome attempts by Ayush to initiate and foster personal interaction, including through electronic communication, despite explicit indications of disinterest. Based on the facts presented, these actions squarely fall within the definition of 'stalking' under Indian criminal law, particularly Secti",
+  "evidence_paths": [
+    "C:\\Users\\LENOVO\\PROJECTS\\SHIELD-HER\\shieldher\\bot\\rpa_tmp\\evidence_batch_ca26afaa-c3af-4fb5-bfbe-f5efed3336db_0_1775841797028.jpg"
+  ],
+  "suspect_name": "Ayush",
+  "suspect_platform_contact": "9865334567",
+  "suspect_id_type_index": 1,
+  "suspect_id_type_label": "Mobile Number",
+  "suspect_id_value": "9865334567",
+  "suspect_description": "Perpetrator operates through anonymous online accounts. Known handle/profile: Ayush contact name on recipient's WhatsApp. The full identifier, which is the phone number associated with this contact, would be needed for official filing..",
+  "risk_level": "medium"
+}

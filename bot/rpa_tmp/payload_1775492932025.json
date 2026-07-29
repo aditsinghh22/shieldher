@@ -1,0 +1,29 @@
+{
+  "complaint_id": "96a111a7-9c17-421b-992f-ef5090d6967d",
+  "category_label": "Women/Children Related Crime",
+  "subcategory_label": "Sexually Explicit Act",
+  "date": "2026-04-06",
+  "hour": "10",
+  "minute": "30",
+  "ampm": "AM",
+  "delay_reason": "Due to severe psychological distress and the need for proper evidence analysis before reporting. The incident was analyzed using ShieldHer AI safety platform.",
+  "state_label": "DELHI",
+  "state_index": 8,
+  "district_index": 1,
+  "user_district": "north delhi",
+  "platform": "WhatsApp",
+  "platform_label": "WhatsApp",
+  "info_source_index": 2,
+  "media_type_index": 1,
+  "email": "fhfhfh@gmail.com",
+  "additional_info": "INCIDENT REPORT: The conversation shows 'Ayush' persistently requesting to meet the user, claiming to be a classmate and providing limited identifying details roll number, despite the user's clear and repeated refusals to meet and statements of not knowing him. Ayush repeatedly asks 'Why' after rejections, demonstrating a disregard for the user's boundaries. DETECTED ISSUES: Disregard for Boundaries: The sender 'Ayush' repeatedly insists on meeting despite the recipient's clear and multiple refusals.. Persistent Unwanted Contact: The sender continues to engage and press for a meeting even after the recipient has clearly expressed unwillingness and stated reasons for refusal. LEGAL CONTEXT: This single interaction, while concerning due to persistent unwanted contact and disregard for boundaries, does not yet meet the threshold for most severe legal violations such as cyber harassment or stalking. However, the behavior is a clear precursor. If this pattern of persistent contact continues, or escalates in frequency, intensity, or content e.g., threats, derogatory language, it could constitute cyber harassment or stalking under relevant laws.",
+  "evidence_paths": [
+    "C:\\Users\\LENOVO\\PROJECTS\\SHIELD-HER\\rpa_tmp\\evidence_batch_96a111a7-9c17-421b-992f-ef5090d6967d_0_1775492932021.jpg",
+    "C:\\Users\\LENOVO\\PROJECTS\\SHIELD-HER\\rpa_tmp\\evidence_batch_96a111a7-9c17-421b-992f-ef5090d6967d_1_1775492932023.jpg"
+  ],
+  "suspect_name": "Ayush",
+  "suspect_id_type_index": 1,
+  "suspect_id_value": "886784949395",
+  "suspect_description": "Persistently requested to meet the victim, claiming to be a classmate, despite repeated and clear refusals. Disregarded victim's stated boundaries and lack of familiarity.",
+  "risk_level": "medium"
+}

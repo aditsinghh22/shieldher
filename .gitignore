@@ -39,3 +39,20 @@ yarn-error.log*
 # typescript
 *.tsbuildinfo
 next-env.d.ts
+
+# bot / rpa
+/bot/.venv/
+/bot/__pycache__/
+/bot/rpa_tmp/
+/bot/*.png
+/bot/bot_logs.txt
+/bot/bot_logs_utf8.txt
+/bot/bot_run_live.txt
+/bot/district_log.txt
+/bot/kanoon_error.txt
+/bot/test_out.txt
+/bot/debug_capture_tab2_dom.log
+/bot/form_ids_output.txt
+/bot/districts_temp.json
+/bot/form_ids_current.json
+/bot/test_payload.json

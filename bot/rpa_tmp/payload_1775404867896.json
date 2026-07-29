@@ -1,0 +1,28 @@
+{
+  "complaint_id": "6aef7bd2-34a1-43a7-b39a-b73f420058db",
+  "category_label": "Women/Children Related Crime",
+  "subcategory_label": "Sexually explicit act",
+  "date": "2026-04-05",
+  "hour": "10",
+  "minute": "30",
+  "ampm": "AM",
+  "delay_reason": "Due to severe psychological distress and the need for proper evidence analysis before reporting. The incident was analyzed using ShieldHer AI safety platform.",
+  "state_label": "DELHI",
+  "state_index": 8,
+  "district_index": 1,
+  "user_district": "north delhi",
+  "platform": "WhatsApp",
+  "platform_label": "WhatsApp",
+  "info_source_index": 2,
+  "media_type_index": 1,
+  "email": "a32@gmail.com",
+  "additional_info": "INCIDENT REPORT: The conversation reveals persistent and unwelcome attempts by 'Ayush' to arrange a meeting with the recipient. Despite the recipient's clear and repeated refusals 'No', 'But i just cant meet any random person', 'But i dont know u', 'We can't meet', Ayush dismisses these boundaries by asserting their shared status as classmates and providing specific identifying details 'Roll number 25', 'You have seen me'. While no explicit threats were made, the persistent questioning and blatant disregard for the recipient's comfort and consent constitute online harassment and a clear violation of personal boundaries. DETECTED ISSUES: Unwanted Persistence/Harassment: The sender repeatedly tries to convince the recipient to meet, despite multiple explicit refusals, demonstrating a clear disregard for the recipient's consent and boundaries.. Disregard for Boundaries: The sender attempts to invalidate the recipient's comfort level and reasons for refusal e.g., 'I don't know you' by emphasizing shared context 'I'm your classmate', 'You have seen me' and providing identifying information roll number, implying an obligation to meet. LEGAL CONTEXT: The sender's actions demonstrate a pattern of online harassment through repeated, unwanted communication and disregard for expressed boundaries. While no direct threats are evident, the persistent nature, coupled with the use of specific identifying information 'Roll number 25', 'You have seen me' to pressure the recipient, co",
+  "evidence_paths": [
+    "C:\\Users\\LENOVO\\PROJECTS\\SHIELD-HER\\rpa_tmp\\evidence_batch_6aef7bd2-34a1-43a7-b39a-b73f420058db_0_1775404867893.jpg"
+  ],
+  "suspect_name": "Ayush",
+  "suspect_id_type_index": 1,
+  "suspect_id_value": "99844638200",
+  "suspect_description": "Engaged in persistent and unwanted attempts to meet the recipient, ignoring repeated refusals and using shared classmate status and a roll number to pressure.",
+  "risk_level": "medium"
+}

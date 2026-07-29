@@ -1,0 +1,26 @@
+{
+  "complaint_id": "MOCK-12345",
+  "victim_details": {
+    "name": "Jane Doe",
+    "state": "Delhi",
+    "district": "New Delhi",
+    "login_id": "test_victim_01"
+  },
+  "incident_details": {
+    "incident_type": "Sextortion / Financial Fraud",
+    "description": "Mock description of the incident involving a demand for money via UPI.",
+    "date_of_incident": "2026-04-01",
+    "suspect_data": {
+      "upi_id": "mock_scammer@upi",
+      "bank_account_number": "1234567890",
+      "platform": "WhatsApp"
+    }
+  },
+  "legal_analysis": {
+    "violated_laws": [
+      "BNS Sec 308",
+      "IT Act Sec 66D"
+    ],
+    "recommended_action": "Route to cybercrime.gov.in and fill suspect bank details."
+  }
+}

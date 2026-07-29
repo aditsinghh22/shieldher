@@ -1,0 +1,30 @@
+{
+  "complaint_id": "7a8747d4-a012-4453-81fd-17aaebb887fd",
+  "category_label": "Women/Children Related Crime",
+  "subcategory_label": "Sexually Explicit Act",
+  "date": "2026-04-09",
+  "hour": "10",
+  "minute": "30",
+  "ampm": "AM",
+  "delay_reason": "Due to severe psychological distress and the need for proper evidence analysis before reporting. The incident was analyzed using ShieldHer AI safety platform.",
+  "state_label": "HIMACHAL PRADESH",
+  "state_index": 12,
+  "district_index": 1,
+  "user_district": "Kangra",
+  "platform": "WhatsApp",
+  "platform_label": "WhatsApp",
+  "info_source_index": 2,
+  "media_type_index": 1,
+  "email": "abahykaushik5432@gmail.com",
+  "additional_info": "INCIDENT REPORT: I am so sorry you are going through this. It is completely okay to feel uncomfortable when someone keeps pushing for a meeting after you have clearly said no. Your boundaries are important, and you do not owe anyone your time or a meeting, regardless of who they claim to be. DETECTED ISSUES: Boundary Violation: The individual continues to pressure you for a meeting despite your clear and repeated refusal.. Persistent Contact: The person is insistent on establishing a connection after you have expressed discomfort and lack of familiarity. LEGAL CONTEXT:  Preliminary Legal Analysis\n Deep Legal Profile powered by Indian Kanoon API\n\n PRELIMINARY LEGAL MEMORANDUM\nDATE: April 10, 2026\nTO: Concerned Party\nFROM: ShieldHer AI Protection Bureau\nSUBJECT: Preliminary Legal Assessment Regarding Online Abuse\n\n---\n\n I. EXECUTIVE SUMMARY\nThis memorandum addresses the legal implications of persistent, unwanted digital communication. Under Indian law, the refusal to cease contact after a clear expression of disinterest constitutes a violation of the victim's privacy and personal liberty. Based on existing statutory frameworks and judicial precedents, such behavior likely satisfies the elements of criminal stalking and electronic harassment.\n\n II. CASE FACTS\nThe subject has been subjected to repeated digital contact despite explicitly expressing a desire for all communication to cease. This persistence, combined with the digital footprint left by the perpetrator, prov",
+  "evidence_paths": [
+    "C:\\Users\\LENOVO\\PROJECTS\\SHIELD-HER\\rpa_tmp\\evidence_batch_7a8747d4-a012-4453-81fd-17aaebb887fd_0_1775768669749.jpg"
+  ],
+  "suspect_name": "Ayush",
+  "suspect_platform_contact": "9873456534",
+  "suspect_id_type_index": 1,
+  "suspect_id_type_label": "Mobile Number",
+  "suspect_id_value": "9865358765",
+  "suspect_description": "Perpetrator operates through anonymous online accounts. Known handle/profile: Ayush Chat Identifier.",
+  "risk_level": "medium"
+}

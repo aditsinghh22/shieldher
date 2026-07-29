@@ -1,0 +1,436 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Shield Her - Dashboard</title>
+<!-- Fonts -->
+<link href="https://fonts.googleapis.com/css2?family=Newsreader:ital,opsz,wght@0,6..72,200..800;1,6..72,200..800&amp;family=Manrope:wght@200..800&amp;display=swap" rel="stylesheet"/>
+<!-- Icons -->
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<!-- Tailwind -->
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            "colors": {
+                "on-tertiary-container": "#436254",
+                "secondary-dim": "#595851",
+                "primary-fixed": "#c8ebd0",
+                "tertiary-fixed-dim": "#cbeddb",
+                "on-tertiary": "#ffffff",
+                "outline": "#838170",
+                "secondary-container": "#e5e2d8",
+                "secondary": "#66655d",
+                "on-surface-variant": "#666555",
+                "on-primary-fixed": "#284632",
+                "on-primary-fixed-variant": "#44624d",
+                "error": "#a64542",
+                "inverse-surface": "#0f0e0a",
+                "on-tertiary-fixed-variant": "#4e6d5e",
+                "inverse-primary": "#d3f7db",
+                "on-error": "#ffffff",
+                "error-container": "#fe8983",
+                "surface-container-highest": "#ece9d5",
+                "on-secondary": "#ffffff",
+                "tertiary-fixed": "#d9fce9",
+                "surface-container-lowest": "#ffffff",
+                "inverse-on-surface": "#9f9d95",
+                "tertiary-dim": "#405f50",
+                "primary": "#466550",
+                "surface-tint": "#466550",
+                "surface-variant": "#ece9d5",
+                "on-secondary-fixed": "#404039",
+                "primary-dim": "#3b5944",
+                "primary-fixed-dim": "#baddc2",
+                "on-secondary-fixed-variant": "#5d5c54",
+                "surface": "#fffbff",
+                "background": "#fffbff",
+                "on-tertiary-fixed": "#315042",
+                "surface-container": "#f7f4e5",
+                "surface-container-low": "#fdf9ed",
+                "on-background": "#39382b",
+                "tertiary": "#4c6b5c",
+                "surface-container-high": "#f2eedd",
+                "surface-bright": "#fffbff",
+                "on-error-container": "#752121",
+                "primary-container": "#c8ebd0",
+                "surface-dim": "#e6e3cd",
+                "on-surface": "#39382b",
+                "error-dim": "#4e0309",
+                "tertiary-container": "#d9fce9",
+                "on-secondary-container": "#53524a",
+                "outline-variant": "#bcbaa7",
+                "secondary-fixed": "#e5e2d8",
+                "secondary-fixed-dim": "#d7d4cb",
+                "on-primary": "#e2ffe7",
+                "on-primary-container": "#3a5844"
+            },
+            "borderRadius": {
+                "DEFAULT": "0.125rem",
+                "lg": "0.25rem",
+                "xl": "0.5rem",
+                "full": "0.75rem"
+            },
+            "fontFamily": {
+                "headline": ["Newsreader", "serif"],
+                "body": ["Manrope", "sans-serif"],
+                "label": ["Manrope", "sans-serif"]
+            }
+          },
+        },
+      }
+    </script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        .serif-text { font-family: 'Newsreader', serif; }
+        .sans-text { font-family: 'Manrope', sans-serif; }
+        
+        .glass-card {
+            background: rgba(255, 255, 255, 0.4);
+            backdrop-filter: blur(8px);
+            border: 1px solid rgba(255, 255, 255, 0.6);
+            box-shadow: 0 4px 24px -1px rgba(57, 56, 43, 0.05), inset 0 1px 0 0 rgba(255, 255, 255, 0.8);
+        }
+        
+        .sidebar-active {
+            background: linear-gradient(90deg, rgba(70, 101, 80, 0.08) 0%, rgba(70, 101, 80, 0) 100%);
+            border-left: 3px solid #466550;
+        }
+
+        .atmospheric-glow {
+            position: fixed;
+            width: 600px;
+            height: 600px;
+            border-radius: 50%;
+            filter: blur(120px);
+            z-index: -1;
+            opacity: 0.15;
+            pointer-events: none;
+        }
+        
+        .glow-leaf { background: #466550; top: -10%; right: -5%; }
+        .glow-sand { background: #ece9d5; bottom: -10%; left: 10%; }
+
+        .premium-bar {
+            background: linear-gradient(180deg, #466550 0%, #315042 100%);
+            box-shadow: 0 4px 12px rgba(70, 101, 80, 0.1);
+        }
+        
+        .premium-bar-muted {
+            background: linear-gradient(180deg, #f2eedd 0%, #e6e3cd 100%);
+        }
+
+        .glass-nav {
+            background: rgba(253, 249, 240, 0.7);
+            backdrop-filter: blur(20px);
+            border-bottom: 1px solid rgba(188, 186, 167, 0.1);
+        }
+    </style>
+</head>
+<body class="bg-[#fdf9f0] text-[#1c1c16] font-body selection:bg-primary-container overflow-x-hidden">
+<!-- Atmospheric Background Effects -->
+<div class="atmospheric-glow glow-leaf"></div>
+<div class="atmospheric-glow glow-sand"></div>
+<!-- Sidebar Navigation -->
+<aside class="h-screen w-64 fixed left-0 top-0 bg-surface-container-low flex flex-col py-10 border-r border-[#bcbaa7]/15 z-50">
+<div class="px-8 mb-12">
+<h1 class="serif-text text-2xl text-[#1c1c16] tracking-tight font-semibold">Shield Her</h1>
+<p class="text-[9px] uppercase tracking-[0.2em] text-[#1c1c16]/40 mt-1.5 font-bold">Editorial Guardian</p>
+</div>
+<nav class="flex-1 px-3 space-y-1">
+<a class="flex items-center gap-3 px-5 py-3.5 text-[#466550] sidebar-active group transition-all duration-300" href="#">
+<span class="material-symbols-outlined text-[20px]" style="font-variation-settings: 'FILL' 1;">dashboard</span>
+<span class="text-sm font-semibold tracking-wide">Dashboard</span>
+</a>
+<a class="flex items-center gap-3 px-5 py-3.5 text-[#1c1c16]/60 hover:text-[#466550] hover:bg-[#466550]/5 rounded-lg transition-all duration-200" href="#">
+<span class="material-symbols-outlined text-[20px]">cloud_upload</span>
+<span class="text-sm font-medium tracking-wide">Upload</span>
+</a>
+<a class="flex items-center gap-3 px-5 py-3.5 text-[#1c1c16]/60 hover:text-[#466550] hover:bg-[#466550]/5 rounded-lg transition-all duration-200" href="#">
+<span class="material-symbols-outlined text-[20px]">history</span>
+<span class="text-sm font-medium tracking-wide">History</span>
+</a>
+<a class="flex items-center gap-3 px-5 py-3.5 text-[#1c1c16]/60 hover:text-[#466550] hover:bg-[#466550]/5 rounded-lg transition-all duration-200" href="#">
+<span class="material-symbols-outlined text-[20px]">download</span>
+<span class="text-sm font-medium tracking-wide">Downloads</span>
+</a>
+<a class="flex items-center gap-3 px-5 py-3.5 text-[#1c1c16]/60 hover:text-[#466550] hover:bg-[#466550]/5 rounded-lg transition-all duration-200" href="#">
+<span class="material-symbols-outlined text-[20px]">gavel</span>
+<span class="text-sm font-medium tracking-wide">Lawyers</span>
+</a>
+<a class="flex items-center gap-3 px-5 py-3.5 text-[#1c1c16]/60 hover:text-[#466550] hover:bg-[#466550]/5 rounded-lg transition-all duration-200" href="#">
+<span class="material-symbols-outlined text-[20px]">chat</span>
+<span class="text-sm font-medium tracking-wide">Communication</span>
+</a>
+<a class="flex items-center gap-3 px-5 py-3.5 text-[#1c1c16]/60 hover:text-[#466550] hover:bg-[#466550]/5 rounded-lg transition-all duration-200" href="#">
+<span class="material-symbols-outlined text-[20px]">settings</span>
+<span class="text-sm font-medium tracking-wide">Settings</span>
+</a>
+</nav>
+<div class="px-5 mt-auto pt-6 border-t border-[#bcbaa7]/15 space-y-1">
+<a class="flex items-center gap-3 px-5 py-3 text-[#1c1c16]/50 hover:text-[#1c1c16] transition-colors" href="#">
+<span class="material-symbols-outlined text-[20px]">contact_support</span>
+<span class="text-sm font-medium">Support</span>
+</a>
+<a class="flex items-center gap-3 px-5 py-3 text-[#1c1c16]/50 hover:text-error transition-colors" href="#">
+<span class="material-symbols-outlined text-[20px]">logout</span>
+<span class="text-sm font-medium">Log out</span>
+</a>
+</div>
+</aside>
+<!-- Main Content Area -->
+<main class="ml-64 min-h-screen">
+<!-- Top Nav -->
+<header class="sticky top-0 z-40 w-full glass-nav px-10 py-5 flex justify-between items-center">
+<div class="flex items-center gap-4">
+<div class="relative group">
+<span class="material-symbols-outlined absolute left-4 top-1/2 -translate-y-1/2 text-[#1c1c16]/30 group-focus-within:text-primary transition-colors">search</span>
+<input class="pl-12 pr-6 py-2.5 bg-white/50 border border-outline-variant/20 rounded-full text-sm focus:ring-2 focus:ring-primary/20 focus:bg-white w-72 transition-all outline-none" placeholder="Search safety reports..." type="text"/>
+</div>
+</div>
+<div class="flex items-center gap-8">
+<div class="flex items-center gap-4">
+<button class="relative text-[#1c1c16]/50 hover:text-primary transition-colors">
+<span class="material-symbols-outlined">notifications</span>
+<span class="absolute top-0 right-0 w-2 h-2 bg-error rounded-full ring-2 ring-[#fdf9f0]"></span>
+</button>
+<button class="text-[#1c1c16]/50 hover:text-primary transition-colors">
+<span class="material-symbols-outlined">help</span>
+</button>
+</div>
+<div class="flex items-center gap-4 pl-8 border-l border-[#bcbaa7]/20">
+<div class="text-right">
+<p class="text-sm font-bold text-[#1c1c16]">Elena Vance</p>
+<p class="text-[10px] font-bold text-primary/60 uppercase tracking-wider">Safety Lead</p>
+</div>
+<img alt="Profile" class="w-10 h-10 rounded-full object-cover ring-2 ring-white shadow-sm" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDfD5ffD-YxFpReaOhJax6N1_Pt3NFLUpitrzyzuXmPPYsIdBf8xw8PIwRb-8DVo_-apKbsW0FoLS3aW7oPHCrAkTjH_LGlZ9fio1WmFpCopgVy4Hr2zmOYzqpNldphju6-qCSZjoLCiAGH6MxpkY9P6WRj_m95-Rg4AVfbeKWgyNLUYgqiBVECaYYT7GQD1LV68xZF0qcy9DGuLAmOdqMXQglAaoMmeM8CdvFekxRiaapoHQili0wb2fYPDL0Cn7aLPeP9a8bWXb6r"/>
+</div>
+</div>
+</header>
+<div class="p-10 max-w-[1400px] mx-auto space-y-10">
+<!-- Page Title -->
+<div class="flex justify-between items-end">
+<div>
+<h2 class="serif-text text-5xl font-semibold tracking-tight text-[#1c1c16]">Safety Dashboard</h2>
+<p class="text-on-surface-variant/80 mt-3 max-w-xl text-lg font-medium leading-relaxed">Monitoring and analyzing visual content patterns to ensure brand integrity and safety compliance.</p>
+</div>
+<button class="bg-primary hover:bg-primary-dim text-white px-8 py-4 rounded-full flex items-center gap-3 transition-all shadow-xl shadow-primary/20 transform hover:-translate-y-0.5 active:translate-y-0">
+<span class="material-symbols-outlined text-[20px]">add_circle</span>
+<span class="text-sm font-bold tracking-wide">New Analysis</span>
+</button>
+</div>
+<!-- Row 1: Metric Cards -->
+<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+<!-- Card 1 -->
+<div class="glass-card p-7 rounded-2xl group cursor-default transition-all duration-300 hover:shadow-2xl hover:shadow-primary/5">
+<div class="flex justify-between items-start mb-5">
+<div class="p-3 bg-primary/10 rounded-xl text-primary group-hover:bg-primary group-hover:text-white transition-colors duration-300">
+<span class="material-symbols-outlined">cloud_upload</span>
+</div>
+<span class="text-primary text-[11px] font-extrabold flex items-center bg-primary/10 px-2.5 py-1 rounded-full">+12.5%</span>
+</div>
+<p class="text-on-surface-variant text-xs font-bold uppercase tracking-widest opacity-60">Total Uploads</p>
+<h3 class="text-3xl font-bold text-[#1c1c16] mt-2 serif-text">2,842</h3>
+</div>
+<!-- Card 2 -->
+<div class="glass-card p-7 rounded-2xl group cursor-default transition-all duration-300 hover:shadow-2xl hover:shadow-primary/5">
+<div class="flex justify-between items-start mb-5">
+<div class="p-3 bg-primary/10 rounded-xl text-primary group-hover:bg-primary group-hover:text-white transition-colors duration-300">
+<span class="material-symbols-outlined">query_stats</span>
+</div>
+<span class="text-primary text-[11px] font-extrabold flex items-center bg-primary/10 px-2.5 py-1 rounded-full">+4.2%</span>
+</div>
+<p class="text-on-surface-variant text-xs font-bold uppercase tracking-widest opacity-60">Analyzed Rate</p>
+<h3 class="text-3xl font-bold text-[#1c1c16] mt-2 serif-text">98.4%</h3>
+</div>
+<!-- Card 3 -->
+<div class="glass-card p-7 rounded-2xl group cursor-default transition-all duration-300 hover:shadow-2xl hover:shadow-primary/5">
+<div class="flex justify-between items-start mb-5">
+<div class="p-3 bg-primary/10 rounded-xl text-primary group-hover:bg-primary group-hover:text-white transition-colors duration-300">
+<span class="material-symbols-outlined">verified_user</span>
+</div>
+<span class="text-primary text-[11px] font-extrabold flex items-center bg-primary/10 px-2.5 py-1 rounded-full">+8.1%</span>
+</div>
+<p class="text-on-surface-variant text-xs font-bold uppercase tracking-widest opacity-60">Safe Results</p>
+<h3 class="text-3xl font-bold text-[#1c1c16] mt-2 serif-text">2,615</h3>
+</div>
+<!-- Card 4 -->
+<div class="glass-card p-7 rounded-2xl group cursor-default transition-all duration-300 hover:shadow-2xl hover:shadow-error/5">
+<div class="flex justify-between items-start mb-5">
+<div class="p-3 bg-error/10 rounded-xl text-error group-hover:bg-error group-hover:text-white transition-colors duration-300">
+<span class="material-symbols-outlined">flag</span>
+</div>
+<span class="text-error text-[11px] font-extrabold flex items-center bg-error/10 px-2.5 py-1 rounded-full">-2.4%</span>
+</div>
+<p class="text-on-surface-variant text-xs font-bold uppercase tracking-widest opacity-60">Flagged Assets</p>
+<h3 class="text-3xl font-bold text-[#1c1c16] mt-2 serif-text">227</h3>
+</div>
+</div>
+<!-- Main Content: Graphs -->
+<div class="grid grid-cols-1 lg:grid-cols-3 gap-10">
+<!-- Safety Insights Graph -->
+<div class="lg:col-span-2 bg-white p-10 rounded-2xl border border-outline-variant/15 shadow-sm">
+<div class="flex justify-between items-center mb-12">
+<div>
+<h4 class="serif-text text-2xl font-semibold">Safety Insights</h4>
+<p class="text-xs text-on-surface-variant font-medium mt-1">Activity over the last 12 months</p>
+</div>
+<div class="flex bg-surface-container-low p-1.5 rounded-full border border-outline-variant/10">
+<button class="px-5 py-2 text-[11px] font-bold bg-white text-primary rounded-full shadow-sm">Monthly</button>
+<button class="px-5 py-2 text-[11px] font-bold text-on-surface-variant/60 hover:text-on-surface transition-colors">Yearly</button>
+</div>
+</div>
+<div class="relative h-72 w-full flex items-end justify-between gap-3 px-2">
+<!-- Bars with Premium Gradients -->
+<div class="flex-1 premium-bar-muted h-[40%] rounded-t-xl relative group transition-all duration-300 hover:opacity-80">
+<div class="absolute -top-10 left-1/2 -translate-x-1/2 bg-[#1c1c16] text-white text-[10px] font-bold px-2.5 py-1 rounded-md opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap">Jan: 420</div>
+</div>
+<div class="flex-1 premium-bar-muted h-[60%] rounded-t-xl relative group transition-all duration-300 hover:opacity-80"></div>
+<div class="flex-1 premium-bar h-[85%] rounded-t-xl relative group transition-all duration-300 hover:scale-x-105"></div>
+<div class="flex-1 premium-bar-muted h-[55%] rounded-t-xl relative group transition-all duration-300 hover:opacity-80"></div>
+<div class="flex-1 premium-bar-muted h-[70%] rounded-t-xl relative group transition-all duration-300 hover:opacity-80"></div>
+<div class="flex-1 premium-bar h-[95%] rounded-t-xl relative group transition-all duration-300 hover:scale-x-105"></div>
+<div class="flex-1 premium-bar-muted h-[45%] rounded-t-xl relative group transition-all duration-300 hover:opacity-80"></div>
+<div class="flex-1 premium-bar-muted h-[65%] rounded-t-xl relative group transition-all duration-300 hover:opacity-80"></div>
+<div class="flex-1 premium-bar h-[80%] rounded-t-xl relative group transition-all duration-300 hover:scale-x-105"></div>
+<div class="flex-1 premium-bar-muted h-[50%] rounded-t-xl relative group transition-all duration-300 hover:opacity-80"></div>
+<div class="flex-1 premium-bar-muted h-[75%] rounded-t-xl relative group transition-all duration-300 hover:opacity-80"></div>
+<div class="flex-1 premium-bar h-[100%] rounded-t-xl relative group transition-all duration-300 hover:scale-x-105"></div>
+</div>
+<div class="flex justify-between mt-6 px-2">
+<span class="text-[9px] font-extrabold text-on-surface-variant/40 tracking-wider">JAN</span>
+<span class="text-[9px] font-extrabold text-on-surface-variant/40 tracking-wider">FEB</span>
+<span class="text-[9px] font-extrabold text-on-surface-variant/40 tracking-wider">MAR</span>
+<span class="text-[9px] font-extrabold text-on-surface-variant/40 tracking-wider">APR</span>
+<span class="text-[9px] font-extrabold text-on-surface-variant/40 tracking-wider">MAY</span>
+<span class="text-[9px] font-extrabold text-on-surface-variant/40 tracking-wider">JUN</span>
+<span class="text-[9px] font-extrabold text-on-surface-variant/40 tracking-wider">JUL</span>
+<span class="text-[9px] font-extrabold text-on-surface-variant/40 tracking-wider">AUG</span>
+<span class="text-[9px] font-extrabold text-on-surface-variant/40 tracking-wider">SEP</span>
+<span class="text-[9px] font-extrabold text-on-surface-variant/40 tracking-wider">OCT</span>
+<span class="text-[9px] font-extrabold text-on-surface-variant/40 tracking-wider">NOV</span>
+<span class="text-[9px] font-extrabold text-on-surface-variant/40 tracking-wider">DEC</span>
+</div>
+</div>
+<!-- Global Safety Gauge -->
+<div class="bg-white p-10 rounded-2xl border border-outline-variant/15 shadow-sm flex flex-col items-center">
+<h4 class="serif-text text-xl font-semibold mb-10 text-center">Global Safety Index</h4>
+<div class="relative w-52 h-52">
+<svg class="w-full h-full transform -rotate-90 filter drop-shadow-sm">
+<circle class="text-surface-container-high" cx="104" cy="104" fill="transparent" r="92" stroke="currentColor" stroke-width="14"></circle>
+<circle class="text-primary" cx="104" cy="104" fill="transparent" r="92" stroke="url(#gradient)" stroke-dasharray="578" stroke-dashoffset="144" stroke-linecap="round" stroke-width="14"></circle>
+<defs>
+<lineargradient id="gradient" x1="0%" x2="100%" y1="0%" y2="100%">
+<stop offset="0%" stop-color="#c8ebd0"></stop>
+<stop offset="100%" stop-color="#466550"></stop>
+</lineargradient>
+</defs>
+</svg>
+<div class="absolute inset-0 flex flex-col items-center justify-center">
+<span class="text-5xl font-bold text-[#1c1c16] serif-text">75<span class="text-2xl opacity-40">%</span></span>
+<span class="text-[10px] font-extrabold text-primary/60 uppercase tracking-[0.2em] mt-2">Health score</span>
+</div>
+</div>
+<div class="mt-12 text-center space-y-3">
+<p class="text-sm font-semibold text-on-surface-variant">Protocols integrated in <span class="text-primary">12 regions</span></p>
+<div class="h-1.5 w-32 bg-surface-container rounded-full mx-auto overflow-hidden">
+<div class="h-full bg-primary w-3/4 rounded-full"></div>
+</div>
+<p class="text-[11px] text-on-surface-variant/50 font-bold uppercase tracking-wider">Quarterly Progress</p>
+</div>
+</div>
+</div>
+<!-- Recent Analyses Table -->
+<section class="bg-white rounded-2xl border border-outline-variant/15 shadow-sm overflow-hidden">
+<div class="px-10 py-8 flex justify-between items-center border-b border-outline-variant/10">
+<div>
+<h4 class="serif-text text-2xl font-semibold">Recent Analyses</h4>
+<p class="text-xs text-on-surface-variant mt-1">Last updated 12 minutes ago</p>
+</div>
+<button class="text-primary text-xs font-extrabold hover:bg-primary/5 px-4 py-2 rounded-full transition-all border border-primary/20">VIEW ALL RECORDS</button>
+</div>
+<div class="overflow-x-auto">
+<table class="w-full text-left">
+<thead>
+<tr class="bg-surface-container-low/30">
+<th class="px-10 py-5 text-[10px] font-extrabold text-on-surface-variant/60 uppercase tracking-[0.15em]">Analysis ID</th>
+<th class="px-10 py-5 text-[10px] font-extrabold text-on-surface-variant/60 uppercase tracking-[0.15em]">Date</th>
+<th class="px-10 py-5 text-[10px] font-extrabold text-on-surface-variant/60 uppercase tracking-[0.15em]">Pattern Found</th>
+<th class="px-10 py-5 text-[10px] font-extrabold text-on-surface-variant/60 uppercase tracking-[0.15em]">Category</th>
+<th class="px-10 py-5 text-[10px] font-extrabold text-on-surface-variant/60 uppercase tracking-[0.15em]">Status</th>
+<th class="px-10 py-5 text-[10px] font-extrabold text-on-surface-variant/60 uppercase tracking-[0.15em] text-right">Confidence</th>
+</tr>
+</thead>
+<tbody class="divide-y divide-outline-variant/10">
+<tr class="hover:bg-surface-container-low/20 transition-colors group">
+<td class="px-10 py-6 text-sm font-bold text-[#1c1c16]">#ANL-8942</td>
+<td class="px-10 py-6 text-sm text-on-surface-variant font-medium">Oct 24, 2023</td>
+<td class="px-10 py-6 text-sm text-[#1c1c16] font-semibold">Subtle Gradient Skew</td>
+<td class="px-10 py-6">
+<span class="px-3 py-1.5 bg-surface-container-high/50 border border-outline-variant/10 rounded-lg text-[10px] font-bold text-on-surface-variant">Visual Quality</span>
+</td>
+<td class="px-10 py-6">
+<div class="inline-flex items-center gap-2 px-3 py-1.5 bg-primary/10 rounded-full">
+<div class="w-1.5 h-1.5 rounded-full bg-primary animate-pulse"></div>
+<span class="text-[11px] font-extrabold text-primary uppercase">Cleared</span>
+</div>
+</td>
+<td class="px-10 py-6 text-sm font-bold text-[#1c1c16] text-right">99.8%</td>
+</tr>
+<tr class="hover:bg-surface-container-low/20 transition-colors">
+<td class="px-10 py-6 text-sm font-bold text-[#1c1c16]">#ANL-8943</td>
+<td class="px-10 py-6 text-sm text-on-surface-variant font-medium">Oct 24, 2023</td>
+<td class="px-10 py-6 text-sm text-[#1c1c16] font-semibold">Irregular Brand Kerning</td>
+<td class="px-10 py-6">
+<span class="px-3 py-1.5 bg-surface-container-high/50 border border-outline-variant/10 rounded-lg text-[10px] font-bold text-on-surface-variant">Typography</span>
+</td>
+<td class="px-10 py-6">
+<div class="inline-flex items-center gap-2 px-3 py-1.5 bg-error/10 rounded-full">
+<div class="w-1.5 h-1.5 rounded-full bg-error"></div>
+<span class="text-[11px] font-extrabold text-error uppercase">Review Required</span>
+</div>
+</td>
+<td class="px-10 py-6 text-sm font-bold text-[#1c1c16] text-right">84.2%</td>
+</tr>
+<tr class="hover:bg-surface-container-low/20 transition-colors">
+<td class="px-10 py-6 text-sm font-bold text-[#1c1c16]">#ANL-8944</td>
+<td class="px-10 py-6 text-sm text-on-surface-variant font-medium">Oct 23, 2023</td>
+<td class="px-10 py-6 text-sm text-[#1c1c16] font-semibold">High Contrast Artifacts</td>
+<td class="px-10 py-6">
+<span class="px-3 py-1.5 bg-surface-container-high/50 border border-outline-variant/10 rounded-lg text-[10px] font-bold text-on-surface-variant">Image Fidelity</span>
+</td>
+<td class="px-10 py-6">
+<div class="inline-flex items-center gap-2 px-3 py-1.5 bg-primary/10 rounded-full">
+<div class="w-1.5 h-1.5 rounded-full bg-primary"></div>
+<span class="text-[11px] font-extrabold text-primary uppercase">Cleared</span>
+</div>
+</td>
+<td class="px-10 py-6 text-sm font-bold text-[#1c1c16] text-right">97.5%</td>
+</tr>
+<tr class="hover:bg-surface-container-low/20 transition-colors">
+<td class="px-10 py-6 text-sm font-bold text-[#1c1c16]">#ANL-8945</td>
+<td class="px-10 py-6 text-sm text-on-surface-variant font-medium">Oct 23, 2023</td>
+<td class="px-10 py-6 text-sm text-[#1c1c16] font-semibold">None Detected</td>
+<td class="px-10 py-6">
+<span class="px-3 py-1.5 bg-surface-container-high/50 border border-outline-variant/10 rounded-lg text-[10px] font-bold text-on-surface-variant">Batch Scan</span>
+</td>
+<td class="px-10 py-6">
+<div class="inline-flex items-center gap-2 px-3 py-1.5 bg-primary/10 rounded-full">
+<div class="w-1.5 h-1.5 rounded-full bg-primary"></div>
+<span class="text-[11px] font-extrabold text-primary uppercase">Cleared</span>
+</div>
+</td>
+<td class="px-10 py-6 text-sm font-bold text-[#1c1c16] text-right">100%</td>
+</tr>
+</tbody>
+</table>
+</div>
+</section>
+</div>
+</main>
+</body></html>

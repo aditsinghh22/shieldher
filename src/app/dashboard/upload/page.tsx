@@ -1,10 +1,11 @@
 'use client';
 
 import { useState } from 'react';
-import { ArrowLeft, Sparkles, Loader, Info, AlertTriangle, Lightbulb, Scale } from 'lucide-react';
+import { ArrowLeft, Sparkles, Loader, Info, AlertTriangle, Lightbulb, Scale, ShieldCheck, MessageCircle, Activity, AlertOctagon } from 'lucide-react';
 import Link from 'next/link';
 import UploadZone from '@/components/UploadZone';
 import { createClient } from '@/lib/supabase/client';
+import { encryptFile, retrieveKey, uint8ArrayToBase64 } from '@/lib/crypto';
 import styles from './page.module.css';
 import { type AnalysisResult } from '@/lib/types';
 
@@ -13,6 +14,7 @@ export default function UploadPage() {
   const [language, setLanguage] = useState('English');
   const [uploading, setUploading] = useState(false);
   const [analyzing, setAnalyzing] = useState(false);
+  const [encrypting, setEncrypting] = useState(false);
   const [error, setError] = useState('');
   const [analysisResult, setAnalysisResult] = useState<AnalysisResult | null>(null);
   const [showFullAnalysis, setShowFullAnalysis] = useState(false);
@@ -33,33 +35,57 @@ export default function UploadPage() {
       const { data: { user } } = await supabase.auth.getUser();
       if (!user) throw new Error('Please sign in to upload');
 
-      const fileUrls: string[] = [];
+      const key = await retrieveKey();
+      if (!key) {
+        throw new Error('Vault is locked. Please go to the History page and unlock your vault to enable secure uploads.');
+      }
 
+      const fileUrls: string[] = [];
+      const fileIVs: string[] = [];
+      const fileTypes: string[] = [];
+
+      // ═══ STEP 2: Encrypt and Upload ═══
       for (const file of files) {
-        // Upload file to Supabase Storage
-        const fileName = `${user.id}/${Date.now()}-${file.name}`;
+        setAnalyzing(false);
+        setUploading(true);
+        setEncrypting(true);
+
+        // Encrypt the file locally
+        const { iv, encryptedBlob } = await encryptFile(key, file);
+        setEncrypting(false);
+
+        const fileName = `${user.id}/${Date.now()}-${file.name}.enc`;
         const { error: storageError } = await supabase.storage
           .from('screenshots')
-          .upload(fileName, file);
+          .upload(fileName, encryptedBlob, {
+            contentType: 'application/octet-stream',
+          });
 
-        if (storageError) throw storageError;
+        if (storageError) {
+          console.error("Storage Error:", storageError);
+          throw new Error(`File upload failed: ${storageError.message}`);
+        }
 
         const { data: { publicUrl } } = supabase.storage
           .from('screenshots')
           .getPublicUrl(fileName);
 
         fileUrls.push(publicUrl);
+        fileIVs.push(iv);
+        fileTypes.push(file.type);
       }
 
       const combinedFileName = files.length === 1 ? files[0].name : `${files.length} items uploaded together`;
 
-      // Create a SINGLE upload record containing all URLs
+      // Create a SINGLE upload record containing all URLs and IVs
       const { data: upload, error: dbError } = await supabase
         .from('uploads')
         .insert({
           user_id: user.id,
           file_url: fileUrls.join(','),
           file_name: combinedFileName,
+          file_iv: fileIVs.join(','),
+          original_type: fileTypes.join(','),
           status: 'pending',
         })
         .select()
@@ -70,11 +96,19 @@ export default function UploadPage() {
       setUploading(false);
       setAnalyzing(true);
 
+      // Export the key to send to the analysis API for ephemeral decryption
+      const exportedKey = await crypto.subtle.exportKey('raw', key);
+      const keyBase64 = uint8ArrayToBase64(new Uint8Array(exportedKey));
+
       // Trigger analysis for the single combined DB record
       const res = await fetch('/api/analyze', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ uploadId: upload.id, language }),
+        body: JSON.stringify({ 
+          uploadId: upload.id, 
+          language,
+          masterKey: keyBase64 // Sent for ephemeral server-side decryption
+        }),
       });
 
       if (!res.ok) {
@@ -89,6 +123,7 @@ export default function UploadPage() {
       setError(err instanceof Error ? err.message : 'Something went wrong');
       setUploading(false);
       setAnalyzing(false);
+      setEncrypting(false);
     }
   };
   const potentialViolations =
@@ -115,7 +150,7 @@ export default function UploadPage() {
         <div className={styles.uploadCard}>
           {!analysisResult ? (
             <>
-              <UploadZone onFilesSelected={handleFilesSelected} isUploading={uploading} />
+              <UploadZone onFilesSelected={handleFilesSelected} isUploading={uploading} variant="dashboard" />
               
               {error && (
                 <div className={styles.error}>{error}</div>
@@ -200,6 +235,41 @@ export default function UploadPage() {
 
               {showFullAnalysis && (
                 <>
+                  {analysisResult.details?.tone_analysis && (
+                    <div className={styles.resultSection}>
+                      <div className={styles.resultSectionTitle}>
+                        <MessageCircle size={18} /> Tone Analysis
+                      </div>
+                      <p className={styles.legalSummary}>{analysisResult.details.tone_analysis}</p>
+                    </div>
+                  )}
+
+                  {analysisResult.details?.manipulation_indicators && analysisResult.details.manipulation_indicators.length > 0 && (
+                    <div className={styles.resultSection}>
+                      <div className={styles.resultSectionTitle}>
+                        <Activity size={18} /> Manipulation Tactics
+                      </div>
+                      <ul className={styles.recList}>
+                        {analysisResult.details.manipulation_indicators.map((indicator, idx) => (
+                          <li key={idx}>{indicator}</li>
+                        ))}
+                      </ul>
+                    </div>
+                  )}
+
+                  {analysisResult.details?.threat_indicators && analysisResult.details.threat_indicators.length > 0 && (
+                    <div className={styles.resultSection}>
+                      <div className={styles.resultSectionTitle}>
+                        <AlertOctagon size={18} /> Threat Indicators
+                      </div>
+                      <ul className={styles.recList}>
+                        {analysisResult.details.threat_indicators.map((threat, idx) => (
+                          <li key={idx}>{threat}</li>
+                        ))}
+                      </ul>
+                    </div>
+                  )}
+
                   {analysisResult.details?.recommendations && analysisResult.details.recommendations.length > 0 && (
                     <div className={styles.resultSection}>
                       <div className={styles.resultSectionTitle}>
@@ -218,8 +288,11 @@ export default function UploadPage() {
                       <div className={styles.resultSectionTitle}>
                         <Scale size={18} /> Legal Perspective
                       </div>
-                      <p className={styles.legalSummary}>{analysisResult.details.legal_analysis.summary}</p>
-                      {potentialViolations.length > 0 && (
+                      <div className={styles.legalSummary} style={{ whiteSpace: 'pre-wrap' }}>
+                        {analysisResult.details.legal_analysis.summary.replace(/#/g, '')}
+                      </div>
+
+                      {!analysisResult.details.legal_analysis.powered_by_kanoon && potentialViolations.length > 0 && (
                           <div className={styles.legalSectionsBlock}>
                             <h4 className={styles.legalSectionsTitle}>
                               Possible Applicable Sections / Articles
@@ -230,8 +303,11 @@ export default function UploadPage() {
                               ))}
                             </ul>
                           </div>
-                        )}
-                      <p className={styles.disclaimer}>{analysisResult.details.legal_analysis.disclaimer}</p>
+                      )}
+                      
+                      {!analysisResult.details.legal_analysis.powered_by_kanoon && (
+                        <p className={styles.disclaimer}>{analysisResult.details.legal_analysis.disclaimer}</p>
+                      )}
                     </div>
                   )}
                 </>
@@ -281,6 +357,19 @@ export default function UploadPage() {
             <li>Include the full conversation thread when possible</li>
             <li>Make sure text is readable and not blurry</li>
             <li>You can upload multiple files at once</li>
+          </ul>
+
+          <div className={styles.tipsHeader} style={{ marginTop: '1.2rem' }}>
+            <div className={styles.tipsIcon}>
+              <ShieldCheck size={20} />
+            </div>
+            <h3>End-to-End Encrypted</h3>
+          </div>
+          <ul className={styles.tipsList}>
+            <li>Your images are encrypted before leaving your browser</li>
+            <li>AI analysis runs through a secure ephemeral proxy</li>
+            <li>Only you can decrypt and view your data</li>
+            <li>Even platform admins cannot access your content</li>
           </ul>
         </div>
       </div>

@@ -34,15 +34,34 @@ async function run() {
                   }
                 }`;
 
-    // Fetch a local dummy image correctly
-    const filePath = '/home/hades/.gemini/antigravity/brain/f63dd2bb-da24-4aea-b22f-007d02bb9e40/chat_screenshot_1773224494404.png';
+    // Try to find a local image to test with
+    const possiblePaths = [
+      './public/language-icon.png',
+      './public/logo.png',
+      '/home/hades/.gemini/antigravity/brain/f63dd2bb-da24-4aea-b22f-007d02bb9e40/chat_screenshot_1773224494404.png'
+    ];
+    
+    let filePath = '';
+    for (const p of possiblePaths) {
+      if (fs.existsSync(p)) {
+        filePath = p;
+        break;
+      }
+    }
+
+    if (!filePath) {
+      console.error("No test image found in public/ or hardcoded path.");
+      return;
+    }
+
+    console.log(`Testing with file: ${filePath}`);
     const fileBuffer = fs.readFileSync(filePath);
     const base64Data = fileBuffer.toString('base64');
     
     const imagePart = {
       inlineData: {
         data: base64Data,
-        mimeType: 'image/png'
+        mimeType: filePath.endsWith('.png') ? 'image/png' : 'image/jpeg'
       },
     };
 

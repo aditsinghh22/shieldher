@@ -1,0 +1,28 @@
+{
+  "complaint_id": "c173ba03-1227-4f60-8685-9256ca547688",
+  "category_label": "Women/Children Related Crime",
+  "subcategory_label": "Sexually Explicit Act",
+  "date": "2026-04-07",
+  "hour": "10",
+  "minute": "30",
+  "ampm": "AM",
+  "delay_reason": "Due to severe psychological distress and the need for proper evidence analysis before reporting. The incident was analyzed using ShieldHer AI safety platform.",
+  "state_label": "HARYANA",
+  "state_index": 11,
+  "district_index": 1,
+  "user_district": "KAITHAL",
+  "platform": "WhatsApp",
+  "platform_label": "WhatsApp",
+  "info_source_index": 2,
+  "media_type_index": 1,
+  "email": "abahyk@gmail.com",
+  "additional_info": "INCIDENT REPORT: The conversation indicates a user named 'Ayush' persistently attempting to arrange a meeting with the recipient, despite the recipient's clear and repeated rejections. Ayush claims to be a classmate and provides a roll number, but the recipient explicitly states they do not know him and are unwilling to meet. Ayush continues to question the refusal, demonstrating a disregard for the recipient's boundaries. DETECTED ISSUES: Unwanted Contact / Persistent Harassment: The suspect repeatedly asks to meet and questions the recipient's refusal, even after clear indications of disinterest and unwillingness to meet.. Boundary Violation: The suspect ignores the recipient's clearly stated boundaries and discomfort regarding meeting a stranger/acquaintance they don't know well. LEGAL CONTEXT:  PRELIMINARY LEGAL MEMORANDUM\n\nDATE: October 26, 2023\nTO: Concerned Party\nFROM: [Your Name/Firm Name], Expert Indian Cyber-Lawyer\nSUBJECT: Preliminary Legal Assessment Regarding Online Abuse Cyber Stalking/Harassment\n\n---\n\n I. EXECUTIVE SUMMARY\n\nThis memorandum provides a preliminary legal assessment of the reported online abuse, specifically focusing on repeated and unwanted attempts to initiate a meeting despite clear rejections. Based on the provided facts, the persistent nature of the contact, particularly after explicit indications of disinterest, strongly suggests potential violations under Indian cyber laws, prominently Section 354D of the Indian Penal Code IPC conc",
+  "evidence_paths": [
+    "C:\\Users\\LENOVO\\PROJECTS\\SHIELD-HER\\rpa_tmp\\evidence_batch_c173ba03-1227-4f60-8685-9256ca547688_0_1775537478619.jpg"
+  ],
+  "suspect_name": "Ayush",
+  "suspect_id_type_index": 1,
+  "suspect_id_value": "5688568568565689",
+  "suspect_description": "Repeatedly requested a meeting despite clear rejections from the recipient, citing they are classmates and the recipient 'has seen' him, demonstrating a disregard for personal boundaries and discomfort.",
+  "risk_level": "low"
+}

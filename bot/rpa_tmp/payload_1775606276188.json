@@ -1,0 +1,32 @@
+{
+  "complaint_id": "2936e4c3-43b9-46aa-9f25-3b03a8d77b42",
+  "category_label": "Women/Children Related Crime",
+  "subcategory_label": "Sexually Explicit Act",
+  "date": "2026-04-07",
+  "hour": "10",
+  "minute": "30",
+  "ampm": "AM",
+  "delay_reason": "Due to severe psychological distress and the need for proper evidence analysis before reporting. The incident was analyzed using ShieldHer AI safety platform.",
+  "state_label": "ARUNACHAL PRADESH",
+  "state_index": 3,
+  "district_index": 1,
+  "user_district": "PAPUM PARE",
+  "platform": "WhatsApp",
+  "platform_label": "WhatsApp",
+  "info_source_index": 2,
+  "media_type_index": 1,
+  "email": "ab@gmail.com",
+  "additional_info": "INCIDENT REPORT: The conversation involves a user named Ayush repeatedly asking the recipient to meet, despite the recipient clearly declining multiple times. Ayush attempts to justify the request by stating they are classmates and knows the recipient's roll number, showing a disregard for the recipient's established boundaries and discomfort. DETECTED ISSUES: Unwanted Contact/Harassment: Repeated attempts to initiate a meeting despite clear and consistent refusal from the recipient. This constitutes unwanted and persistent communication.. Disregard for Boundaries: The sender ignores direct refusals and attempts to negate the recipient's reasons for not wanting to meet, indicating a lack of respect for personal boundaries and autonomy. LEGAL CONTEXT:  Preliminary Legal Memo\n\nTO: Client\nFROM: Expert Indian Cyber-Lawyer\nDATE: October 26, 2023\nSUBJECT: Initial Legal Assessment Regarding Unwanted Digital Communication and Potential Cyber Stalking\n\n 1. Introduction\n\nThis preliminary legal memorandum provides an initial assessment of your situation concerning repeated and unwanted digital communication. Our aim is to clarify the potential legal avenues available under Indian law, particularly concerning cyber harassment and stalking, and to advise on immediate preparatory steps. We recognize the profound distress and violation of personal space that persistent unwanted contact can inflict, and we assure you of our commitment to addressing this matter with the utmost serio",
+  "evidence_paths": [
+    "C:\\Users\\LENOVO\\PROJECTS\\SHIELD-HER\\rpa_tmp\\evidence_batch_2936e4c3-43b9-46aa-9f25-3b03a8d77b42_0_1775606276184.jpg",
+    "C:\\Users\\LENOVO\\PROJECTS\\SHIELD-HER\\rpa_tmp\\evidence_batch_2936e4c3-43b9-46aa-9f25-3b03a8d77b42_1_1775606276185.jpg",
+    "C:\\Users\\LENOVO\\PROJECTS\\SHIELD-HER\\rpa_tmp\\evidence_batch_2936e4c3-43b9-46aa-9f25-3b03a8d77b42_2_1775606276187.jpg"
+  ],
+  "suspect_name": "Ayush",
+  "suspect_platform_contact": "7787755866",
+  "suspect_id_type_index": 4,
+  "suspect_id_type_label": "PAN Card",
+  "suspect_id_value": "7787755776767767",
+  "suspect_description": "A classmate who repeatedly asked the recipient to meet despite clear refusals and tried to justify the requests by asserting their classmate relationship and knowing the recipient's roll number. Engaged in persistent, unwanted communication.",
+  "risk_level": "low"
+}
