@@ -2,7 +2,7 @@
 
 import { FormEvent, useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { useSearchParams } from 'next/navigation';
-import { Loader, MessageSquare, MoreVertical, Search, Send } from 'lucide-react';
+import { CheckCheck, Loader, MessageSquare, MoreVertical, RefreshCw, Search, Send, X } from 'lucide-react';
 import styles from './CommunicationHub.module.css';
 
 type ConversationItem = {
@@ -83,11 +83,36 @@ export default function CommunicationHub() {
   const [conversations, setConversations] = useState<ConversationItem[]>([]);
   const [messages, setMessages] = useState<MessageItem[]>([]);
   const [activeThreadId, setActiveThreadId] = useState('');
+  const [threadQuery, setThreadQuery] = useState('');
+  const [messageQuery, setMessageQuery] = useState('');
+  const [searchOpen, setSearchOpen] = useState(false);
+  const [optionsOpen, setOptionsOpen] = useState(false);
 
   const activeConversation = useMemo(
     () => conversations.find((item) => item.id === activeThreadId) ?? null,
     [conversations, activeThreadId]
   );
+
+  const filteredConversations = useMemo(() => {
+    const query = threadQuery.trim().toLowerCase();
+    if (!query) return conversations;
+
+    return conversations.filter((item) =>
+      [item.counterpart_name, item.last_message, formatDateTime(item.last_message_at)]
+        .join(' ')
+        .toLowerCase()
+        .includes(query)
+    );
+  }, [conversations, threadQuery]);
+
+  const visibleMessages = useMemo(() => {
+    const query = messageQuery.trim().toLowerCase();
+    if (!query) return messages;
+
+    return messages.filter((message) =>
+      [message.body, formatDateTime(message.created_at)].join(' ').toLowerCase().includes(query)
+    );
+  }, [messages, messageQuery]);
 
   const messageRows = useMemo(() => {
     const rows: Array<
@@ -96,7 +121,7 @@ export default function CommunicationHub() {
     > = [];
 
     let previousDay = '';
-    for (const message of messages) {
+    for (const message of visibleMessages) {
       const key = dayKey(message.created_at);
       if (key && key !== previousDay) {
         rows.push({
@@ -115,7 +140,7 @@ export default function CommunicationHub() {
     }
 
     return rows;
-  }, [messages]);
+  }, [visibleMessages]);
 
   const loadConversations = useCallback(async () => {
     try {
@@ -217,6 +242,12 @@ export default function CommunicationHub() {
     messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
   }, [messages]);
 
+  useEffect(() => {
+    setMessageQuery('');
+    setSearchOpen(false);
+    setOptionsOpen(false);
+  }, [activeThreadId]);
+
   const handleSend = async (event: FormEvent) => {
     event.preventDefault();
     if (!activeThreadId || sending) return;
@@ -245,6 +276,23 @@ export default function CommunicationHub() {
     }
   };
 
+  const selectThread = (threadId: string) => {
+    setActiveThreadId(threadId);
+  };
+
+  const refreshActiveThread = async () => {
+    if (!activeThreadId) return;
+    await Promise.all([loadMessages(activeThreadId), loadConversations()]);
+    setOptionsOpen(false);
+  };
+
+  const markActiveThreadRead = async () => {
+    if (!activeThreadId) return;
+    await markRead(activeThreadId);
+    await loadConversations();
+    setOptionsOpen(false);
+  };
+
   return (
     <section className={styles.chatShell}>
       {error ? <div className={styles.error}>{error}</div> : null}
@@ -253,6 +301,22 @@ export default function CommunicationHub() {
           <div className={styles.threadHeader}>
             <h3>{role === 'lawyer' ? 'Client Conversations' : 'Lawyer Conversations'}</h3>
             <p>Encrypted and synced in real time</p>
+          </div>
+
+          <div className={styles.threadSearch}>
+            <Search size={15} />
+            <input
+              type="search"
+              value={threadQuery}
+              onChange={(event) => setThreadQuery(event.target.value)}
+              placeholder="Search threads"
+              aria-label="Search conversations"
+            />
+            {threadQuery ? (
+              <button type="button" aria-label="Clear conversation search" onClick={() => setThreadQuery('')}>
+                <X size={14} />
+              </button>
+            ) : null}
           </div>
 
           {loading ? (
@@ -269,14 +333,19 @@ export default function CommunicationHub() {
                   : 'Start by clicking Contact in Lawyers directory.'}
               </p>
             </div>
+          ) : filteredConversations.length === 0 ? (
+            <div className={styles.emptyState}>
+              <Search size={18} />
+              <p>No conversations match this search.</p>
+            </div>
           ) : (
             <div className={styles.threadItems}>
-              {conversations.map((item) => (
+              {filteredConversations.map((item) => (
                 <button
                   key={item.id}
                   type="button"
                   className={`${styles.threadBtn} ${item.id === activeThreadId ? styles.threadBtnActive : ''}`}
-                  onClick={() => setActiveThreadId(item.id)}
+                  onClick={() => selectThread(item.id)}
                 >
                   <div className={styles.threadTop}>
                     <strong>{item.counterpart_name}</strong>
@@ -311,14 +380,70 @@ export default function CommunicationHub() {
                   </div>
                 </div>
                 <div className={styles.messageActions}>
-                  <button type="button" className={styles.iconBtn} aria-label="Search conversation">
+                  <button
+                    type="button"
+                    className={`${styles.iconBtn} ${searchOpen ? styles.iconBtnActive : ''}`}
+                    aria-label="Search conversation"
+                    aria-expanded={searchOpen}
+                    onClick={() => setSearchOpen((current) => !current)}
+                  >
                     <Search size={16} />
                   </button>
-                  <button type="button" className={styles.iconBtn} aria-label="Conversation options">
-                    <MoreVertical size={16} />
-                  </button>
+                  <div className={styles.optionsWrap}>
+                    <button
+                      type="button"
+                      className={`${styles.iconBtn} ${optionsOpen ? styles.iconBtnActive : ''}`}
+                      aria-label="Conversation options"
+                      aria-expanded={optionsOpen}
+                      onClick={() => setOptionsOpen((current) => !current)}
+                    >
+                      <MoreVertical size={16} />
+                    </button>
+
+                    {optionsOpen ? (
+                      <div className={styles.optionsMenu}>
+                        <button type="button" onClick={refreshActiveThread}>
+                          <RefreshCw size={14} />
+                          Refresh
+                        </button>
+                        <button type="button" onClick={markActiveThreadRead}>
+                          <CheckCheck size={14} />
+                          Mark read
+                        </button>
+                        <button
+                          type="button"
+                          onClick={() => {
+                            setDraft('');
+                            setOptionsOpen(false);
+                          }}
+                        >
+                          <X size={14} />
+                          Clear draft
+                        </button>
+                      </div>
+                    ) : null}
+                  </div>
                 </div>
               </header>
+
+              {searchOpen ? (
+                <div className={styles.messageSearch}>
+                  <Search size={15} />
+                  <input
+                    type="search"
+                    value={messageQuery}
+                    onChange={(event) => setMessageQuery(event.target.value)}
+                    placeholder="Search this conversation"
+                    aria-label="Search this conversation"
+                    autoFocus
+                  />
+                  {messageQuery ? (
+                    <button type="button" aria-label="Clear message search" onClick={() => setMessageQuery('')}>
+                      <X size={14} />
+                    </button>
+                  ) : null}
+                </div>
+              ) : null}
 
               <div className={styles.messageList}>
                 {loadingMessages ? (
@@ -330,6 +455,11 @@ export default function CommunicationHub() {
                   <div className={styles.placeholder}>
                     <MessageSquare size={20} />
                     <p>No messages yet. Send the first message.</p>
+                  </div>
+                ) : visibleMessages.length === 0 ? (
+                  <div className={styles.placeholder}>
+                    <Search size={20} />
+                    <p>No messages match this search.</p>
                   </div>
                 ) : (
                   messageRows.map((row) => {
@@ -365,6 +495,12 @@ export default function CommunicationHub() {
                 <textarea
                   value={draft}
                   onChange={(event) => setDraft(event.target.value)}
+                  onKeyDown={(event) => {
+                    if (event.key === 'Enter' && !event.shiftKey) {
+                      event.preventDefault();
+                      event.currentTarget.form?.requestSubmit();
+                    }
+                  }}
                   placeholder="Type a message..."
                   rows={2}
                   maxLength={2000}

@@ -120,10 +120,10 @@ export default function Sidebar() {
         <Link href="/" className={styles.logo}>
           <div className={styles.logoIcon}>
             <Image 
-              src="/logo.png.jpeg"
+              src="/shieldher-logo-transparent.png"
               alt="ShieldHer Logo"
-              width={38}
-              height={38}
+              width={96}
+              height={64}
               className={styles.customLogoImage}
             />
           </div>
