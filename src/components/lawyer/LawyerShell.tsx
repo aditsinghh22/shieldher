@@ -191,10 +191,10 @@ export default function LawyerShell({ title, subtitle, children }: LawyerShellPr
           <Link href="/lawyer/dashboard" className={sidebarStyles.logo}>
             <div className={sidebarStyles.logoIcon}>
               <Image
-                src="/logo.png.jpeg"
+                src="/shieldher-logo-transparent.png"
                 alt="ShieldHer Logo"
-                width={38}
-                height={38}
+                width={96}
+                height={64}
                 className={sidebarStyles.customLogoImage}
               />
             </div>

@@ -43,7 +43,7 @@
 .logo {
     display: flex;
     align-items: center;
-    gap: 10px;
+    gap: 12px;
     font-family: var(--font-display);
     font-weight: 800;
     font-size: 20px;
@@ -62,9 +62,18 @@
     opacity: 0.85;
 }
 
+.logoIcon {
+    width: 54px;
+    height: 40px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+}
+
 .logoImage {
-    width: 56px;
-    height: 56px;
+    width: 54px;
+    height: 40px;
     object-fit: contain;
     transition: transform var(--transition-fast), filter var(--transition-base);
     filter: drop-shadow(0 2px 8px rgba(0, 0, 0, 0.1));
@@ -80,6 +89,7 @@
 
 .logoText {
     font-weight: 800;
+    line-height: 1;
 }
 
 .links {

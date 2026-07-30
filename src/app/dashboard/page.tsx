@@ -66,6 +66,9 @@ type CaseNotification = {
   timestamp: string;
 };
 
+type ChartRange = 'monthly' | 'yearly';
+type ActiveNavPanel = 'notifications' | 'help' | null;
+
 function parseRole(value: unknown): UserRole | null {
   if (value === 'lawyer' || value === 'user') return value;
   return null;
@@ -172,6 +175,9 @@ export default function DashboardPage() {
   const [caseNotifications, setCaseNotifications] = useState<CaseNotification[]>([]);
   const [loading, setLoading] = useState(true);
   const [expandedId, setExpandedId] = useState<string | null>(null);
+  const [searchQuery, setSearchQuery] = useState('');
+  const [chartRange, setChartRange] = useState<ChartRange>('monthly');
+  const [activeNavPanel, setActiveNavPanel] = useState<ActiveNavPanel>(null);
 
   useEffect(() => {
     async function fetchData() {
@@ -347,16 +353,52 @@ export default function DashboardPage() {
     return months;
   }, [uploads, analyses]);
 
-  const maxBarValue = useMemo(() => {
+  const yearSeries = useMemo<MonthPoint[]>(() => {
+    const years: MonthPoint[] = [];
+    const currentYear = new Date().getFullYear();
+
+    for (let year = currentYear - 4; year <= currentYear; year += 1) {
+      years.push({
+        key: String(year),
+        label: String(year),
+        uploads: 0,
+        safe: 0,
+        reviewed: 0,
+      });
+    }
+
+    const yearMap = new Map(years.map((point) => [point.key, point]));
+
+    uploads.forEach((upload) => {
+      const point = yearMap.get(String(new Date(upload.created_at).getFullYear()));
+      if (point) point.uploads += 1;
+    });
+
+    analyses.forEach((analysis) => {
+      const point = yearMap.get(String(new Date(analysis.created_at).getFullYear()));
+      if (!point) return;
+
+      if (analysis.risk_level === 'safe' || analysis.risk_level === 'low') {
+        point.safe += 1;
+      } else {
+        point.reviewed += 1;
+      }
+    });
+
+    return years;
+  }, [uploads, analyses]);
+
+  const chartSeries = chartRange === 'monthly' ? monthSeries : yearSeries;
+  const chartMaxBarValue = useMemo(() => {
     const highest = Math.max(
       1,
-      ...monthSeries.map((point) => Math.max(point.uploads, point.safe + point.reviewed, point.safe))
+      ...chartSeries.map((point) => Math.max(point.uploads, point.safe + point.reviewed, point.safe))
     );
     return highest;
-  }, [monthSeries]);
+  }, [chartSeries]);
 
-  const monthNow = monthSeries[monthSeries.length - 1] ?? { uploads: 0, safe: 0, reviewed: 0 };
-  const monthPrev = monthSeries[monthSeries.length - 2] ?? { uploads: 0, safe: 0, reviewed: 0 };
+  const monthNow = chartSeries[chartSeries.length - 1] ?? { uploads: 0, safe: 0, reviewed: 0 };
+  const monthPrev = chartSeries[chartSeries.length - 2] ?? { uploads: 0, safe: 0, reviewed: 0 };
 
   const uploadsDelta = deltaPercent(monthNow.uploads, monthPrev.uploads);
   const analyzedDelta = deltaPercent(monthNow.safe + monthNow.reviewed, monthPrev.safe + monthPrev.reviewed);
@@ -375,7 +417,28 @@ export default function DashboardPage() {
   const gaugeInnerOffset = gaugeInnerCircumference * (1 - clampPercent(riskyRatio) / 100);
   const safeScore = totalAnalyzedResults > 0 ? Math.round(safeRatio) : 0;
 
-  const visibleAnalyses = analyses.slice(0, 5);
+  const normalizedSearch = searchQuery.trim().toLowerCase();
+  const filteredAnalyses = useMemo(() => {
+    if (!normalizedSearch) return analyses;
+
+    return analyses.filter((analysis) => {
+      const searchable = [
+        analysis.id,
+        analysis.upload_id,
+        analysis.summary,
+        analysis.risk_level,
+        shortDate(analysis.created_at),
+        ...(analysis.flags ?? []).flatMap((flag) => [flag.category, flag.description]),
+        ...(analysis.details?.recommendations ?? []),
+        analysis.details?.legal_analysis?.summary ?? '',
+      ]
+        .join(' ')
+        .toLowerCase();
+
+      return searchable.includes(normalizedSearch);
+    });
+  }, [analyses, normalizedSearch]);
+  const visibleAnalyses = filteredAnalyses.slice(0, 5);
   const expandedAnalysis = analyses.find((analysis) => analysis.id === expandedId) ?? null;
 
   const toggleRow = (id: string) => {
@@ -383,6 +446,7 @@ export default function DashboardPage() {
   };
 
   const userInitial = userName.trim().charAt(0).toUpperCase() || 'U';
+  const hasNotifications = caseNotifications.length > 0;
 
   return (
     <div className={styles.page}>
@@ -394,17 +458,90 @@ export default function DashboardPage() {
             type="text"
             placeholder="Search safety reports..."
             aria-label="Search dashboard reports"
+            value={searchQuery}
+            onChange={(event) => setSearchQuery(event.target.value)}
           />
         </div>
 
         <div className={styles.navActions}>
-          <button className={styles.iconButton} aria-label="Notifications">
-            <Bell size={18} />
-            <span className={styles.notificationDot} />
-          </button>
-          <button className={styles.iconButton} aria-label="Help">
-            <CircleHelp size={18} />
-          </button>
+          <div className={styles.navPopoverWrap}>
+            <button
+              type="button"
+              className={styles.iconButton}
+              aria-label="Notifications"
+              aria-expanded={activeNavPanel === 'notifications'}
+              onClick={() =>
+                setActiveNavPanel((current) => (current === 'notifications' ? null : 'notifications'))
+              }
+            >
+              <Bell size={18} />
+              {hasNotifications ? <span className={styles.notificationDot} /> : null}
+            </button>
+
+            {activeNavPanel === 'notifications' ? (
+              <div className={styles.navPopover}>
+                <div className={styles.popoverHeader}>
+                  <strong>Case Updates</strong>
+                  <span>{caseNotifications.length}</span>
+                </div>
+                {caseNotifications.length > 0 ? (
+                  <div className={styles.popoverList}>
+                    {caseNotifications.map((notification) => (
+                      <Link
+                        key={notification.id}
+                        href={
+                          notification.threadId
+                            ? `/dashboard/communication?thread=${notification.threadId}`
+                            : '/dashboard/communication'
+                        }
+                        className={styles.popoverItem}
+                        onClick={() => setActiveNavPanel(null)}
+                      >
+                        <span>{notification.lawyerName}</span>
+                        <small>{notification.status === 'accepted' ? 'Accepted your case' : 'Chat is open'}</small>
+                      </Link>
+                    ))}
+                  </div>
+                ) : (
+                  <p className={styles.popoverEmpty}>No new case updates.</p>
+                )}
+              </div>
+            ) : null}
+          </div>
+
+          <div className={styles.navPopoverWrap}>
+            <button
+              type="button"
+              className={styles.iconButton}
+              aria-label="Help"
+              aria-expanded={activeNavPanel === 'help'}
+              onClick={() => setActiveNavPanel((current) => (current === 'help' ? null : 'help'))}
+            >
+              <CircleHelp size={18} />
+            </button>
+
+            {activeNavPanel === 'help' ? (
+              <div className={styles.navPopover}>
+                <div className={styles.popoverHeader}>
+                  <strong>Quick Help</strong>
+                </div>
+                <div className={styles.popoverList}>
+                  <Link href="/dashboard/upload" className={styles.popoverItem} onClick={() => setActiveNavPanel(null)}>
+                    <span>Upload evidence</span>
+                    <small>Start a new safety scan</small>
+                  </Link>
+                  <Link href="/dashboard/history" className={styles.popoverItem} onClick={() => setActiveNavPanel(null)}>
+                    <span>Open archive</span>
+                    <small>Review past analyses</small>
+                  </Link>
+                  <Link href="/dashboard/lawyers" className={styles.popoverItem} onClick={() => setActiveNavPanel(null)}>
+                    <span>Find a lawyer</span>
+                    <small>Share case records securely</small>
+                  </Link>
+                </div>
+              </div>
+            ) : null}
+          </div>
 
           <div className={styles.profileChip}>
             <div className={styles.profileMeta}>
@@ -553,15 +690,32 @@ export default function DashboardPage() {
               <p className={styles.panelHint}>Activity over the last 12 months</p>
             </div>
             <div className={styles.rangeSwitch}>
-              <button className={styles.rangeActive}>Monthly</button>
-              <button>Yearly</button>
+              <button
+                type="button"
+                className={chartRange === 'monthly' ? styles.rangeActive : ''}
+                aria-pressed={chartRange === 'monthly'}
+                onClick={() => setChartRange('monthly')}
+              >
+                Monthly
+              </button>
+              <button
+                type="button"
+                className={chartRange === 'yearly' ? styles.rangeActive : ''}
+                aria-pressed={chartRange === 'yearly'}
+                onClick={() => setChartRange('yearly')}
+              >
+                Yearly
+              </button>
             </div>
           </div>
 
-          <div className={styles.barChart}>
-            {monthSeries.map((point) => {
-              const mutedHeight = Math.max(8, (point.uploads / maxBarValue) * 100);
-              const primaryHeight = Math.max(8, (point.safe / maxBarValue) * 100);
+          <div
+            className={styles.barChart}
+            style={{ gridTemplateColumns: `repeat(${chartSeries.length}, minmax(0, 1fr))` }}
+          >
+            {chartSeries.map((point) => {
+              const mutedHeight = Math.max(8, (point.uploads / chartMaxBarValue) * 100);
+              const primaryHeight = Math.max(8, (point.safe / chartMaxBarValue) * 100);
 
               return (
                 <div key={point.key} className={styles.barGroup}>
@@ -751,12 +905,24 @@ export default function DashboardPage() {
         ) : (
           <div className={styles.emptyState}>
             <Upload size={34} />
-            <h3>No analyses yet</h3>
-            <p>Upload your first screenshot to start generating safety insights.</p>
-            <Link href="/dashboard/upload" className={styles.newAnalysisBtn}>
-              <Plus size={16} />
-              <span>Upload Screenshot</span>
-            </Link>
+            {analyses.length > 0 && normalizedSearch ? (
+              <>
+                <h3>No matching analyses</h3>
+                <p>Try another report ID, risk level, flag, or recommendation.</p>
+                <button type="button" className={styles.newAnalysisBtn} onClick={() => setSearchQuery('')}>
+                  Clear Search
+                </button>
+              </>
+            ) : (
+              <>
+                <h3>No analyses yet</h3>
+                <p>Upload your first screenshot to start generating safety insights.</p>
+                <Link href="/dashboard/upload" className={styles.newAnalysisBtn}>
+                  <Plus size={16} />
+                  <span>Upload Screenshot</span>
+                </Link>
+              </>
+            )}
           </div>
         )}
       </section>

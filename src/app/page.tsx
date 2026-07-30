@@ -3,6 +3,7 @@ import PrivacyFeatureScroller from "@/components/PrivacyFeatureScroller";
 import Reveal from "@/components/Reveal";
 import ShieldSceneWrapper from "@/components/ShieldSceneWrapper";
 import Link from "next/link";
+import Image from "next/image";
 
 export default function Home() {
   return (
@@ -19,7 +20,15 @@ export default function Home() {
           <div />
 
           <div className="hero-nav-logo" aria-label="Shield Her">
-            Shield Her
+            <Image
+              src="/shieldher-logo-transparent.png"
+              alt="Shield Her logo"
+              width={128}
+              height={86}
+              className="hero-nav-logo-image"
+              priority
+            />
+            <span>Shield Her</span>
           </div>
 
           <div>
@@ -416,7 +425,16 @@ export default function Home() {
       <footer className="site-footer">
         <div className="footer-inner">
           <div className="footer-brand">
-            <div className="footer-logo">Shield Her</div>
+            <div className="footer-logo">
+              <Image
+                src="/shieldher-logo-transparent.png"
+                alt="Shield Her logo"
+                width={128}
+                height={86}
+                className="footer-logo-image"
+              />
+              <span>Shield Her</span>
+            </div>
             <p className="footer-tagline">
               © {new Date().getFullYear()} Shield Her. Built for digital safety,
               privacy, and peace of mind.

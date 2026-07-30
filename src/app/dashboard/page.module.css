@@ -99,6 +99,11 @@
   gap: 0.65rem;
 }
 
+.navPopoverWrap {
+  position: relative;
+  display: inline-flex;
+}
+
 .iconButton {
   position: relative;
   width: 38px;
@@ -128,6 +133,87 @@
   border-radius: 50%;
   background: var(--dash-danger);
   box-shadow: 0 0 0 2px #fdf9f0;
+}
+
+.navPopover {
+  position: absolute;
+  top: calc(100% + 0.7rem);
+  right: 0;
+  width: min(18rem, calc(100vw - 2rem));
+  z-index: 50;
+  border-radius: 14px;
+  border: 1px solid rgba(188, 186, 167, 0.4);
+  background: rgba(255, 253, 248, 0.96);
+  box-shadow: 0 20px 42px -24px rgba(57, 56, 43, 0.68);
+  padding: 0.72rem;
+  backdrop-filter: blur(14px) saturate(130%);
+  -webkit-backdrop-filter: blur(14px) saturate(130%);
+}
+
+.popoverHeader {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.8rem;
+  padding: 0.16rem 0.18rem 0.56rem;
+  color: var(--dash-ink);
+}
+
+.popoverHeader strong {
+  font-size: 0.78rem;
+  letter-spacing: 0.09em;
+  text-transform: uppercase;
+}
+
+.popoverHeader span {
+  min-width: 1.35rem;
+  height: 1.35rem;
+  border-radius: 999px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(70, 101, 80, 0.12);
+  color: var(--dash-green);
+  font-size: 0.72rem;
+  font-weight: 800;
+}
+
+.popoverList {
+  display: flex;
+  flex-direction: column;
+  gap: 0.42rem;
+}
+
+.popoverItem {
+  border-radius: 10px;
+  border: 1px solid rgba(188, 186, 167, 0.25);
+  background: rgba(255, 255, 255, 0.62);
+  padding: 0.62rem 0.68rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.16rem;
+  transition: background-color 150ms ease, border-color 150ms ease;
+}
+
+.popoverItem:hover {
+  border-color: rgba(70, 101, 80, 0.28);
+  background: rgba(255, 255, 255, 0.9);
+}
+
+.popoverItem span {
+  font-size: 0.9rem;
+  font-weight: 800;
+  color: var(--dash-ink);
+}
+
+.popoverItem small,
+.popoverEmpty {
+  color: rgba(100, 100, 85, 0.9);
+  font-size: 0.76rem;
+}
+
+.popoverEmpty {
+  padding: 0.55rem 0.18rem 0.18rem;
 }
 
 .profileChip {
