@@ -4,6 +4,7 @@ import { useEffect, useState } from 'react';
 import { ArrowLeft, Sparkles, Loader, Info, AlertTriangle, Lightbulb, Scale } from 'lucide-react';
 import Link from 'next/link';
 import UploadZone from '@/components/UploadZone';
+import MediaAuthenticityPanel from '@/components/MediaAuthenticityPanel';
 import { createClient } from '@/lib/supabase/client';
 import styles from './page.module.css';
 import { type AnalysisResult } from '@/lib/types';
@@ -64,6 +65,7 @@ export default function UploadPage() {
       if (!user) throw new Error('Please sign in to upload');
 
       const fileUrls: string[] = [];
+      const fileTypes: string[] = [];
 
       for (const file of files) {
         // Upload file to Supabase Storage
@@ -79,6 +81,7 @@ export default function UploadPage() {
           .getPublicUrl(fileName);
 
         fileUrls.push(publicUrl);
+        fileTypes.push(file.type);
       }
 
       const combinedFileName = files.length === 1 ? files[0].name : `${files.length} items uploaded together`;
@@ -90,6 +93,7 @@ export default function UploadPage() {
           user_id: user.id,
           file_url: fileUrls.join(','),
           file_name: combinedFileName,
+          original_type: fileTypes.join(','),
           status: 'pending',
         })
         .select()
@@ -211,6 +215,8 @@ export default function UploadPage() {
               </div>
               
               <p className={styles.summary}>{analysisResult.summary}</p>
+
+              <MediaAuthenticityPanel authenticity={analysisResult.details?.media_authenticity} compact={!showFullAnalysis} />
 
               {analysisResult.flags && analysisResult.flags.length > 0 && (
                 <div className={styles.resultSection}>

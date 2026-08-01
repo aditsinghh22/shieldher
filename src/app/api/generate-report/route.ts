@@ -250,7 +250,10 @@ export async function POST(request: NextRequest) {
       y += 8;
 
       const statusColorMap: Record<MediaAuthenticityStatus, [number, number, number]> = {
+        authentic: [0, 166, 124],
         ai_generated: [239, 68, 68],
+        ai_assisted: [245, 158, 11],
+        manipulated: [239, 68, 68],
         likely_human: [0, 166, 124],
         inconclusive: [245, 158, 11],
         unsupported: [100, 116, 139],
@@ -264,11 +267,12 @@ export async function POST(request: NextRequest) {
       doc.setFont('helvetica', 'bold');
       doc.text(sanitizeText((authenticity.label || 'UNKNOWN').toUpperCase()), margin + 24, y + 4.8, { align: 'center' });
 
-      if (typeof authenticity.ai_probability === 'number') {
+      const aiLikelihood = authenticity.ai_generation_probability ?? authenticity.ai_probability;
+      if (typeof aiLikelihood === 'number') {
         doc.setTextColor(66, 84, 102);
         doc.setFontSize(9);
         doc.setFont('helvetica', 'bold');
-        doc.text(`AI likelihood: ${authenticity.ai_probability}%`, pageWidth - margin, y + 4.8, { align: 'right' });
+        doc.text(`AI likelihood: ${aiLikelihood}%`, pageWidth - margin, y + 4.8, { align: 'right' });
       }
       y += 11;
 
@@ -283,6 +287,20 @@ export async function POST(request: NextRequest) {
         5
       );
       y += 4;
+
+      const scoreLine = [
+        typeof authenticity.authenticity_score === 'number' ? `Authenticity: ${authenticity.authenticity_score}%` : '',
+        typeof authenticity.manipulation_probability === 'number' ? `Manipulation: ${authenticity.manipulation_probability}%` : '',
+        typeof authenticity.confidence_score === 'number' ? `Confidence: ${authenticity.confidence_score}%` : '',
+      ].filter(Boolean).join(' | ');
+
+      if (scoreLine) {
+        doc.setTextColor(66, 84, 102);
+        doc.setFontSize(9);
+        doc.setFont('helvetica', 'bold');
+        doc.text(sanitizeText(scoreLine), margin, y);
+        y += 6;
+      }
 
       if (authenticity.items && authenticity.items.length > 0) {
         doc.setTextColor(66, 84, 102);

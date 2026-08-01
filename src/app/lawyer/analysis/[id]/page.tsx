@@ -6,6 +6,7 @@ import { useParams } from 'next/navigation';
 import LawyerShell from '@/components/lawyer/LawyerShell';
 import RiskBadge from '@/components/RiskBadge';
 import LoadingSpinner from '@/components/LoadingSpinner';
+import MediaAuthenticityPanel from '@/components/MediaAuthenticityPanel';
 import { type Upload, type AnalysisResult } from '@/lib/types';
 import {
   AlertTriangle,
@@ -222,6 +223,8 @@ export default function LawyerAnalysisDetailsPage() {
                 )}
               </div>
             </section>
+
+            <MediaAuthenticityPanel authenticity={details.media_authenticity} />
 
             {analysis.flags && analysis.flags.length > 0 && (
               <section className={styles.section}>

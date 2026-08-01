@@ -12,7 +12,7 @@ async function run() {
   console.log('Testing Gemini connection and prompt...');
   try {
     const genAI = new GoogleGenerativeAI(apiKey);
-    const model = genAI.getGenerativeModel({ model: 'gemini-2.5-flash' });
+    const model = genAI.getGenerativeModel({ model: 'gemini-3.1-flash-lite' });
 
     const prompt = `Analyze this chat screenshot for a women's protection application.
                 CRITICAL INSTRUCTIONS:
