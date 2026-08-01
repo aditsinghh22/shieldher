@@ -9,6 +9,7 @@ import RiskBadge from "@/components/RiskBadge";
 import LoadingSpinner from "@/components/LoadingSpinner";
 import DispatchModal, { type DispatchFormData } from "@/components/DispatchModal";
 import MediaAuthenticityPanel from "@/components/MediaAuthenticityPanel";
+import PdfPreviewModal from "@/components/PdfPreviewModal";
 import Link from "next/link";
 import {
   ArrowLeft,
@@ -147,10 +148,52 @@ export default function AnalysisDetailPage() {
   const [analysis, setAnalysis] = useState<DecryptedAnalysis | null>(null);
   const [decryptedMediaArray, setDecryptedMediaArray] = useState<{url: string, decrypted: boolean}[]>([]);
   const [loading, setLoading] = useState(true);
-  const generating = false;
+  const [generating, setGenerating] = useState(false);
+  const [pdfPreviewUrl, setPdfPreviewUrl] = useState<string | null>(null);
+  const [isPdfModalOpen, setIsPdfModalOpen] = useState(false);
   const [isDispatchModalOpen, setIsDispatchModalOpen] = useState(false);
   const [dispatching, setDispatching] = useState(false);
   const [dispatchStatus, setDispatchStatus] = useState<DispatchStatus | null>(null);
+
+  const handleGeneratePdf = useCallback(async () => {
+    if (!uploadId || generating) return;
+    setGenerating(true);
+    try {
+      const res = await fetch('/api/generate-report', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          uploadId,
+          decryptedAnalysis: analysis,
+        }),
+      });
+
+      if (!res.ok) {
+        const errData = await res.json().catch(() => ({}));
+        throw new Error(errData.error || 'Failed to generate forensic PDF report');
+      }
+
+      const blob = await res.blob();
+      const url = window.URL.createObjectURL(blob);
+      setPdfPreviewUrl(url);
+      setIsPdfModalOpen(true);
+    } catch (err: unknown) {
+      console.error('PDF Generation error:', err);
+      alert(err instanceof Error ? err.message : 'Error generating forensic PDF report');
+    } finally {
+      setGenerating(false);
+    }
+  }, [uploadId, analysis, generating]);
+
+  const handleDownloadFromModal = useCallback(() => {
+    if (!pdfPreviewUrl) return;
+    const a = document.createElement('a');
+    a.href = pdfPreviewUrl;
+    a.download = `ShieldHer-Forensic-Report-${uploadId.substring(0, 8)}.pdf`;
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+  }, [pdfPreviewUrl, uploadId]);
 
   const openDispatchModal = useCallback(() => {
     setDispatchStatus(null);
@@ -372,8 +415,12 @@ export default function AnalysisDetailPage() {
              <h3>Export Document</h3>
            </div>
            <p>Download a sanitized forensic report for legal consultation.</p>
-           <button className={styles.exportBtn} disabled={generating}>
-             {generating ? 'Compiling...' : 'Download Forensic PDF'}
+           <button 
+             className={styles.exportBtn} 
+             onClick={handleGeneratePdf}
+             disabled={generating}
+           >
+             {generating ? 'Compiling PDF...' : 'View Forensic PDF'}
            </button>
         </div>
       </section>
@@ -552,6 +599,14 @@ export default function AnalysisDetailPage() {
             analysis.details?.rpa_filing_data?.approximate_date
           ),
         }}
+      />
+
+      <PdfPreviewModal
+        isOpen={isPdfModalOpen}
+        onClose={() => setIsPdfModalOpen(false)}
+        pdfUrl={pdfPreviewUrl}
+        fileName={`ShieldHer-Forensic-Report-${uploadId.substring(0, 8)}.pdf`}
+        onDownload={handleDownloadFromModal}
       />
     </div>
   );
