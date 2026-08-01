@@ -4,6 +4,7 @@ import { useState } from 'react';
 import { ArrowLeft, Sparkles, Loader, Info, AlertTriangle, Lightbulb, Scale, ShieldCheck, MessageCircle, Activity, AlertOctagon } from 'lucide-react';
 import Link from 'next/link';
 import UploadZone from '@/components/UploadZone';
+import MediaAuthenticityPanel from '@/components/MediaAuthenticityPanel';
 import { createClient } from '@/lib/supabase/client';
 import { encryptFile, retrieveKey, uint8ArrayToBase64 } from '@/lib/crypto';
 import styles from './page.module.css';
@@ -14,7 +15,7 @@ export default function UploadPage() {
   const [language, setLanguage] = useState('English');
   const [uploading, setUploading] = useState(false);
   const [analyzing, setAnalyzing] = useState(false);
-  const [encrypting, setEncrypting] = useState(false);
+  const [, setEncrypting] = useState(false);
   const [error, setError] = useState('');
   const [analysisResult, setAnalysisResult] = useState<AnalysisResult | null>(null);
   const [showFullAnalysis, setShowFullAnalysis] = useState(false);
@@ -54,7 +55,10 @@ export default function UploadPage() {
         const { iv, encryptedBlob } = await encryptFile(key, file);
         setEncrypting(false);
 
-        const fileName = `${user.id}/${Date.now()}-${file.name}.enc`;
+        // Sanitize file name to avoid Supabase "Invalid key" errors with spaces or special characters
+        const sanitizedName = file.name.replace(/[^a-zA-Z0-9.\-_]/g, '_');
+        const fileName = `${user.id}/${Date.now()}-${sanitizedName}.enc`;
+        
         const { error: storageError } = await supabase.storage
           .from('screenshots')
           .upload(fileName, encryptedBlob, {
@@ -216,6 +220,8 @@ export default function UploadPage() {
               </div>
               
               <p className={styles.summary}>{analysisResult.summary}</p>
+
+              <MediaAuthenticityPanel authenticity={analysisResult.details?.media_authenticity} compact={!showFullAnalysis} />
 
               {analysisResult.flags && analysisResult.flags.length > 0 && (
                 <div className={styles.resultSection}>

@@ -31,21 +31,82 @@ export interface AnalysisFlag {
 }
 
 export type MediaAuthenticityStatus =
+  | 'authentic'
   | 'ai_generated'
+  | 'ai_assisted'
+  | 'manipulated'
   | 'likely_human'
   | 'inconclusive'
   | 'unsupported'
   | 'unavailable';
 
+export type MediaAuthenticityEvidenceKind =
+  | 'heatmap'
+  | 'timestamp'
+  | 'spectrogram'
+  | 'metadata'
+  | 'text_region'
+  | 'model_signal';
+
+export interface MediaAuthenticityEvidence {
+  kind: MediaAuthenticityEvidenceKind;
+  label: string;
+  description: string;
+  value?: string;
+  evidence_supports?: 'AI' | 'Authentic' | 'Neutral';
+  evidence_strength?: 'Weak' | 'Moderate' | 'Strong';
+  start_time_seconds?: number;
+  end_time_seconds?: number;
+  region?: {
+    x: number;
+    y: number;
+    width: number;
+    height: number;
+  };
+  asset_url?: string;
+}
+
+export interface MediaAuthenticityModelResult {
+  detector_id: string;
+  detector_name: string;
+  model_name?: string;
+  modality: 'image' | 'audio' | 'video' | 'document' | 'text' | 'generic';
+  authenticity_score: number;
+  ai_generation_probability: number;
+  manipulation_probability: number;
+  confidence_score: number;
+  summary: string;
+  technical_details: string[];
+  evidence: MediaAuthenticityEvidence[];
+  possible_models?: string[];
+  risk_level?: 'Low' | 'Medium' | 'High';
+  limitations?: string[];
+  final_reasoning?: string;
+}
+
 export interface MediaAuthenticityItem {
   file_name: string;
-  media_type: 'image' | 'audio' | 'video' | 'other';
+  media_type: 'image' | 'audio' | 'video' | 'document' | 'text' | 'other';
   provider: string;
   status: MediaAuthenticityStatus;
   label: string;
   summary: string;
+  authenticity_score?: number;
+  ai_generation_probability?: number;
+  manipulation_probability?: number;
+  confidence_score?: number;
   ai_probability?: number;
   confidence?: number;
+  human_explanation?: string;
+  technical_explanation?: string;
+  metadata?: Record<string, unknown>;
+  evidence?: MediaAuthenticityEvidence[];
+  model_results?: MediaAuthenticityModelResult[];
+  possible_models?: string[];
+  risk_level?: 'Low' | 'Medium' | 'High';
+  limitations?: string[];
+  final_reasoning?: string;
+  dual_pass_agreement?: boolean;
 }
 
 export interface MediaAuthenticityResult {
@@ -53,11 +114,20 @@ export interface MediaAuthenticityResult {
   status: MediaAuthenticityStatus;
   label: string;
   summary: string;
+  human_explanation?: string;
+  technical_explanation?: string;
+  authenticity_score?: number;
+  ai_generation_probability?: number;
+  manipulation_probability?: number;
+  confidence_score?: number;
   confidence?: number;
   ai_probability?: number;
   analyzed_count: number;
   supported_count: number;
+  detectors_used?: string[];
   items: MediaAuthenticityItem[];
+  possible_models?: string[];
+  risk_level?: 'Low' | 'Medium' | 'High';
 }
 
 export interface AnalysisResult {
