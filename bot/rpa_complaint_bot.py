@@ -18,6 +18,7 @@ FIXES APPLIED:
 """
 
 import argparse
+import difflib
 import json
 import logging
 import os
@@ -80,25 +81,27 @@ MOCK_DATA = {
 
 
 def load_payload() -> dict:
-    """Load payload from --payload CLI arg or fall back to MOCK_DATA."""
+    """Load payload from positional CLI arg, --payload CLI arg, or fall back to MOCK_DATA."""
     parser = argparse.ArgumentParser(description="ShieldHer RPA Complaint Bot")
-    parser.add_argument("--payload", type=str, help="Path to JSON payload file or raw JSON string")
+    parser.add_argument("payload_pos", nargs="?", default=None, help="Path to JSON payload file")
+    parser.add_argument("--payload", type=str, default=None, help="Path to JSON payload file or raw JSON string")
     args = parser.parse_args()
 
+    payload_input = args.payload or args.payload_pos
     data = MOCK_DATA
-    if args.payload:
-        if args.payload.strip().startswith("{"):
+    if payload_input:
+        if payload_input.strip().startswith("{"):
             log.info("Loading payload from raw JSON string")
             try:
-                data = json.loads(args.payload)
+                data = json.loads(payload_input)
             except Exception as e:
                 log.error(f"Failed to parse raw JSON payload: {e}")
-        elif os.path.exists(args.payload):
-            log.info(f"Loading payload from file: {args.payload}")
-            with open(args.payload, "r", encoding="utf-8") as f:
+        elif os.path.exists(payload_input):
+            log.info(f"Loading payload from file: {payload_input}")
+            with open(payload_input, "r", encoding="utf-8") as f:
                 data = json.load(f)
         else:
-            log.warning(f"Payload target not found: {args.payload}, using MOCK_DATA")
+            log.warning(f"Payload target not found: {payload_input}, using MOCK_DATA")
 
     # --- NORMALIZE DATA (Mapping Metadata to Bot Keys) ---
     # In the new Async architecture, user-verified data is in 'dispatch_metadata'
@@ -127,6 +130,8 @@ def load_payload() -> dict:
     for k, v in data.items():
         if k not in normalized and k != "dispatch_metadata":
             normalized[k] = v
+
+    normalized["_payload_path"] = args.payload if args.payload and os.path.exists(args.payload) else ""
             
     log.info(f"Payload normalized for complaint: {normalized.get('complaint_id')}")
     return normalized
@@ -248,18 +253,67 @@ def sanitize_and_prepare_image(source_path: str) -> str:
         return clean_target
 
 
+def cleanup_temp_artifacts(payload_path: str = None, evidence_paths: list = None):
+    """
+    Automatically cleans up temporary JSON payloads, temporary evidence images,
+    and temporary cache directories once form filling is completed.
+    """
+    try:
+        log.info("Performing auto-cleanup of temporary evidence and payload files...")
+        
+        # 1. Clean up common local evidence placeholders & screenshots
+        for local_file in ["evidence1.png", "dummy_evidence.png", "bot_error.png", "tab1_filled.png", "tab2_filled.png", "tab3_preview_rendered.png", "after_tab1_next.png"]:
+            if os.path.exists(local_file):
+                try:
+                    os.remove(local_file)
+                except Exception:
+                    pass
+
+        # 2. Clean up specific passed evidence paths
+        if evidence_paths:
+            for ep in evidence_paths:
+                if ep and os.path.exists(ep):
+                    try:
+                        os.remove(ep)
+                    except Exception:
+                        pass
+
+        # 3. Clean up the specific payload JSON file
+        if payload_path and os.path.exists(payload_path):
+            try:
+                os.remove(payload_path)
+            except Exception:
+                pass
+
+        # 4. Clean up any remaining temporary files in rpa_tmp and bot_tmp
+        bot_base = os.path.dirname(os.path.abspath(__file__))
+        for folder in ["rpa_tmp", "bot_tmp"]:
+            folder_path = os.path.join(bot_base, folder)
+            if os.path.exists(folder_path):
+                for fname in os.listdir(folder_path):
+                    fpath = os.path.join(folder_path, fname)
+                    try:
+                        if os.path.isfile(fpath):
+                            os.remove(fpath)
+                    except Exception:
+                        pass
+        log.info("Auto-cleanup finished: temporary files removed successfully.")
+    except Exception as e:
+        log.warning(f"Auto-cleanup notice: {e}")
+
+
 def select_dropdown(page, field_name, *, value=None, label=None, index=None, wait_loaded=False, timeout=2000):
     """Select dropdown option using exact element ID first, then positional fallback, then text matching."""
     log.info(f"Selecting dropdown '{field_name}': label={label}, value={value}, index={index}")
     try:
         id_map = {
-            "Category": ["#CrimeCategory", "#ContentPlaceHolder1_ddl_CategoryCrime", "select[name*='Category']"],
-            "State": ["#CrimeState", "#ContentPlaceHolder1_ddl_State", "select[name*='State']"],
-            "District": ["#CrimeDistrict", "#ContentPlaceHolder1_ddl_District", "select[name*='District']"],
-            "PoliceStation": ["#CrimePoliceStation", "#ContentPlaceHolder1_ddl_policeStation", "select[name*='policeStation']"],
-            "IncidentOccur": ["#InFoId", "#ContentPlaceHolder1_ddl_InformationSource", "select[name*='InformationSource']", "select[name*='InFo']"],
-            "MediaType": ["#ContentPlaceHolder1_ddl_MediaType", "select[name*='MediaType']"],
-            "IdType": ["#ContentPlaceHolder1_ddl_Id", "select[name*='ddl_Id']"],
+            "Category": ["#ContentPlaceHolder1_ddl_CategoryCrime", "#CrimeCategory", "select[name*='Category' i]", "select[id*='Category' i]"],
+            "State": ["#ContentPlaceHolder1_ddl_State", "#ddl_State", "#CrimeState", "select[name*='ddl_State' i]", "select[name*='State' i]", "select[id*='State' i]"],
+            "District": ["#ContentPlaceHolder1_ddl_District", "#ddl_District", "#CrimeDistrict", "select[name*='ddl_District' i]", "select[name*='District' i]", "select[id*='District' i]"],
+            "PoliceStation": ["#ContentPlaceHolder1_ddl_policeStation", "#CrimePoliceStation", "select[name*='policeStation' i]", "select[id*='policeStation' i]"],
+            "IncidentOccur": ["#ContentPlaceHolder1_ddl_InformationSource", "#InFoId", "select[name*='InformationSource' i]", "select[name*='InFo' i]"],
+            "MediaType": ["#ContentPlaceHolder1_ddl_MediaType", "#MediaType", "select[name*='MediaType' i]"],
+            "IdType": ["#ContentPlaceHolder1_ddl_Id", "#FK_IdTypeId", "select[name*='ddl_Id' i]"],
         }
 
         # 1. Try exact ID/Selector FIRST
@@ -267,7 +321,7 @@ def select_dropdown(page, field_name, *, value=None, label=None, index=None, wai
         for sel_expr in selectors:
             try:
                 sel = page.locator(sel_expr).first
-                if sel.is_visible(timeout=1000) or sel.count() > 0:
+                if sel.count() > 0 and sel.is_visible(timeout=1000):
                     if value:
                         try:
                             sel.select_option(value=str(value))
@@ -394,6 +448,517 @@ def _detect_form_stage(page) -> str:
         return "unknown"
 
 
+STATE_ALIASES: dict[str, list[str]] = {
+    "delhi": ["delhi", "nct of delhi", "national capital territory of delhi", "delhi ut", "central delhi", "new delhi"],
+    "andaman and nicobar islands": ["andaman & nicobar", "andaman and nicobar", "andaman & nicobar islands", "a & n islands", "nicobar"],
+    "andaman & nicobar": ["andaman & nicobar", "andaman and nicobar", "andaman and nicobar islands", "a & n islands"],
+    "jammu and kashmir": ["jammu & kashmir", "jammu and kashmir", "j&k", "jammu", "kashmir"],
+    "jammu & kashmir": ["jammu & kashmir", "jammu and kashmir", "j&k"],
+    "dadra and nagar haveli and daman and diu": ["dadra & nagar haveli and daman & diu", "dadra and nagar haveli", "daman and diu", "daman & diu", "dadra & nagar haveli"],
+    "dadra & nagar haveli and daman & diu": ["dadra and nagar haveli and daman and diu", "dadra and nagar haveli", "daman and diu", "daman & diu"],
+    "dadra and nagar haveli": ["dadra & nagar haveli and daman & diu", "dadra and nagar haveli and daman and diu", "dadra & nagar haveli"],
+    "daman and diu": ["dadra & nagar haveli and daman & diu", "dadra and nagar haveli and daman and diu", "daman & diu"],
+    "odisha": ["odisha", "orissa"],
+    "orissa": ["odisha", "orissa"],
+    "puducherry": ["puducherry", "pondicherry"],
+    "pondicherry": ["puducherry", "pondicherry"],
+    "uttarakhand": ["uttarakhand", "uttaranchal"],
+    "uttaranchal": ["uttarakhand", "uttaranchal"],
+    "telangana": ["telangana", "telangana state"],
+    "tamil nadu": ["tamil nadu", "tamilnadu"],
+    "ladakh": ["ladakh", "ut of ladakh"],
+    "chandigarh": ["chandigarh", "chandigarh ut"],
+}
+
+
+def _clean_str(s: str) -> str:
+    """Normalize string to lowercase alphanumeric only."""
+    return re.sub(r'[^a-zA-Z0-9]', '', (s or '').lower())
+
+
+def select_state_smartly(page, state_label: str) -> bool:
+    """
+    Select state on National Cyber Crime Reporting Portal with multi-tier matching,
+    support for state aliases, and full ASP.NET postback handling.
+    """
+    if not state_label or state_label.strip().lower() in ("select state", "select", ""):
+        state_label = "DELHI"
+
+    target_raw = state_label.strip()
+    target_lower = target_raw.lower()
+    target_clean = _clean_str(target_lower)
+    log.info(f"Selecting state: '{target_raw}' (normalized: '{target_clean}')")
+
+    # Candidate selectors for State dropdown across portal variations
+    state_selectors = [
+        "#ContentPlaceHolder1_ddl_State",
+        "#ddl_State",
+        "#CrimeState",
+        "select[name*='ddl_State' i]",
+        "select[name*='State' i]",
+        "select[id*='State' i]",
+    ]
+
+    try:
+        # 1. Wait for state dropdown to be available in DOM
+        try:
+            page.wait_for_function("""() => {
+                const sel = document.getElementById('ContentPlaceHolder1_ddl_State') ||
+                            document.getElementById('ddl_State') ||
+                            document.getElementById('CrimeState') ||
+                            document.querySelector('select[name*="ddl_State" i]') ||
+                            document.querySelector('select[name*="State" i]') ||
+                            document.querySelectorAll('select')[1];
+                return sel && sel.options && sel.options.length > 1;
+            }""", timeout=12000)
+        except Exception:
+            page.wait_for_timeout(1500)
+
+        # 2. Extract live options from state dropdown
+        options_data = page.evaluate("""() => {
+            const sel = document.getElementById('ContentPlaceHolder1_ddl_State') ||
+                        document.getElementById('ddl_State') ||
+                        document.getElementById('CrimeState') ||
+                        document.querySelector('select[name*="ddl_State" i]') ||
+                        document.querySelector('select[name*="State" i]') ||
+                        document.querySelectorAll('select')[1];
+            if (!sel) return { foundSelector: null, options: [] };
+            const selector = sel.id ? ('#' + sel.id) : (sel.name ? ('select[name="' + sel.name + '"]') : 'select:visible');
+            const opts = Array.from(sel.options).map((opt, idx) => ({
+                index: idx,
+                value: opt.value,
+                text: (opt.text || '').trim()
+            }));
+            return { foundSelector: selector, options: opts };
+        }""")
+
+        options = options_data.get("options", [])
+        found_selector = options_data.get("foundSelector") or "#ContentPlaceHolder1_ddl_State"
+
+        valid_opts = [
+            o for o in options
+            if o['index'] > 0 and o['text']
+            and not o['text'].startswith('-')
+            and not o['text'].lower().startswith('select')
+            and o['text'].lower() not in ('select', 'select state', 'select state / ut')
+        ]
+
+        if not valid_opts:
+            log.warning("No valid state options found in dropdown.")
+            return False
+
+        matched_opt = None
+
+        # Tier 1: Exact case-insensitive match
+        for opt in valid_opts:
+            if opt['text'].strip().lower() == target_lower:
+                matched_opt = opt
+                log.info(f"  -> State Match (Tier 1 - Exact): '{opt['text']}' (value={opt['value']})")
+                break
+
+        # Tier 2: Normalized alphanumeric match
+        if not matched_opt:
+            for opt in valid_opts:
+                if _clean_str(opt['text']) == target_clean:
+                    matched_opt = opt
+                    log.info(f"  -> State Match (Tier 2 - Clean): '{opt['text']}' (value={opt['value']})")
+                    break
+
+        # Tier 3: Alias dictionary lookup
+        if not matched_opt:
+            aliases = STATE_ALIASES.get(target_lower, [])
+            for alias in aliases:
+                alias_clean = _clean_str(alias)
+                for opt in valid_opts:
+                    opt_clean = _clean_str(opt['text'])
+                    if opt_clean == alias_clean or alias_clean in opt_clean or opt_clean in alias_clean:
+                        matched_opt = opt
+                        log.info(f"  -> State Match (Tier 3 - Alias '{alias}'): '{opt['text']}' (value={opt['value']})")
+                        break
+                if matched_opt:
+                    break
+
+        # Tier 4: Substring match (longest options first to prevent false partial matches)
+        if not matched_opt:
+            sorted_opts = sorted(valid_opts, key=lambda o: len(o['text']), reverse=True)
+            for opt in sorted_opts:
+                opt_clean = _clean_str(opt['text'])
+                if target_clean in opt_clean or (len(opt_clean) >= 4 and opt_clean in target_clean):
+                    matched_opt = opt
+                    log.info(f"  -> State Match (Tier 4 - Substring): '{opt['text']}' (value={opt['value']})")
+                    break
+
+        # Tier 5: Fuzzy similarity (difflib SequenceMatcher)
+        if not matched_opt:
+            best_ratio = 0.0
+            best_cand = None
+            for opt in valid_opts:
+                ratio = difflib.SequenceMatcher(None, target_lower, opt['text'].lower()).ratio()
+                if ratio > best_ratio:
+                    best_ratio = ratio
+                    best_cand = opt
+            if best_cand and best_ratio >= 0.70:
+                matched_opt = best_cand
+                log.info(f"  -> State Match (Tier 5 - Fuzzy ratio {best_ratio:.2f}): '{best_cand['text']}' (value={best_cand['value']})")
+
+        # Fallback to Delhi or first valid state
+        if not matched_opt:
+            delhi_opt = next((o for o in valid_opts if 'delhi' in o['text'].lower()), None)
+            matched_opt = delhi_opt or valid_opts[0]
+            log.warning(f"  -> No state match found for '{target_raw}'. Fallback to: '{matched_opt['text']}'")
+
+        # 3. Perform Selection using Playwright native locator first, then JS event fallback
+        selected_successfully = False
+        for sel_expr in [found_selector] + state_selectors:
+            try:
+                loc = page.locator(sel_expr).first
+                if loc.count() > 0:
+                    loc.select_option(value=str(matched_opt['value']))
+                    selected_successfully = True
+                    log.info(f"  -> Executed native select_option on selector '{sel_expr}'")
+                    break
+            except Exception:
+                pass
+
+        # Trigger DOM events & ASP.NET PostBack if needed
+        page.evaluate("""(val) => {
+            const sel = document.getElementById('ContentPlaceHolder1_ddl_State') ||
+                        document.getElementById('ddl_State') ||
+                        document.getElementById('CrimeState') ||
+                        document.querySelector('select[name*="ddl_State" i]') ||
+                        document.querySelector('select[name*="State" i]') ||
+                        document.querySelectorAll('select')[1];
+            if (sel) {
+                if (sel.value !== val) {
+                    sel.value = val;
+                }
+                sel.dispatchEvent(new Event('input', { bubbles: true }));
+                sel.dispatchEvent(new Event('change', { bubbles: true }));
+                if (typeof sel.onchange === 'function') {
+                    try { sel.onchange(); } catch (e) {}
+                }
+                if (window.jQuery) {
+                    try { window.jQuery(sel).trigger('change'); } catch (e) {}
+                }
+                if (window.__doPostBack && sel.name) {
+                    try { window.__doPostBack(sel.name, ''); } catch (e) {}
+                }
+            }
+        }""", matched_opt['value'])
+
+        # 4. Wait for District dropdown to populate via AJAX postback
+        log.info("  -> Waiting for District dropdown AJAX postback...")
+        page.wait_for_timeout(1000)
+        try:
+            page.wait_for_function("""() => {
+                const distSel = document.getElementById('ContentPlaceHolder1_ddl_District') ||
+                                document.getElementById('ddl_District') ||
+                                document.getElementById('CrimeDistrict') ||
+                                document.querySelector('select[name*="ddl_District" i]') ||
+                                document.querySelector('select[name*="District" i]') ||
+                                document.querySelectorAll('select')[2];
+                return distSel && distSel.options && distSel.options.length > 1;
+            }""", timeout=8000)
+            log.info("  -> District options successfully loaded post-state selection.")
+        except Exception:
+            log.info("  -> District wait timeout; continuing with direct check.")
+
+        return True
+
+    except Exception as e:
+        log.warning(f"select_state_smartly error: {e}")
+        return False
+
+
+# Directional / Common district mapping for high-accuracy resolution
+DISTRICT_SPECIAL_MAPPINGS: dict[str, list[str]] = {
+    # Delhi Districts
+    "south east delhi": ["SOUTH-EAST", "SOUTH", "SOUTH WEST"],
+    "southeast delhi": ["SOUTH-EAST", "SOUTH", "SOUTH WEST"],
+    "south west delhi": ["SOUTH WEST", "SOUTH", "SOUTH-EAST"],
+    "southwest delhi": ["SOUTH WEST", "SOUTH", "SOUTH-EAST"],
+    "south delhi": ["SOUTH", "SOUTH-EAST", "SOUTH WEST"],
+    "north west delhi": ["NORTH WEST", "NORTH", "NORTH EAST", "OUTER NORTH"],
+    "northwest delhi": ["NORTH WEST", "NORTH", "NORTH EAST", "OUTER NORTH"],
+    "north east delhi": ["NORTH EAST", "NORTH", "NORTH WEST"],
+    "northeast delhi": ["NORTH EAST", "NORTH", "NORTH WEST"],
+    "north delhi": ["NORTH", "NORTH EAST", "NORTH WEST", "OUTER NORTH"],
+    "central delhi": ["CENTRAL", "NEW DELHI"],
+    "east delhi": ["EAST", "NORTH EAST", "SHAHDARA"],
+    "west delhi": ["WEST", "SOUTH WEST", "DWARKA"],
+    "new delhi": ["NEW DELHI", "CENTRAL"],
+    "shahdara": ["SHAHDARA", "EAST"],
+    "dwarka": ["DWARKA", "SOUTH WEST", "WEST"],
+    "rohini": ["ROHINI", "NORTH WEST", "OUTER NORTH"],
+    "outer north": ["OUTER NORTH", "NORTH WEST", "NORTH"],
+
+    # Maharashtra Districts
+    "mumbai suburban": ["BRIHAN MUMBAI CITY", "NAVI MUMBAI"],
+    "mumbai sub": ["BRIHAN MUMBAI CITY", "NAVI MUMBAI"],
+    "mumbai city": ["BRIHAN MUMBAI CITY", "NAVI MUMBAI"],
+    "mumbai": ["BRIHAN MUMBAI CITY", "NAVI MUMBAI"],
+    "pune": ["PUNE CITY", "PUNE RURAL"],
+    "pune city": ["PUNE CITY", "PUNE RURAL"],
+    "pune rural": ["PUNE RURAL", "PUNE CITY"],
+    "thane": ["THANE CITY", "THANE RURAL"],
+    "thane city": ["THANE CITY", "THANE RURAL"],
+    "thane rural": ["THANE RURAL", "THANE CITY"],
+    "navi mumbai": ["NAVI MUMBAI", "THANE CITY"],
+    "nagpur": ["NAGPUR CITY", "NAGPUR RURAL"],
+    "nashik": ["NASHIK CITY", "NASHIK RURAL"],
+    "aurangabad": ["AURANGABAD CITY", "AURANGABAD RURAL"],
+
+    # Karnataka Districts
+    "bengaluru urban": ["BANGALORE CITY", "Bengaluru South District", "BANGALORE RURAL"],
+    "bangalore urban": ["BANGALORE CITY", "Bengaluru South District", "BANGALORE RURAL"],
+    "bengaluru rural": ["BANGALORE RURAL", "Bengaluru South District", "BANGALORE CITY"],
+    "bangalore rural": ["BANGALORE RURAL", "Bengaluru South District", "BANGALORE CITY"],
+    "bengaluru": ["BANGALORE CITY", "BANGALORE RURAL", "Bengaluru South District"],
+    "bangalore": ["BANGALORE CITY", "BANGALORE RURAL", "Bengaluru South District"],
+    "mysuru": ["MYSURU CITY", "MYSURU DISTRICT"],
+    "mysore": ["MYSURU CITY", "MYSURU DISTRICT"],
+
+    # West Bengal Districts
+    "kolkata": ["KOLKATA CENTRAL DIVISION", "KOLKATA POLICE CYBER HQ", "Kolkata", "KOLKATA SOUTH DIVISION", "KOLKATA NORTH AND NORTH SUBURBAN DIVISION"],
+    "howrah": ["HOWRAH POLICE COMMISSIONERATE", "Howrah Rural", "HOWRAH GRP"],
+    "north 24 parganas": ["Barasat Police District", "BARRACKPORE POLICE COMMISSIONERATE", "BIDHANNAGAR POLICE COMMISSIONERATE", "Basirhat Police District", "Bongaon Police District"],
+    "south 24 parganas": ["Baruipur Police District", "DIAMOND HARBOUR POLICE DISTRICT", "SUNDARBAN POLICE DISTRICT"],
+
+    # Tamil Nadu Districts
+    "chennai": ["CHENNAI - CCB", "CHENNAI - PEW EAST", "CHENNAI - PEW SOUTH", "CHENNAI - PEW NORTH", "CHENNAI - PEW WEST", "ADYAR", "ANNA NAGAR", "MYLAPORE", "T NAGAR"],
+    "coimbatore": ["COIMBATORE CITY", "COIMBATORE", "CSCID-COIMBATORE"],
+    "madurai": ["MADURAI CITY", "MADURAI", "CSCID - MADURAI"],
+
+    # Uttar Pradesh Districts
+    "lucknow": ["Lucknow Central- Commissionerate Lucknow", "Lucknow East- Commissionerate Lucknow", "Lucknow North- Commissionerate Lucknow", "Lucknow South- Commissionerate Lucknow", "Lucknow West- Commissionerate Lucknow", "GRP LUCKNOW"],
+    "kanpur nagar": ["Central -Commissionerate Kanpur Nagar", "East- Commissionerate Kanpur Nagar", "South- Commissionerate Kanpur Nagar", "West- Commissionerate Kanpur Nagar"],
+    "kanpur": ["Central -Commissionerate Kanpur Nagar", "East- Commissionerate Kanpur Nagar", "South- Commissionerate Kanpur Nagar"],
+    "gautam buddha nagar": ["Commissionerate Gautam Buddha Nagar", "Central Commissionerate Gautam Buddha Nagar", "Greater Noida - Commissionerate Gautam Buddha Nagar"],
+    "noida": ["Commissionerate Gautam Buddha Nagar", "Central Commissionerate Gautam Buddha Nagar", "Greater Noida - Commissionerate Gautam Buddha Nagar"],
+    "ghaziabad": ["City - Commissionerate Ghaziabad", "Rural - Commissionerate Ghaziabad", "Trans Hindon - Commissionerate Ghaziabad"],
+    "varanasi": ["Kashi Commissionerate Varanasi", "Gomati -Commissionerate Varanasi", "Varuna- Commissionerate Varanasi"],
+    "prayagraj": ["City - Commissionerate Prayagraj", "Ganganagar - Commissionerate Prayagraj", "Yamunanagar - Commissionerate Prayagraj"],
+    "agra": ["City - Commissionerate Agra", "East - Commissionerate Agra", "West - Commissionerate Agra"],
+}
+
+
+def select_district_smartly(page, target_district: str) -> bool:
+    """
+    Selects the requested district on cybercrime.gov.in using a smart, multi-tier
+    matching algorithm (exact -> normalized -> specialized mappings -> longest substring
+    -> token overlap -> fuzzy similarity).
+    """
+    district_selectors = [
+        "#ContentPlaceHolder1_ddl_District",
+        "#ddl_District",
+        "#CrimeDistrict",
+        "select[name*='ddl_District' i]",
+        "select[name*='District' i]",
+        "select[id*='District' i]",
+    ]
+
+    try:
+        # 1. Wait for district dropdown to populate
+        try:
+            page.wait_for_function("""() => {
+                const s = document.getElementById('ContentPlaceHolder1_ddl_District') ||
+                          document.getElementById('ddl_District') ||
+                          document.getElementById('CrimeDistrict') ||
+                          document.querySelector('select[name*="ddl_District" i]') ||
+                          document.querySelector('select[name*="District" i]') ||
+                          document.querySelectorAll('select')[2];
+                return s && s.options && s.options.length > 1;
+            }""", timeout=10000)
+        except Exception:
+            page.wait_for_timeout(2000)
+
+        # 2. Extract options from district dropdown
+        options_data = page.evaluate("""() => {
+            const sel = document.getElementById('ContentPlaceHolder1_ddl_District') ||
+                        document.getElementById('ddl_District') ||
+                        document.getElementById('CrimeDistrict') ||
+                        document.querySelector('select[name*="ddl_District" i]') ||
+                        document.querySelector('select[name*="District" i]') ||
+                        document.querySelectorAll('select')[2];
+            if (!sel) return { foundSelector: null, options: [] };
+            const selector = sel.id ? ('#' + sel.id) : (sel.name ? ('select[name="' + sel.name + '"]') : 'select:visible');
+            const opts = Array.from(sel.options).map((opt, idx) => ({
+                index: idx,
+                value: opt.value,
+                text: (opt.text || '').trim()
+            }));
+            return { foundSelector: selector, options: opts };
+        }""")
+
+        options = options_data.get("options", [])
+        found_selector = options_data.get("foundSelector") or "#ContentPlaceHolder1_ddl_District"
+
+        valid_opts = [
+            o for o in options
+            if o['index'] > 0 and o['text']
+            and not o['text'].startswith('-')
+            and not o['text'].lower().startswith('select')
+            and o['text'].lower() not in ('select', 'select district', 'select district / commissionerate')
+        ]
+
+        if not valid_opts:
+            log.warning("No valid district options available in dropdown.")
+            return False
+
+        # If user did not provide a district, select first available option
+        if not target_district or not target_district.strip() or target_district.strip().lower() in ("select district", "select", ""):
+            log.info(f"No specific district specified, selecting default district: '{valid_opts[0]['text']}'")
+            matched_opt = valid_opts[0]
+        else:
+            target_raw = target_district.strip()
+            target_lower = target_raw.lower()
+            target_clean = _clean_str(target_lower)
+            log.info(f"Matching user district '{target_raw}' (clean: '{target_clean}') against {len(valid_opts)} portal options...")
+
+            matched_opt = None
+
+            # Tier 1: Exact case-insensitive match (e.g. "SOUTH" == "south" or "NEW DELHI" == "new delhi")
+            for opt in valid_opts:
+                if opt['text'].strip().lower() == target_lower:
+                    matched_opt = opt
+                    log.info(f"  -> District Match (Tier 1 - Exact): '{opt['text']}' (value={opt['value']})")
+                    break
+
+            # Tier 2: Normalized alphanumeric match (e.g. "South Delhi" -> "southdelhi" == "SOUTHDELHI")
+            if not matched_opt:
+                for opt in valid_opts:
+                    if _clean_str(opt['text']) == target_clean:
+                        matched_opt = opt
+                        log.info(f"  -> District Match (Tier 2 - Clean Alphanumeric): '{opt['text']}' (value={opt['value']})")
+                        break
+
+            # Tier 3: Directional / Special District Mapping (e.g. "South East Delhi" -> "SOUTH-EAST", "South Delhi" -> "SOUTH")
+            if not matched_opt:
+                mapped_cands = DISTRICT_SPECIAL_MAPPINGS.get(target_lower, [])
+                # First pass: exact clean match on candidate
+                for cand in mapped_cands:
+                    cand_clean = _clean_str(cand)
+                    for opt in valid_opts:
+                        if _clean_str(opt['text']) == cand_clean:
+                            matched_opt = opt
+                            log.info(f"  -> District Match (Tier 3 - Special Mapping Exact '{cand}'): '{opt['text']}' (value={opt['value']})")
+                            break
+                    if matched_opt:
+                        break
+
+                # Second pass: substring match within candidate
+                if not matched_opt:
+                    for cand in mapped_cands:
+                        cand_clean = _clean_str(cand)
+                        for opt in valid_opts:
+                            opt_clean = _clean_str(opt['text'])
+                            if len(cand_clean) >= 3 and cand_clean in opt_clean:
+                                matched_opt = opt
+                                log.info(f"  -> District Match (Tier 3 - Special Mapping Substring '{cand}'): '{opt['text']}' (value={opt['value']})")
+                                break
+                        if matched_opt:
+                            break
+
+            # Tier 4: Longest Substring Match (sorted descending by length so longer names like 'SOUTH-EAST' match before 'SOUTH')
+            if not matched_opt:
+                sorted_opts = sorted(valid_opts, key=lambda o: len(o['text']), reverse=True)
+                for opt in sorted_opts:
+                    opt_clean = _clean_str(opt['text'])
+                    # Ignore very short noise substrings (less than 3 chars)
+                    if len(opt_clean) >= 3 and (opt_clean in target_clean or target_clean in opt_clean):
+                        matched_opt = opt
+                        log.info(f"  -> District Match (Tier 4 - Longest Substring): '{opt['text']}' (value={opt['value']})")
+                        break
+
+            # Tier 5: Token Overlap / Jaccard Word Similarity
+            if not matched_opt:
+                stop_words = {'district', 'city', 'rural', 'urban', 'commissionerate', 'police', 'dist', 'distt', 'division', 'hq', 'circle'}
+                target_words = [w for w in re.findall(r'[a-zA-Z0-9]+', target_lower) if w not in stop_words]
+                
+                best_cand = None
+                best_score = 0
+
+                for opt in valid_opts:
+                    opt_words = [w for w in re.findall(r'[a-zA-Z0-9]+', opt['text'].lower()) if w not in stop_words]
+                    overlap = set(target_words).intersection(set(opt_words))
+                    score = len(overlap)
+                    
+                    # Directional boost
+                    for directional in ('east', 'west', 'north', 'south', 'central', 'sub', 'suburban', 'outer', 'inner'):
+                        if directional in target_words and directional in opt_words:
+                            score += 3
+
+                    if score > best_score:
+                        best_score = score
+                        best_cand = opt
+
+                if best_cand and best_score > 0:
+                    matched_opt = best_cand
+                    log.info(f"  -> District Match (Tier 5 - Token Overlap score {best_score}): '{best_cand['text']}' (value={best_cand['value']})")
+
+            # Tier 6: Fuzzy similarity (difflib SequenceMatcher)
+            if not matched_opt:
+                best_ratio = 0.0
+                best_cand = None
+                for opt in valid_opts:
+                    ratio = difflib.SequenceMatcher(None, target_lower, opt['text'].lower()).ratio()
+                    if ratio > best_ratio:
+                        best_ratio = ratio
+                        best_cand = opt
+                if best_cand and best_ratio >= 0.60:
+                    matched_opt = best_cand
+                    log.info(f"  -> District Match (Tier 6 - Fuzzy ratio {best_ratio:.2f}): '{best_cand['text']}' (value={best_cand['value']})")
+
+            # Fallback to index 1 only if all matching fails
+            if not matched_opt:
+                matched_opt = valid_opts[0]
+                log.warning(f"  -> No match found for '{target_district}', defaulting to index 1: '{valid_opts[0]['text']}'")
+
+        # 3. Perform Selection on District dropdown
+        for sel_expr in [found_selector] + district_selectors:
+            try:
+                loc = page.locator(sel_expr).first
+                if loc.count() > 0:
+                    loc.select_option(value=str(matched_opt['value']))
+                    log.info(f"  -> Selected district '{matched_opt['text']}' on selector '{sel_expr}'")
+                    break
+            except Exception:
+                pass
+
+        # Trigger DOM events & ASP.NET PostBack for Police Station loading
+        page.evaluate("""(val) => {
+            const sel = document.getElementById('ContentPlaceHolder1_ddl_District') ||
+                        document.getElementById('ddl_District') ||
+                        document.getElementById('CrimeDistrict') ||
+                        document.querySelector('select[name*="ddl_District" i]') ||
+                        document.querySelector('select[name*="District" i]') ||
+                        document.querySelectorAll('select')[2];
+            if (sel) {
+                if (sel.value !== val) {
+                    sel.value = val;
+                }
+                sel.dispatchEvent(new Event('input', { bubbles: true }));
+                sel.dispatchEvent(new Event('change', { bubbles: true }));
+                if (typeof sel.onchange === 'function') {
+                    try { sel.onchange(); } catch (e) {}
+                }
+                if (window.jQuery) {
+                    try { window.jQuery(sel).trigger('change'); } catch (e) {}
+                }
+                if (window.__doPostBack && sel.name) {
+                    try { window.__doPostBack(sel.name, ''); } catch (e) {}
+                }
+            }
+        }""", matched_opt['value'])
+
+        page.wait_for_timeout(500)
+        return True
+
+    except Exception as e:
+        log.warning(f"select_district_smartly error: {e}")
+        return False
+
+
 def fill_tab1(page, data: dict) -> bool:
     """Fill Tab 1 (Incident & Complainant Details). Returns True if SAVE & NEXT succeeded."""
     log.info("=== TAB 1: Complaint & Incident Details ===")
@@ -469,46 +1034,31 @@ def fill_tab1(page, data: dict) -> bool:
     # 4. State -> District -> Police Station
     state_label = data.get("state_label", "DELHI")
     log.info(f"Step 4: State -> '{state_label}'")
-    try:
-        page.select_option("#CrimeState", label=state_label)
-    except Exception:
-        try:
-            select_dropdown(page, "State", label=state_label, index=9)
-        except Exception: pass
+    select_state_smartly(page, state_label)
 
-    # Wait for District dropdown options to populate via AJAX
-    try:
-        page.wait_for_selector("#CrimeDistrict option:nth-child(2)", timeout=5000)
-    except Exception:
-        page.wait_for_timeout(1500)
-
-    # 5. District
+    # 5. District (Smart Case-Insensitive & Token Matching)
     user_district = data.get("user_district", "")
     log.info(f"Step 5: District -> '{user_district}'")
-    try:
-        dist_opts = page.evaluate("() => Array.from(document.getElementById('CrimeDistrict').options).map(o => o.text.trim())")
-        if user_district and any(user_district.lower() in d.lower() for d in dist_opts):
-            page.select_option("#CrimeDistrict", label=user_district)
-        elif len(dist_opts) > 1:
-            page.select_option("#CrimeDistrict", index=1)
-    except Exception:
-        try:
-            page.select_option("#CrimeDistrict", index=1)
-        except Exception: pass
+    select_district_smartly(page, user_district)
 
     # Wait for Police Station dropdown options to populate via AJAX
     try:
-        page.wait_for_selector("#CrimePoliceStation option:nth-child(2)", timeout=5000)
+        page.wait_for_function("""() => {
+            const sel = document.getElementById('ContentPlaceHolder1_ddl_policeStation') ||
+                        document.getElementById('CrimePoliceStation') ||
+                        document.querySelector('select[name*="policeStation" i]') ||
+                        document.querySelectorAll('select')[3];
+            return sel && sel.options && sel.options.length > 1;
+        }""", timeout=6000)
     except Exception:
         page.wait_for_timeout(1000)
 
     # 6. Police Station
     log.info("Step 6: Police Station")
     try:
-        ps_opts = page.evaluate("() => document.getElementById('CrimePoliceStation') ? Array.from(document.getElementById('CrimePoliceStation').options).map(o => o.text.trim()) : []")
-        if len(ps_opts) > 1:
-            page.select_option("#CrimePoliceStation", index=1)
-    except Exception: pass
+        select_dropdown(page, "PoliceStation", index=1)
+    except Exception as e:
+        log.warning(f"Police Station selection error: {e}")
 
     page.wait_for_timeout(500)
 
@@ -516,18 +1066,10 @@ def fill_tab1(page, data: dict) -> bool:
     platform_label = data.get("platform_label") or data.get("platform", "WhatsApp")
     log.info(f"Step 7: Incident Occurred Platform -> '{platform_label}'")
     try:
-        plat_opts = page.evaluate("() => document.getElementById('InFoId') ? Array.from(document.getElementById('InFoId').options).map(o => ({ value: o.value, text: o.text.trim() })) : []")
-        plat_matched = False
-        for opt in plat_opts:
-            if platform_label.lower() in opt["text"].lower() or opt["text"].lower() in platform_label.lower():
-                page.select_option("#InFoId", value=opt["value"])
-                plat_matched = True
-                log.info(f"  -> Selected InFoId platform: {opt['text']}")
-                break
-        if not plat_matched and len(plat_opts) > 1:
-            page.select_option("#InFoId", index=6) # WhatsApp default
+        if not select_dropdown(page, "IncidentOccur", label=platform_label):
+            select_dropdown(page, "IncidentOccur", index=1)
     except Exception as e:
-        log.warning(f"Platform selection notice: {e}")
+        log.warning(f"Platform selection error: {e}")
 
     page.wait_for_timeout(600)
 
@@ -599,7 +1141,6 @@ def fill_tab1(page, data: dict) -> bool:
         log.warning(f"Additional info fill notice: {e}")
 
     page.wait_for_timeout(1000)
-    page.screenshot(path="tab1_filled.png", full_page=True)
 
     # 11. Click SAVE & NEXT
     log.info("Step 11: Clicking 'Save & Next'...")
@@ -613,7 +1154,6 @@ def fill_tab1(page, data: dict) -> bool:
         log.warning(f"Save & Next click notice: {e}")
 
     page.wait_for_timeout(3500)
-    page.screenshot(path="after_tab1_next.png", full_page=True)
 
     stage = _detect_form_stage(page)
     if stage == "tab2":
@@ -2027,7 +2567,6 @@ def fill_tab2(page, data: dict) -> bool:
         except Exception: pass
 
     page.wait_for_timeout(1000)
-    page.screenshot(path="tab2_filled.png", full_page=True)
 
     # 6. Click PREVIEW & NEXT
     log.info("Clicking 'Preview & Next' button...")
@@ -2041,7 +2580,6 @@ def fill_tab2(page, data: dict) -> bool:
         log.warning(f"Preview & Next click notice: {e}")
 
     page.wait_for_timeout(3500)
-    page.screenshot(path="tab3_preview_rendered.png", full_page=True)
 
     stage = _detect_form_stage(page)
     if stage == "tab3":
@@ -2225,6 +2763,12 @@ def run_bot(data: dict):
                 fill_tab2(page, data)
 
             log.info("RPA Halted on Tab 3 for review.")
+
+            # Automatically delete all temporary JSON payloads, evidence files, and cache
+            payload_file = data.get("_payload_path") or ""
+            evidence_file = data.get("local_evidence_path") or data.get("evidence_path") or ""
+            cleanup_temp_artifacts(payload_path=payload_file, evidence_paths=[evidence_file])
+
             if is_headless:
                 page.wait_for_timeout(30000)
             else:
@@ -2234,11 +2778,10 @@ def run_bot(data: dict):
             
         except Exception as e:
             log.error(f"Bot error: {e}")
-            try:
-                page.screenshot(path="bot_error.png")
-            except:
-                pass
         finally:
+            payload_file = data.get("_payload_path") or ""
+            evidence_file = data.get("local_evidence_path") or data.get("evidence_path") or ""
+            cleanup_temp_artifacts(payload_path=payload_file, evidence_paths=[evidence_file])
             if is_headless:
                 browser.close()
 
