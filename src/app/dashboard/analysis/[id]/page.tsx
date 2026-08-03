@@ -2,12 +2,14 @@
 
 import { useEffect, useState, useCallback } from "react";
 import { useParams } from "next/navigation";
-import { type Upload, type AnalysisFlag, type RiskLevel } from "@/lib/types";
+import { type MediaAuthenticityResult, type Upload, type AnalysisFlag, type RiskLevel } from "@/lib/types";
 import { retrieveKey, uint8ArrayToBase64, decryptFile } from "@/lib/crypto";
 import { createClient } from "@/lib/supabase/client";
 import RiskBadge from "@/components/RiskBadge";
 import LoadingSpinner from "@/components/LoadingSpinner";
 import DispatchModal, { type DispatchFormData } from "@/components/DispatchModal";
+import MediaAuthenticityPanel from "@/components/MediaAuthenticityPanel";
+import PdfPreviewModal from "@/components/PdfPreviewModal";
 import Link from "next/link";
 import {
   ArrowLeft,
@@ -34,6 +36,7 @@ interface DecryptedAnalysis {
     threat_indicators?: string[];
     recommendations?: string[];
     confidence_score?: number;
+    media_authenticity?: MediaAuthenticityResult;
     legal_analysis?: {
       summary: string;
       potential_violations: string[];
@@ -145,10 +148,52 @@ export default function AnalysisDetailPage() {
   const [analysis, setAnalysis] = useState<DecryptedAnalysis | null>(null);
   const [decryptedMediaArray, setDecryptedMediaArray] = useState<{url: string, decrypted: boolean}[]>([]);
   const [loading, setLoading] = useState(true);
-  const generating = false;
+  const [generating, setGenerating] = useState(false);
+  const [pdfPreviewUrl, setPdfPreviewUrl] = useState<string | null>(null);
+  const [isPdfModalOpen, setIsPdfModalOpen] = useState(false);
   const [isDispatchModalOpen, setIsDispatchModalOpen] = useState(false);
   const [dispatching, setDispatching] = useState(false);
   const [dispatchStatus, setDispatchStatus] = useState<DispatchStatus | null>(null);
+
+  const handleGeneratePdf = useCallback(async () => {
+    if (!uploadId || generating) return;
+    setGenerating(true);
+    try {
+      const res = await fetch('/api/generate-report', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          uploadId,
+          decryptedAnalysis: analysis,
+        }),
+      });
+
+      if (!res.ok) {
+        const errData = await res.json().catch(() => ({}));
+        throw new Error(errData.error || 'Failed to generate forensic PDF report');
+      }
+
+      const blob = await res.blob();
+      const url = window.URL.createObjectURL(blob);
+      setPdfPreviewUrl(url);
+      setIsPdfModalOpen(true);
+    } catch (err: unknown) {
+      console.error('PDF Generation error:', err);
+      alert(err instanceof Error ? err.message : 'Error generating forensic PDF report');
+    } finally {
+      setGenerating(false);
+    }
+  }, [uploadId, analysis, generating]);
+
+  const handleDownloadFromModal = useCallback(() => {
+    if (!pdfPreviewUrl) return;
+    const a = document.createElement('a');
+    a.href = pdfPreviewUrl;
+    a.download = `ShieldHer-Forensic-Report-${uploadId.substring(0, 8)}.pdf`;
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+  }, [pdfPreviewUrl, uploadId]);
 
   const openDispatchModal = useCallback(() => {
     setDispatchStatus(null);
@@ -235,14 +280,15 @@ export default function AnalysisDetailPage() {
         message: "Legal Dispatcher triggered successfully! The background bot is now filing your complaint on the National Cyber Crime Portal. You can check the status on your dashboard shortly." 
       });
       setIsDispatchModalOpen(false);
-    } catch (err: any) {
+    } catch (err: unknown) {
       console.error("Full Dispatch Error Object:", err);
       let message = "Unknown error";
       
       if (err instanceof Error) {
         message = err.message;
       } else if (typeof err === 'object' && err !== null) {
-        message = err.message || err.details || JSON.stringify(err);
+        const errRecord = err as { message?: string; details?: string };
+        message = errRecord.message || errRecord.details || JSON.stringify(err);
       } else {
         message = String(err);
       }
@@ -369,8 +415,12 @@ export default function AnalysisDetailPage() {
              <h3>Export Document</h3>
            </div>
            <p>Download a sanitized forensic report for legal consultation.</p>
-           <button className={styles.exportBtn} disabled={generating}>
-             {generating ? 'Compiling...' : 'Download Forensic PDF'}
+           <button 
+             className={styles.exportBtn} 
+             onClick={handleGeneratePdf}
+             disabled={generating}
+           >
+             {generating ? 'Compiling PDF...' : 'View Forensic PDF'}
            </button>
         </div>
       </section>
@@ -438,6 +488,8 @@ export default function AnalysisDetailPage() {
               </div>
               <p className={styles.summaryQuote}>{analysis.summary}</p>
            </section>
+
+           <MediaAuthenticityPanel authenticity={analysis.details?.media_authenticity} />
 
            {/* DETECTED FLAGS SECTION */}
            {analysis.flags?.length > 0 && (
@@ -547,6 +599,14 @@ export default function AnalysisDetailPage() {
             analysis.details?.rpa_filing_data?.approximate_date
           ),
         }}
+      />
+
+      <PdfPreviewModal
+        isOpen={isPdfModalOpen}
+        onClose={() => setIsPdfModalOpen(false)}
+        pdfUrl={pdfPreviewUrl}
+        fileName={`ShieldHer-Forensic-Report-${uploadId.substring(0, 8)}.pdf`}
+        onDownload={handleDownloadFromModal}
       />
     </div>
   );

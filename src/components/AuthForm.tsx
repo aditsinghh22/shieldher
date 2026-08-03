@@ -260,9 +260,8 @@ export default function AuthForm({ initialMode = 'login' }: AuthFormProps) {
                 id="identifier"
                 type={authMethod === 'email' ? 'email' : 'tel'}
                 inputMode={authMethod === 'email' ? 'email' : 'numeric'}
-                className={`input ${styles.inputWithIcon} ${
-                  authMethod === 'phone' ? styles.inputWithDialCode : ''
-                }`}
+                className={`input ${styles.inputWithIcon} ${authMethod === 'phone' ? styles.inputWithDialCode : ''
+                  }`}
                 placeholder={authMethod === 'email' ? 'you@example.com' : 'Enter phone number'}
                 value={identifier}
                 onChange={(e) =>

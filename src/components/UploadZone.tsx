@@ -41,6 +41,10 @@ export default function UploadZone({
       "image/*": [".png", ".jpg", ".jpeg", ".webp"],
       "audio/*": [".mp3", ".wav", ".m4a", ".aac", ".ogg"],
       "video/*": [".mp4", ".mov", ".webm", ".mkv"],
+      "application/pdf": [".pdf"],
+      "application/msword": [".doc"],
+      "application/vnd.openxmlformats-officedocument.wordprocessingml.document": [".docx"],
+      "text/*": [".txt", ".md", ".csv", ".json", ".log"],
     },
     maxSize: 50 * 1024 * 1024, // Increased to 50MB for video support
     multiple: true,
@@ -76,10 +80,10 @@ export default function UploadZone({
                 ? "Drop your evidence here"
                 : isUploading
                   ? "Uploading..."
-                  : "Drag & drop screenshots, recordings, or video evidence"}
+                  : "Drag & drop screenshots, recordings, videos, or documents"}
             </p>
             <p className={styles.dropHint}>
-              or click to browse • Images/Audio/Video up to 50MB
+              or click to browse • Images/Audio/Video/Documents up to 50MB
             </p>
           </div>
         </div>
@@ -97,6 +101,10 @@ export default function UploadZone({
                 ) : f.file.type.startsWith("video/") ? (
                   <div className={styles.audioPreview} style={{ background: "rgba(139, 92, 246, 0.08)" }}>
                     <FileVideo size={42} style={{ color: "#8b5cf6" }} />
+                  </div>
+                ) : f.file.type.startsWith("text/") || f.file.type.includes("pdf") || f.file.type.includes("word") ? (
+                  <div className={styles.audioPreview} style={{ background: "rgba(70, 101, 80, 0.08)" }}>
+                    <FileText size={42} style={{ color: "#466550" }} />
                   </div>
                 ) : (
                   <img
