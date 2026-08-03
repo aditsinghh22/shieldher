@@ -4,11 +4,13 @@ import React, { useState, useMemo } from "react";
 import { X, Send, MapPin, User, Mail, Clock, AlertCircle } from "lucide-react";
 import styles from "./DispatchModal.module.css";
 import indiaDistrictsData from "@/lib/india-districts.json";
+import cybercrimeDistrictsData from "@/lib/cybercrime-districts.json";
 
 export interface DispatchFormData {
   user_state: string;
   user_district: string;
   user_email: string;
+  user_platform: string;
   user_suspect_name: string;
   user_suspect_platform_contact: string;
   user_suspect_id_type: string;
@@ -25,6 +27,7 @@ interface DispatchModalProps {
   onConfirm: (data: DispatchFormData) => void;
   isLoading: boolean;
   initialData?: {
+    platform?: string;
     suspect_name?: string;
     suspect_platform_contact?: string;
     suspect_id_type?: string;
@@ -34,7 +37,7 @@ interface DispatchModalProps {
 }
 
 const INDIAN_STATES = [
-  "Select State", "ANDAMAN AND NICOBAR ISLANDS", "ANDHRA PRADESH", "ARUNACHAL PRADESH",
+  "ANDAMAN AND NICOBAR ISLANDS", "ANDHRA PRADESH", "ARUNACHAL PRADESH",
   "ASSAM", "BIHAR", "CHANDIGARH", "CHHATTISGARH", "DELHI", "GOA", "GUJARAT",
   "HARYANA", "HIMACHAL PRADESH", "JAMMU AND KASHMIR", "JHARKHAND", "KARNATAKA",
   "KERALA", "LADAKH", "LAKSHADWEEP", "MADHYA PRADESH", "MAHARASHTRA", "MANIPUR",
@@ -74,9 +77,10 @@ function normalizeStateKey(state: string): string {
 
 const DISTRICTS_BY_STATE: Record<string, string[]> = (() => {
   const mapped = new Map<string, string[]>();
-  const states = (indiaDistrictsData as { states: IndiaDistrictState[] }).states || [];
 
-  for (const entry of states) {
+  // 1. First load standard districts dataset as baseline
+  const standardStates = (indiaDistrictsData as { states: IndiaDistrictState[] }).states || [];
+  for (const entry of standardStates) {
     const key = normalizeStateKey(entry.state);
     const districts = (entry.districts || []).map((d) => d.trim()).filter(Boolean);
     if (districts.length > 0) {
@@ -84,25 +88,36 @@ const DISTRICTS_BY_STATE: Record<string, string[]> = (() => {
     }
   }
 
-  const dadra = mapped.get("DADRA AND NAGAR HAVELI") || [];
-  const daman = mapped.get("DAMAN AND DIU") || [];
-  if (dadra.length > 0 || daman.length > 0) {
-    mapped.set(
-      "DADRA AND NAGAR HAVELI AND DAMAN AND DIU",
-      [...dadra, ...daman]
-    );
+  // 2. Overlay / enrich with exact Cyber Crime Portal districts (cybercrime_districts.json)
+  const ccDistricts = (cybercrimeDistrictsData as Record<string, string[]>) || {};
+  for (const [stateName, distList] of Object.entries(ccDistricts)) {
+    const key = normalizeStateKey(stateName);
+    const validDists = (distList || []).map((d) => d.trim()).filter(Boolean);
+    if (validDists.length > 0) {
+      // Direct exact portal district list
+      mapped.set(key, validDists);
+    }
   }
 
-  if (!mapped.has("ANDAMAN AND NICOBAR ISLANDS")) {
-    mapped.set("ANDAMAN AND NICOBAR ISLANDS", [
-      "Nicobars",
-      "North and Middle Andaman",
-      "South Andaman",
-    ]);
+  // Specific state alias keys for 100% resolution
+  const andaman = mapped.get("ANDAMAN AND NICOBAR") || mapped.get("ANDAMAN & NICOBAR") || [];
+  if (andaman.length > 0) {
+    mapped.set("ANDAMAN AND NICOBAR ISLANDS", andaman);
+    mapped.set("ANDAMAN AND NICOBAR", andaman);
   }
 
-  if (!mapped.has("LADAKH")) {
-    mapped.set("LADAKH", ["Kargil", "Leh"]);
+  const dadraDaman = mapped.get("DADRA AND NAGAR HAVELI AND DAMAN AND DIU") ||
+                     mapped.get("DADRA & NAGAR HAVELI AND DAMAN & DIU") || [];
+  if (dadraDaman.length > 0) {
+    mapped.set("DADRA AND NAGAR HAVELI AND DAMAN AND DIU", dadraDaman);
+    mapped.set("DADRA AND NAGAR HAVELI", dadraDaman);
+    mapped.set("DAMAN AND DIU", dadraDaman);
+  }
+
+  const jk = mapped.get("JAMMU AND KASHMIR") || mapped.get("JAMMU & KASHMIR") || [];
+  if (jk.length > 0) {
+    mapped.set("JAMMU AND KASHMIR", jk);
+    mapped.set("JAMMU & KASHMIR", jk);
   }
 
   return Object.fromEntries(mapped.entries());
@@ -113,6 +128,7 @@ function buildInitialFormData(initialData?: DispatchModalProps["initialData"]): 
     user_state: "DELHI",
     user_district: "",
     user_email: "",
+    user_platform: initialData?.platform || "WhatsApp",
     user_suspect_name: initialData?.suspect_name || "",
     user_suspect_platform_contact: initialData?.suspect_platform_contact || "",
     user_suspect_id_type: initialData?.suspect_id_type || "none",

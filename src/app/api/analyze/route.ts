@@ -215,7 +215,8 @@ export async function POST(request: NextRequest) {
 
     supabase = await createClient();
     const { data: { user } } = await supabase.auth.getUser();
-    const userCountry = user?.user_metadata?.country || 'India';
+    // Default jurisdiction to India for Indian Kanoon & National Cyber Crime portal filing
+    const userCountry = 'India';
 
     // Get the upload record
     const { data: upload, error: uploadError } = await supabase
@@ -395,13 +396,14 @@ export async function POST(request: NextRequest) {
       }
 
       // --- 3. INDIAN KANOON INTEGRATION ---
-      if (process.env.KANOON_API_TOKEN && result.details?.legal_analysis?.kanoon_search_keywords && userCountry.toLowerCase() === 'india') {
+      const kanoonToken = process.env.KANOON_API_KEY || process.env.KANOON_API_TOKEN;
+      if (kanoonToken && result.details?.legal_analysis?.kanoon_search_keywords && userCountry.toLowerCase() === 'india') {
         try {
           const kQuery = result.details.legal_analysis.kanoon_search_keywords;
           const kRes = await fetch('https://api.indiankanoon.org/search/', {
             method: 'POST',
             headers: {
-              'Authorization': `Token ${process.env.KANOON_API_TOKEN}`,
+              'Authorization': `Token ${kanoonToken}`,
               'Accept': 'application/json',
               'Content-Type': 'application/x-www-form-urlencoded',
               'User-Agent': 'ShieldHer-Legal-Bot'
