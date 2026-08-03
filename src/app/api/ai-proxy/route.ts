@@ -107,13 +107,14 @@ export async function POST(request: NextRequest) {
     const result = JSON.parse(cleanText);
 
     // --- INDIAN KANOON INTEGRATION ---
-    if (process.env.KANOON_API_TOKEN && result.details?.legal_analysis?.kanoon_search_keywords) {
+    const kanoonToken = process.env.KANOON_API_KEY || process.env.KANOON_API_TOKEN;
+    if (kanoonToken && result.details?.legal_analysis?.kanoon_search_keywords) {
       try {
         const query = result.details.legal_analysis.kanoon_search_keywords;
         const kRes = await fetch('https://api.indiankanoon.org/search/', {
           method: 'POST',
           headers: {
-            'Authorization': `Token ${process.env.KANOON_API_TOKEN}`,
+            'Authorization': `Token ${kanoonToken}`,
             'Accept': 'application/json',
             'Content-Type': 'application/x-www-form-urlencoded',
             'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36'

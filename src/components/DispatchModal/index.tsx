@@ -9,6 +9,7 @@ export interface DispatchFormData {
   user_state: string;
   user_district: string;
   user_email: string;
+  user_platform: string;
   user_suspect_name: string;
   user_suspect_platform_contact: string;
   user_suspect_id_type: string;
@@ -25,6 +26,7 @@ interface DispatchModalProps {
   onConfirm: (data: DispatchFormData) => void;
   isLoading: boolean;
   initialData?: {
+    platform?: string;
     suspect_name?: string;
     suspect_platform_contact?: string;
     suspect_id_type?: string;
@@ -113,6 +115,7 @@ function buildInitialFormData(initialData?: DispatchModalProps["initialData"]): 
     user_state: "DELHI",
     user_district: "",
     user_email: "",
+    user_platform: initialData?.platform || "WhatsApp",
     user_suspect_name: initialData?.suspect_name || "",
     user_suspect_platform_contact: initialData?.suspect_platform_contact || "",
     user_suspect_id_type: initialData?.suspect_id_type || "none",

@@ -178,61 +178,61 @@ export default function AnalysisDetailPage() {
       let transitPath = upload?.file_url;
 
       // --- E2EE DECRYPTION BRIDGE ---
-      // If the file is encrypted, we decrypt it in the browser and upload a 
-      // temporary unencrypted copy for the bot to use. 
+      // If the file is encrypted, decrypt it locally in the browser and pass the base64 data directly to the local dispatcher.
+      let decryptedBase64: string | null = null;
       const encryptionKey = await retrieveKey();
       if (upload?.file_iv && encryptionKey && upload?.file_url) {
-        console.log("E2EE Evidence detected. Preparing decrypted transit copy...");
-        
-        // 1. Download encrypted blob
-        const { data: encryptedData, error: downloadError } = await supabase
-          .storage
-          .from('evidence')
-          .download(upload.file_url.replace('evidence/', ''));
-        
-        if (downloadError) throw new Error(`Failed to download encrypted evidence: ${downloadError.message}`);
+        console.log("E2EE Evidence detected. Decrypting locally for local RPA dispatcher...");
+        try {
+          const rawUrl = upload.file_url.split(',')[0];
+          const rawIv = upload.file_iv.split(',')[0];
+          const storagePath = rawUrl.includes('/screenshots/')
+            ? decodeURIComponent(rawUrl.split('/screenshots/')[1])
+            : rawUrl.replace(/^screenshots\//, '');
 
-        // 2. Decrypt locally
-        const decryptedBlob = await decryptFile(
-          encryptionKey, 
-          await encryptedData.arrayBuffer(), 
-          upload.file_iv
-        );
-
-        // 3. Upload to transit folder
-        const transitFilename = `transit/${uploadId}-${Date.now()}.png`;
-        const { data: transitData, error: uploadError } = await supabase
-          .storage
-          .from('evidence')
-          .upload(transitFilename, decryptedBlob, {
-            contentType: 'image/png',
-            cacheControl: '60', // Very short cache
-            upsert: true
-          });
-
-        if (uploadError) throw new Error(`Failed to upload decrypted transit file: ${uploadError.message}`);
-        
-        transitPath = `evidence/${transitFilename}`;
-        console.log("Transit bridge ready:", transitPath);
+          // Download encrypted blob
+          const { data: encryptedData, error: downloadError } = await supabase
+            .storage
+            .from('screenshots')
+            .download(storagePath);
+          
+          if (!downloadError && encryptedData) {
+            const decryptedBlob = await decryptFile(
+              encryptionKey, 
+              await encryptedData.arrayBuffer(), 
+              rawIv
+            );
+            const buffer = await decryptedBlob.arrayBuffer();
+            decryptedBase64 = uint8ArrayToBase64(new Uint8Array(buffer));
+            console.log("Evidence decrypted locally, passing to local dispatcher API.");
+          }
+        } catch (decErr) {
+          console.warn("Evidence local decryption notice:", decErr);
+        }
       }
 
-      // 4. Update status and metadata
-      const { error } = await supabase
-        .from('uploads')
-        .update({ 
-          status: 'ready_to_file',
-          dispatch_metadata: {
-            ...formData,
-            file_url: transitPath
-          }
-        })
-        .eq('id', uploadId);
+      // 4. Trigger local RPA Dispatcher API (Spawns live Playwright Chrome on desktop)
+      const dispatchRes = await fetch('/api/dispatch', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          uploadId,
+          formData,
+          fileUrl: upload?.file_url,
+          decryptedBase64,
+        }),
+      });
 
-      if (error) throw error;
+      if (!dispatchRes.ok) {
+        const errJson = await dispatchRes.json();
+        throw new Error(errJson.error || 'Failed to dispatch RPA bot');
+      }
+
+      const dispatchData = await dispatchRes.json();
 
       setDispatchStatus({ 
         type: "success", 
-        message: "Legal Dispatcher triggered successfully! The background bot is now filing your complaint on the National Cyber Crime Portal. You can check the status on your dashboard shortly." 
+        message: dispatchData.message || "Legal Dispatcher triggered successfully! Chrome is opening live on your desktop to fill out your complaint." 
       });
       setIsDispatchModalOpen(false);
     } catch (err: any) {
@@ -536,6 +536,7 @@ export default function AnalysisDetailPage() {
         onConfirm={handleDispatchConfirm}
         isLoading={dispatching}
         initialData={{
+          platform: analysis.details?.rpa_filing_data?.platform || "WhatsApp",
           suspect_name: analysis.details?.rpa_filing_data?.suspect_info?.name,
           suspect_platform_contact: analysis.details?.rpa_filing_data?.platform_url_or_id || "",
           suspect_id_type: normalizeSuspectIdType(
